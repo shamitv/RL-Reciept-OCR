@@ -94,6 +94,7 @@ def cached_chat_completion(client: Any, **kwargs: Any) -> Any:
     cached_data = _read_cache(cache_dir, cache_key, ttl_seconds)
     if cached_data is not None:
         try:
+            logger.info(f"CACHE HIT! Serving response from {cache_dir / f'{cache_key}.json'}")
             message_content = cached_data["payload"]["choices"][0]["message"]["content"]
             return CachedChatCompletion(message_content)
         except Exception as e:

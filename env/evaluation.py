@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import base64
 import json
+import logging
 import mimetypes
 import os
+
+logger = logging.getLogger(__name__)
 from collections import Counter
 from datetime import datetime, timezone
 from json import JSONDecodeError, JSONDecoder
@@ -704,6 +707,8 @@ def evaluate_dataset_images(
             continue
         if limit is not None and processed >= limit:
             break
+        
+        logger.info(f"Evaluating receipt: {audit.sample_id}")
         record = evaluate_audit_record(audit, extractor_client, extractor_model, judge_client, judge_model)
         append_eval_record(resolved_output_dir, record)
         processed += 1
@@ -735,6 +740,8 @@ def evaluate_single_receipt(
     audit = next((record for record in audits if record.sample_id == sample_id), None)
     if audit is None:
         raise KeyError(f"Unknown sample_id={sample_id}")
+
+    logger.info(f"Evaluating single receipt: {sample_id}")
 
     dataset = ReceiptDataset(dataset_root=dataset_root)
     extractor_model = require_env("MODEL_NAME")
