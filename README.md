@@ -30,8 +30,10 @@ python -m venv .venv
 pip install -r requirements.txt
 pytest
 python scripts/smoke_test.py
-python inference.py --agent heuristic --task easy
+python inference.py
 ```
+
+The baseline runner evaluates all three tasks by default. Use `--task easy`, `--task medium`, or `--task hard` for a single-task run, and `--format json` for machine-readable output.
 
 Create a `.env` file in the repo root if you want local environment variables loaded automatically.
 

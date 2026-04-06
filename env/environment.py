@@ -105,7 +105,7 @@ class ReceiptExtractionEnv:
             final = grade_receipt(self.hidden_state.current_draft, self.hidden_state.gold_fields)
             reward += self.reward_tracker.compute_terminal_reward(final, 0)
             self.hidden_state.done = True
-            info.update({"success": final.success, "final_score": final.score, "budget_exhausted": True})
+            info.update({"success": final.success, "final_score": final.score, "field_scores": final.field_scores, "budget_exhausted": True})
 
         self.hidden_state.cumulative_reward += reward
         self.hidden_state.history.append({"action": action.model_dump(exclude_none=True), "message": message, "reward": reward})

@@ -22,3 +22,17 @@ def test_invalid_action_is_deterministic() -> None:
     env.reset(task_name="easy", seed=1)
     result = env.step(ReceiptAction(action_type="inspect_bbox", bbox_id="missing"))
     assert result.observation.last_action_result == "Invalid bbox inspection request"
+
+
+def test_budget_exhaustion_returns_field_scores() -> None:
+    env = ReceiptExtractionEnv()
+    env.reset(task_name="hard", seed=1)
+
+    result = None
+    for _ in range(env.task.max_steps):
+        result = env.step(ReceiptAction(action_type="view_receipt"))
+
+    assert result is not None
+    assert result.done is True
+    assert result.info["budget_exhausted"] is True
+    assert "field_scores" in result.info
