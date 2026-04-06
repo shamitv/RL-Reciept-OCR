@@ -134,6 +134,7 @@ def test_evaluate_dataset_images_writes_artifacts_and_respects_resume(monkeypatc
     monkeypatch.setenv("API_BASE_URL", "https://extractor.example/v1")
     monkeypatch.setenv("EVAL_MODEL", "judge-model")
     monkeypatch.setenv("EVAL_API_BASE_URL", "https://judge.example/v1")
+    monkeypatch.setenv("LLM_CACHE_DIR", str(tmp_path / "llm-cache"))
 
     extractor_client = _FakeClient(['{"company":"Store Name","date":"2019-03-25","address":"123 Main St Springfield","total":"31.00"}'])
     judge_client = _FakeClient(['{"summary":"Perfect extraction","failure_reasons":[],"field_notes":{"total":"Matched exactly."}}'])
