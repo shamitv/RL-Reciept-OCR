@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, Request
-from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from env.evaluation import EvalArtifactStore
+from env.evaluation import EvalArtifactStore, build_field_results, evaluate_single_receipt, get_audit_record
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 TEMPLATES = Jinja2Templates(directory=str(BASE_DIR / "server" / "templates"))
@@ -18,6 +19,58 @@ ui_router = APIRouter(tags=["eval-ui"])
 
 def get_store() -> EvalArtifactStore:
     return EvalArtifactStore()
+
+
+def eval_model_config() -> dict[str, str]:
+    return {
+        "extractor_model": os.getenv("MODEL_NAME", "").strip() or "not-configured",
+        "extractor_base_url": os.getenv("API_BASE_URL", "").strip() or "not-configured",
+        "judge_model": os.getenv("EVAL_MODEL", "").strip() or "not-configured",
+        "judge_base_url": os.getenv("EVAL_API_BASE_URL", "").strip() or "not-configured",
+    }
+
+
+def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str, Any] | None:
+    audit = get_audit_record(sample_id)
+    record = store.get_record(sample_id)
+
+    if audit is None and record is None:
+        return None
+
+    if audit is None and record is not None:
+        payload = record.model_dump(mode="json")
+        payload["processed"] = True
+        payload["processable"] = record.dataset_status == "runnable"
+        return payload
+
+    if record is not None:
+        payload = record.model_dump(mode="json")
+        payload["processed"] = True
+        payload["processable"] = audit.dataset_status == "runnable"
+        return payload
+
+    payload = {
+        "sample_id": audit.sample_id,
+        "annotation_path": audit.annotation_path,
+        "image_path": audit.image_path,
+        "dataset_status": audit.dataset_status,
+        "status": "not_run",
+        "skip_reason": audit.skip_reason,
+        "gold_fields": audit.gold_fields.model_dump(mode="json") if audit.gold_fields else None,
+        "predicted_fields": None,
+        "field_results": {
+            name: result.model_dump(mode="json")
+            for name, result in build_field_results(None, audit.gold_fields).items()
+        },
+        "overall_score": 0.0,
+        "deterministic_success": False,
+        "error": None,
+        "judge": None,
+        "created_at": None,
+        "processed": False,
+        "processable": audit.dataset_status == "runnable",
+    }
+    return payload
 
 
 def pagination_window(page: int, pages: int) -> list[int]:
@@ -52,9 +105,20 @@ def eval_receipts(
 @api_router.get("/receipts/{sample_id}")
 def eval_receipt_detail(sample_id: str) -> dict[str, Any]:
     store = get_store()
-    record = store.get_record(sample_id)
+    record = detail_record_payload(store, sample_id)
     if record is None:
         raise HTTPException(status_code=404, detail=f"Evaluation record not found for sample_id={sample_id}")
+    return record
+
+
+@api_router.post("/receipts/{sample_id}/run")
+def eval_receipt_run(sample_id: str) -> dict[str, Any]:
+    try:
+        record = evaluate_single_receipt(sample_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     return record.model_dump(mode="json")
 
 
@@ -62,10 +126,14 @@ def eval_receipt_detail(sample_id: str) -> dict[str, Any]:
 def eval_receipt_image(sample_id: str) -> FileResponse:
     store = get_store()
     record = store.get_record(sample_id)
-    if record is None or not record.image_path:
+    image_path_str = record.image_path if record is not None else None
+    if not image_path_str:
+        audit = get_audit_record(sample_id)
+        image_path_str = audit.image_path if audit is not None else None
+    if not image_path_str:
         raise HTTPException(status_code=404, detail=f"Receipt image not found for sample_id={sample_id}")
 
-    image_path = Path(record.image_path)
+    image_path = Path(image_path_str)
     if not image_path.exists():
         raise HTTPException(status_code=404, detail=f"Receipt image file missing for sample_id={sample_id}")
     return FileResponse(image_path)
@@ -101,6 +169,8 @@ def eval_dashboard(
             context={
                 "title": "Receipt Eval Dashboard",
                 "output_dir": str(store.output_dir),
+                "receipt_menu": store.receipt_menu(),
+                "eval_models": eval_model_config(),
             },
         )
 
@@ -112,6 +182,8 @@ def eval_dashboard(
             "title": "Receipt Eval Dashboard",
             "summary": summary.model_dump(mode="json"),
             "listing": listing,
+            "receipt_menu": store.receipt_menu(),
+            "eval_models": eval_model_config(),
             "status_filter": status or "",
             "sample_filter": sample_id or "",
             "has_errors_filter": has_errors,
@@ -123,12 +195,12 @@ def eval_dashboard(
 @ui_router.get("/eval/receipts/{sample_id}", response_class=HTMLResponse)
 def eval_detail(request: Request, sample_id: str) -> HTMLResponse:
     store = get_store()
-    record = store.get_record(sample_id)
+    record = detail_record_payload(store, sample_id)
     if record is None:
         raise HTTPException(status_code=404, detail=f"Evaluation record not found for sample_id={sample_id}")
 
-    records = store.records()
-    sample_ids = [item.sample_id for item in records]
+    menu_items = store.receipt_menu()
+    sample_ids = [item["sample_id"] for item in menu_items]
     index = sample_ids.index(sample_id)
     previous_id = sample_ids[index - 1] if index > 0 else None
     next_id = sample_ids[index + 1] if index + 1 < len(sample_ids) else None
@@ -138,8 +210,16 @@ def eval_detail(request: Request, sample_id: str) -> HTMLResponse:
         name="eval_detail.html",
         context={
             "title": f"Receipt Eval: {sample_id}",
-            "record": record.model_dump(mode="json"),
+            "record": record,
+            "receipt_menu": menu_items,
+            "eval_models": eval_model_config(),
             "previous_id": previous_id,
             "next_id": next_id,
         },
     )
+
+
+@ui_router.post("/eval/receipts/{sample_id}/run")
+def eval_detail_run(sample_id: str) -> RedirectResponse:
+    evaluate_single_receipt(sample_id)
+    return RedirectResponse(url=f"/eval/receipts/{sample_id}", status_code=303)

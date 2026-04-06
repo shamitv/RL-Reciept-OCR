@@ -1,85 +1,127 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="detail-layout">
-  <article class="panel image-panel">
+<section class="eval-layout">
+  <aside class="panel receipt-menu">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Receipt</p>
-        <h2>{{ record.sample_id }}</h2>
+        <p class="eyebrow">Dataset</p>
+        <h2>All Receipts</h2>
       </div>
-      <span class="pill {{ record.status }}">{{ record.status }}</span>
+      <p class="meta">{{ receipt_menu|length }} total</p>
     </div>
-    {% if record.image_path %}
-    <img class="receipt-image" src="/api/eval/receipts/{{ record.sample_id }}/image" alt="{{ record.sample_id }}">
-    {% else %}
-    <p class="empty-copy">No image path recorded for this sample.</p>
-    {% endif %}
-    <div class="detail-nav">
-      {% if previous_id %}<a href="/eval/receipts/{{ previous_id }}">Previous</a>{% endif %}
-      <a href="/eval">Back to Dashboard</a>
-      {% if next_id %}<a href="/eval/receipts/{{ next_id }}">Next</a>{% endif %}
-    </div>
-  </article>
-
-  <article class="panel detail-panel">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Deterministic Score</p>
-        <h2>{{ "%.3f"|format(record.overall_score) }}</h2>
-      </div>
-      <p class="meta mono">{{ record.dataset_status }}</p>
-    </div>
-
-    {% if record.skip_reason %}
-    <p class="banner skipped">Skipped: {{ record.skip_reason }}</p>
-    {% endif %}
-    {% if record.error %}
-    <p class="banner failed">Error: {{ record.error }}</p>
-    {% endif %}
-
-    <div class="field-grid">
-      {% for field_name, field_result in record.field_results.items() %}
-      <section class="field-card {{ field_result.status }}">
-        <header>
-          <h3>{{ field_name }}</h3>
-          <span class="pill {{ field_result.status }}">{{ field_result.status }}</span>
-        </header>
-        <p><strong>Predicted</strong><span>{{ field_result.predicted or "—" }}</span></p>
-        <p><strong>Gold</strong><span>{{ field_result.gold or "—" }}</span></p>
-        <p><strong>Score</strong><span>{{ "%.3f"|format(field_result.score) }}</span></p>
-      </section>
+    <div class="receipt-menu-list">
+      {% for item in receipt_menu %}
+      <a class="receipt-menu-item {% if item.sample_id == record.sample_id %}active{% endif %}" href="/eval/receipts/{{ item.sample_id }}">
+        {% if item.image_path %}
+        <img src="/api/eval/receipts/{{ item.sample_id }}/image" alt="{{ item.sample_id }}" loading="lazy">
+        {% else %}
+        <div class="receipt-thumb empty">No image</div>
+        {% endif %}
+        <div>
+          <strong>{{ item.sample_id }}</strong>
+          <div class="receipt-menu-meta">
+            <span class="pill {{ item.status }}">{{ item.status }}</span>
+            <span class="mono small">{{ item.dataset_status }}</span>
+          </div>
+        </div>
+      </a>
       {% endfor %}
     </div>
+  </aside>
 
-    {% if record.judge %}
-    <section class="judge-panel">
+  <section class="detail-layout">
+    <article class="panel image-panel">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Judge</p>
-          <h2>Validation Notes</h2>
+          <p class="eyebrow">Receipt</p>
+          <h2>{{ record.sample_id }}</h2>
         </div>
+        <span class="pill {{ record.status }}">{{ record.status }}</span>
       </div>
-      <p>{{ record.judge.summary }}</p>
-      {% if record.judge.failure_reasons %}
-      <div class="tag-row">
-        {% for reason in record.judge.failure_reasons %}
-        <span class="pill failed">{{ reason }}</span>
-        {% endfor %}
-      </div>
+      {% if record.image_path %}
+      <img class="receipt-image" src="/api/eval/receipts/{{ record.sample_id }}/image" alt="{{ record.sample_id }}">
+      {% else %}
+      <p class="empty-copy">No image path recorded for this sample.</p>
       {% endif %}
-      {% if record.judge.field_notes %}
-      <dl class="field-notes">
-        {% for field_name, note in record.judge.field_notes.items() %}
+      <div class="run-bar">
+        {% if record.processable %}
+        <form method="post" action="/eval/receipts/{{ record.sample_id }}/run">
+          <button type="submit">{% if record.processed %}Re-run{% else %}Run{% endif %} extraction + judge</button>
+        </form>
+        {% else %}
+        <p class="empty-copy">This receipt cannot be evaluated automatically because its gold fields are incomplete or unparseable.</p>
+        {% endif %}
+      </div>
+      <div class="detail-nav">
+        {% if previous_id %}<a href="/eval/receipts/{{ previous_id }}">Previous</a>{% endif %}
+        <a href="/eval">Back to Dashboard</a>
+        {% if next_id %}<a href="/eval/receipts/{{ next_id }}">Next</a>{% endif %}
+      </div>
+    </article>
+
+    <article class="panel detail-panel">
+      <div class="section-heading">
         <div>
-          <dt>{{ field_name }}</dt>
-          <dd>{{ note }}</dd>
+          <p class="eyebrow">Deterministic Score</p>
+          <h2>{{ "%.3f"|format(record.overall_score) }}</h2>
         </div>
-        {% endfor %}
-      </dl>
+        <p class="meta mono">{{ record.dataset_status }}</p>
+      </div>
+
+      {% if not record.processed %}
+      <p class="banner pending">This receipt has not been processed by the extraction and judge LLMs yet.</p>
       {% endif %}
-    </section>
-    {% endif %}
-  </article>
+      {% if record.skip_reason %}
+      <p class="banner skipped">Skipped: {{ record.skip_reason }}</p>
+      {% endif %}
+      {% if record.error %}
+      <p class="banner failed">Error: {{ record.error }}</p>
+      {% endif %}
+
+      <div class="field-grid">
+        {% for field_name, field_result in record.field_results.items() %}
+        <section class="field-card {{ field_result.status }}">
+          <header>
+            <h3>{{ field_name }}</h3>
+            <span class="pill {{ field_result.status }}">{{ field_result.status }}</span>
+          </header>
+          <p><strong>Predicted</strong><span>{{ field_result.predicted or "—" }}</span></p>
+          <p><strong>Gold</strong><span>{{ field_result.gold or "—" }}</span></p>
+          <p><strong>Score</strong><span>{{ "%.3f"|format(field_result.score) }}</span></p>
+        </section>
+        {% endfor %}
+      </div>
+
+      {% if record.judge %}
+      <section class="judge-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Judge</p>
+            <h2>Validation Notes</h2>
+          </div>
+        </div>
+        <p>{{ record.judge.summary }}</p>
+        {% if record.judge.failure_reasons %}
+        <div class="tag-row">
+          {% for reason in record.judge.failure_reasons %}
+          <span class="pill failed">{{ reason }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if record.judge.field_notes %}
+        <dl class="field-notes">
+          {% for field_name, note in record.judge.field_notes.items() %}
+          <div>
+            <dt>{{ field_name }}</dt>
+            <dd>{{ note }}</dd>
+          </div>
+          {% endfor %}
+        </dl>
+        {% endif %}
+      </section>
+      {% endif %}
+    </article>
+  </section>
 </section>
 {% endblock %}

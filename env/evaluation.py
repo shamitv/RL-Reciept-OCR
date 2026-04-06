@@ -667,6 +667,13 @@ def existing_result_sample_ids(output_dir: str | Path | None = None) -> set[str]
     return {record.sample_id for record in load_results_jsonl(output_dir)}
 
 
+def get_audit_record(sample_id: str, dataset_root: str | Path | None = None) -> DatasetAuditRecord | None:
+    for record in audit_dataset(dataset_root):
+        if record.sample_id == sample_id:
+            return record
+    return None
+
+
 def evaluate_dataset_images(
     dataset_root: str | Path | None = None,
     output_dir: str | Path | None = None,
@@ -713,6 +720,39 @@ def evaluate_dataset_images(
     )
 
 
+def evaluate_single_receipt(
+    sample_id: str,
+    dataset_root: str | Path | None = None,
+    output_dir: str | Path | None = None,
+    extractor_client: Any | None = None,
+    judge_client: Any | None = None,
+) -> ReceiptEvalRecord:
+    resolved_output_dir = resolve_eval_output_dir(output_dir)
+    audits = audit_dataset(dataset_root)
+    audit = next((record for record in audits if record.sample_id == sample_id), None)
+    if audit is None:
+        raise KeyError(f"Unknown sample_id={sample_id}")
+
+    dataset = ReceiptDataset(dataset_root=dataset_root)
+    extractor_model = require_env("MODEL_NAME")
+    extractor_base_url = require_env("API_BASE_URL")
+    judge_model = require_env("EVAL_MODEL")
+    judge_base_url = require_env("EVAL_API_BASE_URL")
+
+    extractor_client = extractor_client or build_model_client(extractor_base_url)
+    judge_client = judge_client or build_model_client(judge_base_url)
+
+    updated_record = evaluate_audit_record(audit, extractor_client, extractor_model, judge_client, judge_model)
+    records_by_sample_id = {record.sample_id: record for record in load_results_jsonl(resolved_output_dir)}
+    records_by_sample_id[updated_record.sample_id] = updated_record
+    merged_records = sorted(records_by_sample_id.values(), key=lambda item: item.sample_id)
+
+    summary = build_eval_summary(merged_records, dataset.dataset_root, resolved_output_dir, len(audits))
+    report_markdown = render_markdown_report(summary, merged_records)
+    write_eval_artifacts(resolved_output_dir, merged_records, summary, report_markdown)
+    return updated_record
+
+
 class EvalArtifactStore:
     def __init__(self, output_dir: str | Path | None = None) -> None:
         self.output_dir = resolve_eval_output_dir(output_dir)
@@ -746,6 +786,44 @@ class EvalArtifactStore:
             if record.sample_id == sample_id:
                 return record
         return None
+
+    def audit_records(self) -> list[DatasetAuditRecord]:
+        return audit_dataset()
+
+    def receipt_menu(self) -> list[dict[str, Any]]:
+        records_by_sample_id = {record.sample_id: record for record in self.records()}
+        items: list[dict[str, Any]] = []
+        seen_sample_ids: set[str] = set()
+        for audit in self.audit_records():
+            record = records_by_sample_id.get(audit.sample_id)
+            seen_sample_ids.add(audit.sample_id)
+            items.append(
+                {
+                    "sample_id": audit.sample_id,
+                    "image_path": audit.image_path,
+                    "dataset_status": audit.dataset_status,
+                    "status": record.status if record is not None else "not_run",
+                    "overall_score": record.overall_score if record is not None else None,
+                    "processed": record is not None,
+                    "processable": audit.dataset_status == "runnable",
+                }
+            )
+        for record in records_by_sample_id.values():
+            if record.sample_id in seen_sample_ids:
+                continue
+            items.append(
+                {
+                    "sample_id": record.sample_id,
+                    "image_path": record.image_path,
+                    "dataset_status": record.dataset_status,
+                    "status": record.status,
+                    "overall_score": record.overall_score,
+                    "processed": True,
+                    "processable": record.dataset_status == "runnable",
+                }
+            )
+        items.sort(key=lambda item: item["sample_id"])
+        return items
 
     def list_records(
         self,

@@ -19,6 +19,20 @@
         <a href="/api/eval/report">Report</a>
       </nav>
     </header>
+    {% if eval_models %}
+    <section class="panel model-strip">
+      <div>
+        <p class="eyebrow">Extractor LLM</p>
+        <strong>{{ eval_models.extractor_model }}</strong>
+        <span class="meta mono">{{ eval_models.extractor_base_url }}</span>
+      </div>
+      <div>
+        <p class="eyebrow">Judge LLM</p>
+        <strong>{{ eval_models.judge_model }}</strong>
+        <span class="meta mono">{{ eval_models.judge_base_url }}</span>
+      </div>
+    </section>
+    {% endif %}
     {% block content %}{% endblock %}
   </div>
 </body>
