@@ -1,6 +1,6 @@
 name: rl-receipt-ocr
 version: 0.1.0
-description: Sequential receipt extraction environment for structured company, date, address, and total extraction from annotated receipts.
+description: Sequential receipt extraction environment for receipt headers, monetary summaries, reconciliation, and line-item extraction from annotated receipts.
 entrypoint: env.server:app
 runtime:
   python: "3.11"
@@ -19,4 +19,7 @@ metadata:
     - company
     - date
     - address
+    - subtotal
+    - tax
     - total
+    - line_items

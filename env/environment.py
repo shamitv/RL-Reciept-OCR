@@ -2,13 +2,22 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass, field
-from random import Random
 
-from env.candidate_retrieval import query_candidates
+from env.candidate_retrieval import query_candidates, query_line_item_candidates
 from env.dataset import ReceiptDataset
 from env.graders import grade_receipt
-from env.models import OCRRegion, ReceiptAction, ReceiptDraft, ReceiptObservation, ReceiptState, StepResult, TaskConfig
-from env.normalizers import normalize_amount, normalize_date
+from env.models import (
+    OCRRegion,
+    ReceiptAction,
+    ReceiptDraft,
+    ReceiptLineItem,
+    ReceiptLineItemCandidate,
+    ReceiptObservation,
+    ReceiptState,
+    StepResult,
+    TaskConfig,
+)
+from env.normalizers import normalize_address, normalize_amount, normalize_date, normalize_text
 from env.rewards import RewardTracker
 from env.tasks import get_task
 from env.utils import make_rng
@@ -18,13 +27,19 @@ from env.utils import make_rng
 class HiddenState:
     sample_id: str = ""
     difficulty: str = "easy"
+    task_id: str = "easy"
     image_ref: str | None = None
     gold_fields: ReceiptDraft = field(default_factory=ReceiptDraft)
+    gold_line_items: list[ReceiptLineItem] = field(default_factory=list)
     all_regions: list[OCRRegion] = field(default_factory=list)
     revealed_region_ids: list[str] = field(default_factory=list)
     candidate_lists: dict[str, list] = field(default_factory=dict)
+    line_item_candidates: list[ReceiptLineItemCandidate] = field(default_factory=list)
     current_draft: ReceiptDraft = field(default_factory=ReceiptDraft)
     validation_feedback: list[str] = field(default_factory=list)
+    reconciliation_feedback: list[str] = field(default_factory=list)
+    current_reconciliation_delta: float | None = None
+    current_reconciliation_status: str | None = None
     history: list[dict] = field(default_factory=list)
     step_index: int = 0
     remaining_budget: int = 0
@@ -39,28 +54,30 @@ class ReceiptExtractionEnv:
         self.dataset = ReceiptDataset()
         self.rng = make_rng(0)
         self.hidden_state = HiddenState()
+        self.task: TaskConfig = get_task("easy")
         self.last_observation = ReceiptObservation(
-            task_id="easy",
-            difficulty="easy",
-            instruction="Extract company, date, address, and total.",
+            task_id=self.task.task_id,
+            difficulty=self.task.difficulty,
+            instruction=self.task.instruction,
             image_ref=None,
             remaining_budget=0,
             step_index=0,
             terminal_allowed=False,
         )
-        self.task: TaskConfig = get_task("easy")
         self.reward_tracker = RewardTracker()
 
     def reset(self, task_name: str | None = None, seed: int | None = None) -> StepResult:
         self.rng = make_rng(seed)
         self.task = get_task(task_name)
-        sample = self.dataset.sample(self.task.difficulty, self.rng)
+        sample = self.dataset.sample(self.task.task_id, self.rng)
         self.reward_tracker = RewardTracker()
         self.hidden_state = HiddenState(
             sample_id=sample.sample_id,
             difficulty=self.task.difficulty,
+            task_id=self.task.task_id,
             image_ref=sample.image_ref,
             gold_fields=sample.gold_fields,
+            gold_line_items=sample.gold_line_items,
             all_regions=sample.regions,
             current_draft=ReceiptDraft(),
             step_index=0,
@@ -73,6 +90,7 @@ class ReceiptExtractionEnv:
         return ReceiptState(
             sample_id=self.hidden_state.sample_id,
             difficulty=self.hidden_state.difficulty,
+            task_id=self.hidden_state.task_id,
             current_draft=self.hidden_state.current_draft.model_copy(deep=True),
             revealed_region_ids=list(self.hidden_state.revealed_region_ids),
             history=list(self.hidden_state.history),
@@ -80,6 +98,9 @@ class ReceiptExtractionEnv:
             remaining_budget=self.hidden_state.remaining_budget,
             cumulative_reward=self.hidden_state.cumulative_reward,
             done=self.hidden_state.done,
+            current_reconciliation_delta=self.hidden_state.current_reconciliation_delta,
+            current_reconciliation_status=self.hidden_state.current_reconciliation_status,
+            reconciliation_feedback=list(self.hidden_state.reconciliation_feedback),
             last_error=self.hidden_state.last_error,
         )
 
@@ -95,25 +116,72 @@ class ReceiptExtractionEnv:
 
         info: dict = {}
         if action.action_type == "submit":
-            final = grade_receipt(self.hidden_state.current_draft, self.hidden_state.gold_fields)
-            blank_fields = sum(1 for field in ("company", "date", "address", "total") if getattr(self.hidden_state.current_draft, field) is None)
+            final = grade_receipt(
+                self.hidden_state.current_draft,
+                self.hidden_state.gold_fields,
+                task_id=self.task.task_id,
+                gold_line_items=self.hidden_state.gold_line_items,
+            )
+            blank_fields = self._blank_field_count()
             reward = self.reward_tracker.compute_terminal_reward(final, blank_fields)
             self.hidden_state.done = True
-            info = {"success": final.success, "final_score": final.score, "field_scores": final.field_scores}
+            info = {
+                "success": final.success,
+                "final_score": final.score,
+                "field_scores": final.field_scores,
+                "header_score": final.header_score,
+                "summary_score": final.summary_score,
+                "line_items_score": final.line_items_score,
+                "reconciliation_score": final.reconciliation_score,
+                "reconciliation_delta": final.reconciliation_delta,
+                "reconciliation_status": final.reconciliation_status,
+            }
         else:
-            reward = self.reward_tracker.compute_step_reward(prev_draft, self.state(), action, self.hidden_state.gold_fields, message)
+            reward = self.reward_tracker.compute_step_reward(
+                prev_draft=prev_draft,
+                current_state=self.state(),
+                action=action,
+                gold=self.hidden_state.gold_fields,
+                action_result=message,
+                gold_line_items=self.hidden_state.gold_line_items,
+                task=self.task,
+            )
 
         if self.hidden_state.remaining_budget <= 0 and not self.hidden_state.done:
-            final = grade_receipt(self.hidden_state.current_draft, self.hidden_state.gold_fields)
-            reward += self.reward_tracker.compute_terminal_reward(final, 0)
+            final = grade_receipt(
+                self.hidden_state.current_draft,
+                self.hidden_state.gold_fields,
+                task_id=self.task.task_id,
+                gold_line_items=self.hidden_state.gold_line_items,
+            )
+            reward += self.reward_tracker.compute_terminal_reward(final, self._blank_field_count())
             self.hidden_state.done = True
-            info.update({"success": final.success, "final_score": final.score, "field_scores": final.field_scores, "budget_exhausted": True})
+            info.update(
+                {
+                    "success": final.success,
+                    "final_score": final.score,
+                    "field_scores": final.field_scores,
+                    "header_score": final.header_score,
+                    "summary_score": final.summary_score,
+                    "line_items_score": final.line_items_score,
+                    "reconciliation_score": final.reconciliation_score,
+                    "reconciliation_delta": final.reconciliation_delta,
+                    "reconciliation_status": final.reconciliation_status,
+                    "budget_exhausted": True,
+                }
+            )
 
         self.hidden_state.cumulative_reward += reward
         self.hidden_state.history.append({"action": action.model_dump(exclude_none=True), "message": message, "reward": reward})
         self.hidden_state.last_action_result = message
         self.last_observation = self._build_observation(message)
         return StepResult(observation=self.last_observation, reward=reward, done=self.hidden_state.done, info=info)
+
+    def _blank_field_count(self) -> int:
+        blank_fields = sum(1 for field in self.task.target_fields if getattr(self.hidden_state.current_draft, field) is None)
+        if self.task.requires_line_items and not self.hidden_state.current_draft.line_items:
+            blank_fields += 1
+        return blank_fields
 
     def _visible_regions(self) -> list[OCRRegion]:
         ids = set(self.hidden_state.revealed_region_ids)
@@ -141,8 +209,6 @@ class ReceiptExtractionEnv:
     def _default_reveal_windows(self) -> list[str]:
         if self.task.difficulty == "easy":
             return [window for window in ("top", "bottom") if window in self.task.visible_windows]
-        if self.task.difficulty == "medium":
-            return [window for window in ("top",) if window in self.task.visible_windows]
         return [window for window in ("top",) if window in self.task.visible_windows]
 
     def _candidate_noise(self) -> float:
@@ -199,6 +265,18 @@ class ReceiptExtractionEnv:
             self.hidden_state.candidate_lists[action.field] = candidates
             return f"Generated {len(candidates)} candidates for {action.field}"
 
+        if action.action_type == "query_line_item_candidates":
+            if not self.task.requires_line_items:
+                self.hidden_state.last_error = "line items unsupported"
+                return "Line-item candidates are unavailable for this task"
+            candidates = query_line_item_candidates(
+                self._visible_regions(),
+                ranking_noise=self._candidate_noise(),
+                noise_key=f"{self.hidden_state.sample_id}:{self.task.task_id}:line_items",
+            )
+            self.hidden_state.line_item_candidates = candidates
+            return f"Generated {len(candidates)} line-item candidates"
+
         if action.action_type == "set_field_from_candidate":
             if not action.field or not action.candidate_id:
                 self.hidden_state.last_error = "missing field or candidate_id"
@@ -210,6 +288,38 @@ class ReceiptExtractionEnv:
                 return "Candidate not found"
             setattr(self.hidden_state.current_draft, action.field, selected.value)
             return f"Set {action.field} from candidate"
+
+        if action.action_type == "add_line_item_from_candidate":
+            if not action.candidate_id:
+                self.hidden_state.last_error = "missing candidate_id"
+                return "Missing candidate_id"
+            selected = next((candidate for candidate in self.hidden_state.line_item_candidates if candidate.candidate_id == action.candidate_id), None)
+            if selected is None:
+                self.hidden_state.last_error = "candidate not found"
+                return "Candidate not found"
+            if any(item.item_id == selected.candidate_id for item in self.hidden_state.current_draft.line_items):
+                self.hidden_state.last_error = "line item already added"
+                return "Line item already added"
+            self.hidden_state.current_draft.line_items.append(
+                ReceiptLineItem(
+                    item_id=selected.candidate_id,
+                    description=selected.description,
+                    line_total=selected.line_total,
+                    raw_text=selected.raw_text,
+                    evidence_ids=list(selected.evidence_ids),
+                )
+            )
+            return "Added line item from candidate"
+
+        if action.action_type == "remove_line_item":
+            if action.line_item_index is None:
+                self.hidden_state.last_error = "missing line_item_index"
+                return "Missing line_item_index"
+            if action.line_item_index < 0 or action.line_item_index >= len(self.hidden_state.current_draft.line_items):
+                self.hidden_state.last_error = "invalid line_item_index"
+                return "Invalid line_item_index"
+            removed = self.hidden_state.current_draft.line_items.pop(action.line_item_index)
+            return f"Removed line item {removed.description or removed.item_id or action.line_item_index}"
 
         if action.action_type == "set_field_manual":
             if not action.field or not action.value:
@@ -235,17 +345,55 @@ class ReceiptExtractionEnv:
                 return "Missing field"
             current = getattr(self.hidden_state.current_draft, action.field)
             if action.field == "date":
-                setattr(self.hidden_state.current_draft, action.field, normalize_date(current))
-            elif action.field == "total":
-                setattr(self.hidden_state.current_draft, action.field, normalize_amount(current))
+                setattr(self.hidden_state.current_draft, action.field, normalize_date(current) or None)
+            elif action.field in {"subtotal", "tax", "total"}:
+                setattr(self.hidden_state.current_draft, action.field, normalize_amount(current) or None)
+            elif action.field == "address":
+                setattr(self.hidden_state.current_draft, action.field, normalize_address(current) or None)
+            elif action.field == "company":
+                setattr(self.hidden_state.current_draft, action.field, normalize_text(current) or None)
             return f"Normalized {action.field}"
 
         if action.action_type == "check_total_consistency":
             total = self.hidden_state.current_draft.total
+            subtotal = self.hidden_state.current_draft.subtotal
+            tax = self.hidden_state.current_draft.tax
             totals = [candidate.value for candidate in self.hidden_state.candidate_lists.get("total", [])]
-            valid = bool(total and total in totals)
-            message = "Total matches visible evidence" if valid else "Total is weakly supported"
+            if total and subtotal and tax:
+                normalized_subtotal = normalize_amount(subtotal)
+                normalized_tax = normalize_amount(tax)
+                normalized_total = normalize_amount(total)
+                if normalized_subtotal and normalized_tax and normalized_total:
+                    if round(float(normalized_subtotal) + float(normalized_tax), 2) == round(float(normalized_total), 2):
+                        message = "Total reconciles against subtotal and tax"
+                    else:
+                        message = "Total does not reconcile against subtotal and tax"
+                else:
+                    message = "Total is weakly supported"
+            else:
+                valid = bool(total and total in totals)
+                message = "Total matches visible evidence" if valid else "Total is weakly supported"
             self.hidden_state.validation_feedback.append(message)
+            return message
+
+        if action.action_type == "check_receipt_consistency":
+            grade = grade_receipt(
+                self.hidden_state.current_draft,
+                self.hidden_state.gold_fields,
+                task_id=self.task.task_id,
+                gold_line_items=self.hidden_state.gold_line_items,
+            )
+            self.hidden_state.current_reconciliation_delta = grade.reconciliation_delta
+            self.hidden_state.current_reconciliation_status = grade.reconciliation_status
+            if grade.reconciliation_status == "pass":
+                message = "Receipt reconciliation passed"
+            elif grade.reconciliation_status == "partial":
+                message = "Receipt reconciliation is close"
+            else:
+                message = "Receipt reconciliation failed"
+            if grade.reconciliation_delta is not None:
+                message = f"{message} (delta={grade.reconciliation_delta:.2f})"
+            self.hidden_state.reconciliation_feedback.append(message)
             return message
 
         if action.action_type == "check_date_format":
@@ -272,12 +420,16 @@ class ReceiptExtractionEnv:
         return ReceiptObservation(
             task_id=self.task.task_id,
             difficulty=self.task.difficulty,
-            instruction="Extract company, date, address, and total from the receipt.",
+            instruction=self.task.instruction,
             image_ref=self.hidden_state.image_ref,
             visible_regions=self._visible_regions(),
             candidate_lists=self.hidden_state.candidate_lists,
+            line_item_candidates=list(self.hidden_state.line_item_candidates),
             current_draft=self.hidden_state.current_draft.model_copy(deep=True),
             validation_feedback=list(self.hidden_state.validation_feedback),
+            reconciliation_feedback=list(self.hidden_state.reconciliation_feedback),
+            current_reconciliation_delta=self.hidden_state.current_reconciliation_delta,
+            current_reconciliation_status=self.hidden_state.current_reconciliation_status,
             last_action_result=message,
             remaining_budget=self.hidden_state.remaining_budget,
             step_index=self.hidden_state.step_index,

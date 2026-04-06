@@ -4,8 +4,9 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-FieldName = Literal["company", "date", "address", "total"]
+FieldName = Literal["company", "date", "address", "subtotal", "tax", "total"]
 Difficulty = Literal["easy", "medium", "hard"]
+ReconciliationStatus = Literal["pass", "partial", "fail"]
 ActionType = Literal[
     "view_receipt",
     "list_text_regions",
@@ -18,6 +19,10 @@ ActionType = Literal[
     "normalize_field",
     "check_total_consistency",
     "check_date_format",
+    "query_line_item_candidates",
+    "add_line_item_from_candidate",
+    "remove_line_item",
+    "check_receipt_consistency",
     "clear_field",
     "submit",
 ]
@@ -39,11 +44,32 @@ class FieldCandidate(BaseModel):
     heuristic_score: float
 
 
+class ReceiptLineItem(BaseModel):
+    item_id: str | None = None
+    description: str | None = None
+    line_total: str | None = None
+    quantity: str | None = None
+    raw_text: str | None = None
+    evidence_ids: list[str] = Field(default_factory=list)
+
+
+class ReceiptLineItemCandidate(BaseModel):
+    candidate_id: str
+    description: str | None = None
+    line_total: str | None = None
+    raw_text: str | None = None
+    evidence_ids: list[str] = Field(default_factory=list)
+    heuristic_score: float
+
+
 class ReceiptDraft(BaseModel):
     company: str | None = None
     date: str | None = None
     address: str | None = None
+    subtotal: str | None = None
+    tax: str | None = None
     total: str | None = None
+    line_items: list[ReceiptLineItem] = Field(default_factory=list)
 
 
 class ReceiptAction(BaseModel):
@@ -53,6 +79,7 @@ class ReceiptAction(BaseModel):
     bbox_id: str | None = None
     radius_bucket: int | None = None
     candidate_id: str | None = None
+    line_item_index: int | None = None
     span_ids: list[str] | None = None
     join_mode: str | None = None
     mode: str | None = None
@@ -67,8 +94,12 @@ class ReceiptObservation(BaseModel):
     image_ref: str | None
     visible_regions: list[OCRRegion] = Field(default_factory=list)
     candidate_lists: dict[str, list[FieldCandidate]] = Field(default_factory=dict)
+    line_item_candidates: list[ReceiptLineItemCandidate] = Field(default_factory=list)
     current_draft: ReceiptDraft = Field(default_factory=ReceiptDraft)
     validation_feedback: list[str] = Field(default_factory=list)
+    reconciliation_feedback: list[str] = Field(default_factory=list)
+    current_reconciliation_delta: float | None = None
+    current_reconciliation_status: ReconciliationStatus | None = None
     last_action_result: str = ""
     remaining_budget: int
     step_index: int
@@ -78,6 +109,7 @@ class ReceiptObservation(BaseModel):
 class ReceiptState(BaseModel):
     sample_id: str
     difficulty: str
+    task_id: str = "easy"
     current_draft: ReceiptDraft
     revealed_region_ids: list[str] = Field(default_factory=list)
     history: list[dict] = Field(default_factory=list)
@@ -85,6 +117,9 @@ class ReceiptState(BaseModel):
     remaining_budget: int
     cumulative_reward: float
     done: bool
+    current_reconciliation_delta: float | None = None
+    current_reconciliation_status: ReconciliationStatus | None = None
+    reconciliation_feedback: list[str] = Field(default_factory=list)
     last_error: str | None = None
 
 
@@ -99,6 +134,12 @@ class GradeResult(BaseModel):
     score: float
     success: bool
     field_scores: dict[str, float]
+    header_score: float = 0.0
+    summary_score: float = 0.0
+    line_items_score: float = 0.0
+    reconciliation_score: float = 0.0
+    reconciliation_delta: float | None = None
+    reconciliation_status: ReconciliationStatus | None = None
 
 
 class TaskConfig(BaseModel):
@@ -108,6 +149,9 @@ class TaskConfig(BaseModel):
     visible_windows: list[str]
     corruption_level: float = 0.0
     ranking_noise: float = 0.0
+    instruction: str
+    target_fields: list[FieldName] = Field(default_factory=list)
+    requires_line_items: bool = False
 
 
 class ReceiptSample(BaseModel):
@@ -115,3 +159,4 @@ class ReceiptSample(BaseModel):
     image_ref: str | None = None
     regions: list[OCRRegion]
     gold_fields: ReceiptDraft
+    gold_line_items: list[ReceiptLineItem] = Field(default_factory=list)

@@ -3,10 +3,11 @@ from __future__ import annotations
 import hashlib
 import re
 
-from env.models import FieldCandidate, OCRRegion
+from env.models import FieldCandidate, OCRRegion, ReceiptLineItemCandidate
 from env.normalizers import normalize_address, normalize_amount, normalize_date, normalize_text
 
-FIELDS = ("company", "date", "address", "total")
+FIELDS = ("company", "date", "address", "subtotal", "tax", "total")
+LINE_ITEM_BLOCKLIST = ("TOTAL", "SUBTOTAL", "TAX", "GST", "SST", "CHANGE", "CASH", "CARD", "BALANCE")
 
 
 def _window_score(region: OCRRegion) -> float:
@@ -20,7 +21,15 @@ def company_candidates(regions: list[OCRRegion]) -> list[FieldCandidate]:
         if any(char.isdigit() for char in text):
             continue
         score = 0.7 + 0.3 * _window_score(region)
-        candidates.append(FieldCandidate(candidate_id=f"company:{region.region_id}", field="company", value=text, evidence_ids=[region.region_id], heuristic_score=round(score, 4)))
+        candidates.append(
+            FieldCandidate(
+                candidate_id=f"company:{region.region_id}",
+                field="company",
+                value=text,
+                evidence_ids=[region.region_id],
+                heuristic_score=round(score, 4),
+            )
+        )
     return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
 
 
@@ -31,21 +40,87 @@ def date_candidates(regions: list[OCRRegion]) -> list[FieldCandidate]:
         if not normalized:
             continue
         score = 0.8 + 0.2 * _window_score(region)
-        candidates.append(FieldCandidate(candidate_id=f"date:{region.region_id}", field="date", value=normalized, evidence_ids=[region.region_id], heuristic_score=round(score, 4)))
+        candidates.append(
+            FieldCandidate(
+                candidate_id=f"date:{region.region_id}",
+                field="date",
+                value=normalized,
+                evidence_ids=[region.region_id],
+                heuristic_score=round(score, 4),
+            )
+        )
     return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
 
 
 def total_candidates(regions: list[OCRRegion]) -> list[FieldCandidate]:
     candidates: list[FieldCandidate] = []
     for region in regions:
-        if "TOTAL" not in normalize_text(region.text) and not re.search(r"\d+[.]\d{1,2}", region.text):
+        normalized_text = normalize_text(region.text)
+        if "TOTAL" not in normalized_text and not re.search(r"\d+[.]\d{1,2}", region.text):
+            continue
+        if "SUBTOTAL" in normalized_text:
             continue
         amount = normalize_amount(region.text)
         if not amount:
             continue
         bottom_bias = region.bbox[1] / 300.0
         score = 0.75 + min(0.25, bottom_bias)
-        candidates.append(FieldCandidate(candidate_id=f"total:{region.region_id}", field="total", value=amount, evidence_ids=[region.region_id], heuristic_score=round(score, 4)))
+        candidates.append(
+            FieldCandidate(
+                candidate_id=f"total:{region.region_id}",
+                field="total",
+                value=amount,
+                evidence_ids=[region.region_id],
+                heuristic_score=round(score, 4),
+            )
+        )
+    return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
+
+
+def subtotal_candidates(regions: list[OCRRegion]) -> list[FieldCandidate]:
+    candidates: list[FieldCandidate] = []
+    for region in regions:
+        normalized_text = normalize_text(region.text)
+        amount = normalize_amount(region.text)
+        if not amount:
+            continue
+        if "SUBTOTAL" not in normalized_text and "TOTAL" in normalized_text:
+            continue
+        if "SUBTOTAL" not in normalized_text and region.bbox[1] > 225:
+            continue
+        keyword_bonus = 0.18 if "SUBTOTAL" in normalized_text else 0.0
+        score = 0.6 + keyword_bonus + min(0.18, region.bbox[1] / 400.0)
+        candidates.append(
+            FieldCandidate(
+                candidate_id=f"subtotal:{region.region_id}",
+                field="subtotal",
+                value=amount,
+                evidence_ids=[region.region_id],
+                heuristic_score=round(score, 4),
+            )
+        )
+    return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
+
+
+def tax_candidates(regions: list[OCRRegion]) -> list[FieldCandidate]:
+    candidates: list[FieldCandidate] = []
+    for region in regions:
+        normalized_text = normalize_text(region.text)
+        amount = normalize_amount(region.text)
+        if not amount:
+            continue
+        if not any(keyword in normalized_text for keyword in ("TAX", "GST", "SST", "VAT")):
+            continue
+        score = 0.68 + 0.2 * (region.bbox[1] / 300.0)
+        candidates.append(
+            FieldCandidate(
+                candidate_id=f"tax:{region.region_id}",
+                field="tax",
+                value=amount,
+                evidence_ids=[region.region_id],
+                heuristic_score=round(score, 4),
+            )
+        )
     return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
 
 
@@ -65,7 +140,49 @@ def address_candidates(regions: list[OCRRegion]) -> list[FieldCandidate]:
             has_digit = any(any(char.isdigit() for char in region.text) for region in window)
             top_penalty = 0.12 if index == 0 and not has_digit else 0.0
             score = 0.62 + 0.08 * width + (0.08 if has_digit else 0.0) - top_penalty
-            candidates.append(FieldCandidate(candidate_id=f"address:{'-'.join(evidence_ids)}", field="address", value=value, evidence_ids=evidence_ids, heuristic_score=round(score, 4)))
+            candidates.append(
+                FieldCandidate(
+                    candidate_id=f"address:{'-'.join(evidence_ids)}",
+                    field="address",
+                    value=value,
+                    evidence_ids=evidence_ids,
+                    heuristic_score=round(score, 4),
+                )
+            )
+    return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
+
+
+def line_item_candidates(regions: list[OCRRegion]) -> list[ReceiptLineItemCandidate]:
+    candidates: list[ReceiptLineItemCandidate] = []
+    for region in sorted(regions, key=lambda item: (item.bbox[1], item.bbox[0], item.region_id)):
+        raw_text = region.text.strip()
+        if not raw_text:
+            continue
+        normalized_text = normalize_text(raw_text)
+        if any(keyword in normalized_text for keyword in LINE_ITEM_BLOCKLIST):
+            continue
+        if not re.search(r"\d+[.]\d{1,2}", raw_text):
+            continue
+        line_total = normalize_amount(raw_text)
+        description = raw_text
+        last_amount = re.search(r"(\d+[.]\d{1,2})(?!.*\d+[.]\d{1,2})", raw_text)
+        if last_amount:
+            description = raw_text[: last_amount.start()].strip(" -:$")
+        description = normalize_text(description) or raw_text
+        if not description:
+            continue
+        middle_bias = 1.0 - abs(((region.bbox[1] + region.bbox[3]) / 2.0) - 150.0) / 150.0
+        score = 0.62 + max(0.0, 0.18 * middle_bias) + (0.12 if line_total else 0.0)
+        candidates.append(
+            ReceiptLineItemCandidate(
+                candidate_id=f"line-item:{region.region_id}",
+                description=description,
+                line_total=line_total or None,
+                raw_text=raw_text,
+                evidence_ids=[region.region_id],
+                heuristic_score=round(score, 4),
+            )
+        )
     return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
 
 
@@ -86,6 +203,21 @@ def _rerank_candidates(candidates: list[FieldCandidate], ranking_noise: float, n
     return sorted(reranked, key=lambda item: (item.heuristic_score, item.candidate_id), reverse=True)
 
 
+def _rerank_line_item_candidates(
+    candidates: list[ReceiptLineItemCandidate],
+    ranking_noise: float,
+    noise_key: str,
+) -> list[ReceiptLineItemCandidate]:
+    if ranking_noise <= 0.0:
+        return candidates
+
+    reranked: list[ReceiptLineItemCandidate] = []
+    for candidate in candidates:
+        adjusted_score = candidate.heuristic_score + (_stable_noise(f"{noise_key}:{candidate.candidate_id}") * ranking_noise)
+        reranked.append(candidate.model_copy(update={"heuristic_score": round(adjusted_score, 4)}))
+    return sorted(reranked, key=lambda item: (item.heuristic_score, item.candidate_id), reverse=True)
+
+
 def query_candidates(field: str, visible_regions: list[OCRRegion], ranking_noise: float = 0.0, noise_key: str = "") -> list[FieldCandidate]:
     if field == "company":
         candidates = company_candidates(visible_regions)
@@ -96,7 +228,18 @@ def query_candidates(field: str, visible_regions: list[OCRRegion], ranking_noise
     if field == "address":
         candidates = address_candidates(visible_regions)
         return _rerank_candidates(candidates, ranking_noise, noise_key)
+    if field == "subtotal":
+        candidates = subtotal_candidates(visible_regions)
+        return _rerank_candidates(candidates, ranking_noise, noise_key)
+    if field == "tax":
+        candidates = tax_candidates(visible_regions)
+        return _rerank_candidates(candidates, ranking_noise, noise_key)
     if field == "total":
         candidates = total_candidates(visible_regions)
         return _rerank_candidates(candidates, ranking_noise, noise_key)
     return []
+
+
+def query_line_item_candidates(visible_regions: list[OCRRegion], ranking_noise: float = 0.0, noise_key: str = "") -> list[ReceiptLineItemCandidate]:
+    candidates = line_item_candidates(visible_regions)
+    return _rerank_line_item_candidates(candidates, ranking_noise, noise_key)

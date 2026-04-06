@@ -2,11 +2,20 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from random import Random
 from pathlib import Path
 
-from env.models import OCRRegion, ReceiptDraft, ReceiptSample
-from env.normalizers import normalize_amount, normalize_date
+from env.models import OCRRegion, ReceiptDraft, ReceiptLineItem, ReceiptSample
+from env.normalizers import normalize_amount, normalize_date, normalize_text
+
+LINE_ITEM_AMOUNT_PATTERN = re.compile(r"(\d+[.]\d{1,2})(?!.*\d+[.]\d{1,2})")
+TASK_REQUIREMENTS: dict[str, tuple[str, ...]] = {
+    "easy": ("company", "address", "date", "total"),
+    "medium": ("company", "date", "subtotal", "tax", "total"),
+    "hard": ("company", "date", "subtotal", "tax", "total"),
+}
+
 
 MOCK_SAMPLES = [
     ReceiptSample(
@@ -19,33 +28,48 @@ MOCK_SAMPLES = [
             OCRRegion(region_id="r4", text="25/03/2019", bbox=(0, 90, 120, 110)),
             OCRRegion(region_id="r5", text="TOTAL 31.00", bbox=(0, 220, 140, 240)),
         ],
-        gold_fields=ReceiptDraft(company="MART CORNER SDN BHD", address="12 JALAN BINTANG 50000 KUALA LUMPUR", date="2019-03-25", total="31.00"),
+        gold_fields=ReceiptDraft(
+            company="MART CORNER SDN BHD",
+            address="12 JALAN BINTANG 50000 KUALA LUMPUR",
+            date="2019-03-25",
+            total="31.00",
+        ),
     ),
     ReceiptSample(
         sample_id="sample_medium_1",
         image_ref="mock://receipt/2",
         regions=[
             OCRRegion(region_id="r1", text="FRESH HUB MARKET", bbox=(0, 0, 200, 20)),
-            OCRRegion(region_id="r2", text="88 JLN MERDEKA", bbox=(0, 28, 200, 48)),
-            OCRRegion(region_id="r3", text="SHAH ALAM SELANGOR", bbox=(0, 50, 220, 70)),
-            OCRRegion(region_id="r4", text="26-03-19", bbox=(0, 92, 100, 112)),
-            OCRRegion(region_id="r5", text="SUBTOTAL 19.90", bbox=(0, 180, 140, 200)),
-            OCRRegion(region_id="r6", text="TOTAL DUE 21.10", bbox=(0, 220, 160, 240)),
+            OCRRegion(region_id="r2", text="26-03-19", bbox=(0, 92, 100, 112)),
+            OCRRegion(region_id="r3", text="SUBTOTAL 19.90", bbox=(0, 180, 140, 200)),
+            OCRRegion(region_id="r4", text="TAX 1.20", bbox=(0, 200, 140, 220)),
+            OCRRegion(region_id="r5", text="TOTAL DUE 21.10", bbox=(0, 220, 160, 240)),
         ],
-        gold_fields=ReceiptDraft(company="FRESH HUB MARKET", address="88 JLN MERDEKA SHAH ALAM SELANGOR", date="2019-03-26", total="21.10"),
+        gold_fields=ReceiptDraft(
+            company="FRESH HUB MARKET",
+            date="2019-03-26",
+            subtotal="19.90",
+            tax="1.20",
+            total="21.10",
+        ),
     ),
     ReceiptSample(
         sample_id="sample_hard_1",
         image_ref="mock://receipt/3",
         regions=[
             OCRRegion(region_id="r1", text="CITY CAFE", bbox=(0, 0, 120, 20)),
-            OCRRegion(region_id="r2", text="LOT 9 KOMPLEKS NIAGA", bbox=(0, 30, 220, 50)),
-            OCRRegion(region_id="r3", text="PETALING JAYA", bbox=(0, 55, 180, 75)),
-            OCRRegion(region_id="r4", text="2019-03-27", bbox=(0, 88, 100, 108)),
-            OCRRegion(region_id="r5", text="CASH 12.00", bbox=(0, 180, 120, 200)),
-            OCRRegion(region_id="r6", text="TOTAL 12.00", bbox=(0, 215, 120, 235)),
+            OCRRegion(region_id="r2", text="2019-03-27", bbox=(0, 88, 100, 108)),
+            OCRRegion(region_id="r3", text="LATTE 4.50", bbox=(0, 140, 120, 160)),
+            OCRRegion(region_id="r4", text="MUFFIN 3.50", bbox=(0, 165, 120, 185)),
+            OCRRegion(region_id="r5", text="SUBTOTAL 8.00", bbox=(0, 190, 120, 210)),
+            OCRRegion(region_id="r6", text="TAX 0.48", bbox=(0, 205, 120, 225)),
+            OCRRegion(region_id="r7", text="TOTAL 8.48", bbox=(0, 225, 120, 245)),
         ],
-        gold_fields=ReceiptDraft(company="CITY CAFE", address="LOT 9 KOMPLEKS NIAGA PETALING JAYA", date="2019-03-27", total="12.00"),
+        gold_fields=ReceiptDraft(company="CITY CAFE", date="2019-03-27", subtotal="8.00", tax="0.48", total="8.48"),
+        gold_line_items=[
+            ReceiptLineItem(item_id="li-1", description="LATTE", line_total="4.50", raw_text="LATTE 4.50"),
+            ReceiptLineItem(item_id="li-2", description="MUFFIN", line_total="3.50", raw_text="MUFFIN 3.50"),
+        ],
     ),
 ]
 
@@ -54,14 +78,17 @@ class ReceiptDataset:
     def __init__(self, dataset_root: str | Path | None = None) -> None:
         self.dataset_root = self._resolve_dataset_root(dataset_root)
         self.samples = self._load_samples()
-        self.samples_by_difficulty = self._bucket_by_difficulty(self.samples)
+        self.samples_by_task = self._bucket_by_task(self.samples)
 
-    def sample(self, difficulty: str, rng: Random) -> ReceiptSample:
-        candidates = self.samples_by_difficulty.get(difficulty, [])
+    def sample(self, task_name: str, rng: Random) -> ReceiptSample:
+        candidates = self.samples_by_task.get(task_name, [])
         if not candidates:
             candidates = self.samples
         index = rng.randrange(len(candidates))
         return candidates[index].model_copy(deep=True)
+
+    def eligible_task_counts(self) -> dict[str, int]:
+        return {task_name: len(samples) for task_name, samples in self.samples_by_task.items()}
 
     def _resolve_dataset_root(self, dataset_root: str | Path | None) -> Path:
         if dataset_root is not None:
@@ -99,23 +126,35 @@ class ReceiptDataset:
             if category:
                 grouped_regions.setdefault(category, []).append(region)
 
-        company = self._join_text(grouped_regions.get("Business name", []))
-        address = self._join_text(grouped_regions.get("Business address", []))
-        date = self._pick_date(grouped_regions.get("Time and date", []))
-        total = self._pick_total(grouped_regions.get("Total", []))
-        if not company or not address or not date or not total:
-            return None
-
         image_name = annotation_path.name[:-5]
         image_path = image_dir / image_name
         if not image_path.exists():
+            return None
+
+        company = self._join_text(grouped_regions.get("Business name", []))
+        address = self._join_text(grouped_regions.get("Business address", []))
+        date = self._pick_date(grouped_regions.get("Time and date", []))
+        subtotal = self._pick_amount(grouped_regions.get("Subtotal", []))
+        tax = self._pick_amount(grouped_regions.get("Tax", []))
+        total = self._pick_amount(grouped_regions.get("Total", []))
+        gold_line_items = self._extract_line_items(grouped_regions.get("Item information", []))
+
+        if not company or not date or not total:
             return None
 
         return ReceiptSample(
             sample_id=annotation_path.stem,
             image_ref=str(image_path),
             regions=sorted(visible_regions, key=lambda region: (region.bbox[1], region.bbox[0], region.region_id)),
-            gold_fields=ReceiptDraft(company=company, address=address, date=date, total=total),
+            gold_fields=ReceiptDraft(
+                company=company or None,
+                address=address or None,
+                date=date or None,
+                subtotal=subtotal or None,
+                tax=tax or None,
+                total=total or None,
+            ),
+            gold_line_items=gold_line_items,
         )
 
     def _build_region(self, obj: dict) -> OCRRegion | None:
@@ -151,7 +190,7 @@ class ReceiptDataset:
                 return normalized
         return ""
 
-    def _pick_total(self, regions: list[OCRRegion]) -> str:
+    def _pick_amount(self, regions: list[OCRRegion]) -> str:
         ordered = sorted(regions, key=lambda item: (item.bbox[1], item.bbox[0], item.region_id))
         for region in reversed(ordered):
             normalized = normalize_amount(region.text)
@@ -159,23 +198,49 @@ class ReceiptDataset:
                 return normalized
         return ""
 
-    def _bucket_by_difficulty(self, samples: list[ReceiptSample]) -> dict[str, list[ReceiptSample]]:
-        if not samples:
-            return {"easy": [], "medium": [], "hard": []}
+    def _extract_line_items(self, regions: list[OCRRegion]) -> list[ReceiptLineItem]:
+        items: list[ReceiptLineItem] = []
+        for region in sorted(regions, key=lambda item: (item.bbox[1], item.bbox[0], item.region_id)):
+            item = self._line_item_from_region(region)
+            if item is not None:
+                items.append(item)
+        return items
 
-        ranked = sorted(samples, key=lambda sample: (self._complexity_score(sample), sample.sample_id))
-        total = len(ranked)
-        first_cut = max(1, total // 3)
-        second_cut = max(first_cut + 1, (2 * total) // 3) if total > 1 else total
-        return {
-            "easy": ranked[:first_cut],
-            "medium": ranked[first_cut:second_cut] or ranked[:first_cut],
-            "hard": ranked[second_cut:] or ranked[-1:],
-        }
+    def _line_item_from_region(self, region: OCRRegion) -> ReceiptLineItem | None:
+        raw_text = region.text.strip()
+        if not raw_text:
+            return None
+        amount_match = LINE_ITEM_AMOUNT_PATTERN.search(raw_text)
+        line_total = normalize_amount(amount_match.group(1) if amount_match else raw_text) or None
+        description_text = raw_text
+        if amount_match:
+            description_text = raw_text[: amount_match.start()].strip(" -:$")
+        description = normalize_text(description_text) or None
+        if not description and not line_total:
+            return None
+        return ReceiptLineItem(
+            item_id=f"gold:{region.region_id}",
+            description=description,
+            line_total=line_total,
+            raw_text=raw_text,
+            evidence_ids=[region.region_id],
+        )
 
-    def _complexity_score(self, sample: ReceiptSample) -> tuple[int, int, int, int, int]:
-        texts = [region.text for region in sample.regions]
-        address_lines = sum(1 for text in texts if any(char.isdigit() for char in text) and any(char.isalpha() for char in text))
-        numeric_lines = sum(1 for text in texts if any(char.isdigit() for char in text))
-        long_lines = sum(1 for text in texts if len(text.strip()) >= 20)
-        return (len(sample.regions), address_lines, numeric_lines, long_lines, len(sample.gold_fields.address or ""))
+    def _bucket_by_task(self, samples: list[ReceiptSample]) -> dict[str, list[ReceiptSample]]:
+        buckets = {"easy": [], "medium": [], "hard": []}
+        for sample in samples:
+            if self._is_task_eligible(sample, "easy"):
+                buckets["easy"].append(sample)
+            if self._is_task_eligible(sample, "medium"):
+                buckets["medium"].append(sample)
+            if self._is_task_eligible(sample, "hard"):
+                buckets["hard"].append(sample)
+        return buckets
+
+    def _is_task_eligible(self, sample: ReceiptSample, task_name: str) -> bool:
+        required_fields = TASK_REQUIREMENTS[task_name]
+        if not all(getattr(sample.gold_fields, field) for field in required_fields):
+            return False
+        if task_name == "hard":
+            return bool(sample.gold_line_items)
+        return True
