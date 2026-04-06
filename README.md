@@ -11,6 +11,55 @@ The target schema is fixed to four fields:
 
 The environment is designed as a real-world document extraction task rather than a single-step classifier. Agents operate through repeated `reset()` / `step()` / `state()` interactions and are scored by deterministic graders against annotated receipt data.
 
+## Learning Agent Design
+
+The intended learning agent in this project is an external policy trained against the environment, not the frozen LLM itself.
+
+The planned setup is:
+
+- Environment: the OpenEnv receipt extraction world implemented in this repo
+- Agent: a policy that reads the observation or encoded state and chooses the next action
+- Learning: PPO updates that policy from reward signals
+- Frozen helper: an LLM may assist with interpretation or reranking, but it does not learn
+
+In other words, the learning loop is:
+
+```text
+observation -> policy network -> action
+                    ^
+                    |
+             updated by PPO from reward
+```
+
+Under that design, the agent learns:
+
+- what action to take next
+- which field to focus on
+- whether to inspect more OCR evidence
+- which candidate to choose
+- when to validate
+- when to submit
+
+That is a real learning agent because its future behavior is meant to improve based on past reward.
+
+### Trainable vs. Frozen Components
+
+Trainable component:
+
+- an external policy module, intended to be trained with PPO
+
+Frozen components:
+
+- the base LLM, if one is used as a helper
+- the OCR evidence already present in the dataset
+- the deterministic graders and reward logic
+
+What this design does not do:
+
+- fine-tune the base LLM
+- directly learn OCR
+- directly generate raw text end to end via RL
+
 ## Environment Definition
 
 ### Observation space
@@ -215,7 +264,7 @@ These numbers reflect the current deterministic heuristic and current task const
 - `env/` environment package, graders, rewards, dataset loader, API server
 - `server/templates/` built-in eval UI templates
 - `server/static/` built-in eval UI styles
-- `training/` BC and PPO placeholders
+- `training/` planned BC and PPO entrypoints, currently placeholders
 - `tests/` deterministic unit tests
 - `scripts/` local preparation, smoke-test helpers, and dataset eval runner
 - `docs/` hackathon notes and execution plans
@@ -262,12 +311,13 @@ docker run -p 7860:7860 rl-receipt-ocr
 - the environment implements typed models and `reset()` / `step()` / `state()`
 - task difficulty now affects runtime behavior, not only step budget
 - the heuristic baseline evaluates all three tasks deterministically by default
+- the intended learning architecture is an external PPO-trained policy over environment observations, while any helper LLM remains frozen
 - local pytest currently passes
 - `openenv validate` currently passes in the local Python environment
 
 ## Limitations
 
-- the training package still contains placeholder scripts for BC and PPO
+- the PPO and behavior-cloning training scripts are still placeholders, so the learning agent design is documented but not yet implemented in code
 - the current baseline is heuristic-only; no API-backed policy mode is implemented
 - dataset-wide image eval depends on configured OpenAI-compatible model endpoints for extraction and validation
 - final `openenv validate` and deployment verification are still pending
