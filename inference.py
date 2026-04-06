@@ -6,8 +6,11 @@ from typing import List
 
 from openai import OpenAI
 
+from env.config import load_environment
 from env.environment import ReceiptExtractionEnv
 from env.models import ReceiptAction
+
+load_environment()
 
 API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")

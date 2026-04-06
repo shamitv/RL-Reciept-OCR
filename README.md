@@ -33,6 +33,20 @@ python scripts/smoke_test.py
 python inference.py --agent heuristic --task easy
 ```
 
+Create a `.env` file in the repo root if you want local environment variables loaded automatically.
+
+Example:
+
+```dotenv
+API_BASE_URL=https://router.huggingface.co/v1
+MODEL_NAME=gpt-4o-mini
+OPENAI_API_KEY=your-key-here
+HF_TOKEN=your-hf-token-here
+RECEIPT_DATASET_ROOT=dataset/Receipt dataset/ds0
+```
+
+`RECEIPT_DATASET_ROOT` is optional. If unset, the loader defaults to the prepared dataset bundled in `dataset/Receipt dataset/ds0`.
+
 ## Notes
 
 - The dataset loader currently ships with mock seeded samples so the workspace runs before SROIE ingestion is added.

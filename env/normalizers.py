@@ -42,8 +42,10 @@ def normalize_date(value: str | None) -> str:
     if not value:
         return ""
     candidate = value.strip()
-    if not DATE_PATTERN.search(candidate):
+    match = DATE_PATTERN.search(candidate)
+    if not match:
         return ""
+    candidate = match.group(0)
     try:
         parsed = parser.parse(candidate, dayfirst=True, fuzzy=False)
     except (ValueError, TypeError, OverflowError):

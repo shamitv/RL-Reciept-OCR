@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 
+from env.config import load_environment
 from env.environment import ReceiptExtractionEnv
 from env.models import ReceiptAction, StepResult
+
+load_environment()
 
 app = FastAPI(title="RL Receipt OCR OpenEnv")
 ENV = ReceiptExtractionEnv()

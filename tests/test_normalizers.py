@@ -12,6 +12,7 @@ def test_normalize_amount() -> None:
 
 def test_normalize_date() -> None:
     assert normalize_date("25/03/2019") == "2019-03-25"
+    assert normalize_date("05/11/18/ 8:47 PM") == "2018-11-05"
 
 
 def test_normalize_address() -> None:
