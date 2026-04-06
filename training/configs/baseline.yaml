@@ -1,0 +1,6 @@
+seed: 7
+env:
+  task_mix:
+    easy: 1.0
+policy:
+  type: heuristic
