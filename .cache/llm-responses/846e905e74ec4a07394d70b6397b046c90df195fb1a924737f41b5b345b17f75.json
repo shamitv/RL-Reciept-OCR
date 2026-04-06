@@ -1,0 +1,14 @@
+{
+  "key": "846e905e74ec4a07394d70b6397b046c90df195fb1a924737f41b5b345b17f75",
+  "created_at": "2026-04-06T13:17:27.395950+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"summary\":\"Perfect extraction\",\"failure_reasons\":[],\"field_notes\":{\"total\":\"Matched exactly.\"}}"
+        }
+      }
+    ]
+  }
+}
