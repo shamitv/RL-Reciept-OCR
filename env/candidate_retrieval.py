@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import re
 
 from env.models import FieldCandidate, OCRRegion
@@ -68,13 +69,34 @@ def address_candidates(regions: list[OCRRegion]) -> list[FieldCandidate]:
     return sorted(candidates, key=lambda item: item.heuristic_score, reverse=True)
 
 
-def query_candidates(field: str, visible_regions: list[OCRRegion]) -> list[FieldCandidate]:
+def _stable_noise(key: str) -> float:
+    digest = hashlib.sha256(key.encode("utf-8")).digest()
+    value = int.from_bytes(digest[:8], "big") / float(2**64)
+    return (value * 2.0) - 1.0
+
+
+def _rerank_candidates(candidates: list[FieldCandidate], ranking_noise: float, noise_key: str) -> list[FieldCandidate]:
+    if ranking_noise <= 0.0:
+        return candidates
+
+    reranked: list[FieldCandidate] = []
+    for candidate in candidates:
+        adjusted_score = candidate.heuristic_score + (_stable_noise(f"{noise_key}:{candidate.candidate_id}") * ranking_noise)
+        reranked.append(candidate.model_copy(update={"heuristic_score": round(adjusted_score, 4)}))
+    return sorted(reranked, key=lambda item: (item.heuristic_score, item.candidate_id), reverse=True)
+
+
+def query_candidates(field: str, visible_regions: list[OCRRegion], ranking_noise: float = 0.0, noise_key: str = "") -> list[FieldCandidate]:
     if field == "company":
-        return company_candidates(visible_regions)
+        candidates = company_candidates(visible_regions)
+        return _rerank_candidates(candidates, ranking_noise, noise_key)
     if field == "date":
-        return date_candidates(visible_regions)
+        candidates = date_candidates(visible_regions)
+        return _rerank_candidates(candidates, ranking_noise, noise_key)
     if field == "address":
-        return address_candidates(visible_regions)
+        candidates = address_candidates(visible_regions)
+        return _rerank_candidates(candidates, ranking_noise, noise_key)
     if field == "total":
-        return total_candidates(visible_regions)
+        candidates = total_candidates(visible_regions)
+        return _rerank_candidates(candidates, ranking_noise, noise_key)
     return []

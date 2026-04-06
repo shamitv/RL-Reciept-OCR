@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass, field
+from random import Random
 
 from env.candidate_retrieval import query_candidates
 from env.dataset import ReceiptDataset
@@ -36,6 +37,7 @@ class HiddenState:
 class ReceiptExtractionEnv:
     def __init__(self) -> None:
         self.dataset = ReceiptDataset()
+        self.rng = make_rng(0)
         self.hidden_state = HiddenState()
         self.last_observation = ReceiptObservation(
             task_id="easy",
@@ -50,9 +52,9 @@ class ReceiptExtractionEnv:
         self.reward_tracker = RewardTracker()
 
     def reset(self, task_name: str | None = None, seed: int | None = None) -> StepResult:
-        rng = make_rng(seed)
+        self.rng = make_rng(seed)
         self.task = get_task(task_name)
-        sample = self.dataset.sample(self.task.difficulty, rng)
+        sample = self.dataset.sample(self.task.difficulty, self.rng)
         self.reward_tracker = RewardTracker()
         self.hidden_state = HiddenState(
             sample_id=sample.sample_id,
@@ -118,6 +120,9 @@ class ReceiptExtractionEnv:
         return [region for region in self.hidden_state.all_regions if region.region_id in ids]
 
     def _reveal_window(self, window: str) -> int:
+        if window not in self.task.visible_windows:
+            self.hidden_state.last_error = f"window {window} unavailable for task"
+            return 0
         regions = self.hidden_state.all_regions
         if window == "top":
             selected = [region for region in regions if region.bbox[1] <= 100]
@@ -133,13 +138,28 @@ class ReceiptExtractionEnv:
                 self.hidden_state.revealed_region_ids.append(region.region_id)
         return len(self.hidden_state.revealed_region_ids) - before
 
+    def _default_reveal_windows(self) -> list[str]:
+        if self.task.difficulty == "easy":
+            return [window for window in ("top", "bottom") if window in self.task.visible_windows]
+        if self.task.difficulty == "medium":
+            return [window for window in ("top",) if window in self.task.visible_windows]
+        return [window for window in ("top",) if window in self.task.visible_windows]
+
+    def _candidate_noise(self) -> float:
+        return self.task.ranking_noise + (self.task.corruption_level / 2.0)
+
     def _execute_action(self, action: ReceiptAction) -> str:
         if action.action_type == "view_receipt":
-            return f"Viewing receipt {self.hidden_state.sample_id}"
+            total_revealed = 0
+            for window in self._default_reveal_windows():
+                total_revealed += self._reveal_window(window)
+            return f"Viewing receipt {self.hidden_state.sample_id}; revealed {total_revealed} starter regions"
 
         if action.action_type == "list_text_regions":
             window = action.window or "all"
             revealed = self._reveal_window(window)
+            if self.hidden_state.last_error:
+                return f"Window {window} is unavailable for {self.task.difficulty}"
             return f"Revealed {revealed} regions from {window}"
 
         if action.action_type == "inspect_bbox":
@@ -170,7 +190,12 @@ class ReceiptExtractionEnv:
             if not action.field:
                 self.hidden_state.last_error = "missing field"
                 return "Missing field"
-            candidates = query_candidates(action.field, self._visible_regions())
+            candidates = query_candidates(
+                action.field,
+                self._visible_regions(),
+                ranking_noise=self._candidate_noise(),
+                noise_key=f"{self.hidden_state.sample_id}:{self.task.task_id}:{action.field}",
+            )
             self.hidden_state.candidate_lists[action.field] = candidates
             return f"Generated {len(candidates)} candidates for {action.field}"
 
