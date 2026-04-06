@@ -1,5 +1,13 @@
 # Plan: Task Difficulty And Environment Fidelity
 
+## Status
+
+Current state: complete for the current environment design
+
+- Task-specific visibility rules are enforced.
+- Candidate ranking noise is deterministic and task-aware.
+- Task behavior differences are covered by tests.
+
 ## Goal
 
 Turn the current easy, medium, and hard task presets into genuinely different environment conditions that reward better policies and make the task progression defensible to judges.

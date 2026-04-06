@@ -1,5 +1,13 @@
 # Plan: Real Dataset Integration
 
+## Status
+
+Current state: complete
+
+- The default runtime path now loads prepared receipt annotations from disk.
+- Deterministic sampling and derived difficulty buckets are implemented.
+- Dataset-focused tests were added.
+
 ## Goal
 
 Replace the embedded mock receipt samples with a deterministic, testable loader built on the prepared receipt dataset in the repository.

@@ -1,5 +1,13 @@
 # Plan: Baseline Inference And Evaluation
 
+## Status
+
+Current state: complete for Path A
+
+- The repository now uses a heuristic-only baseline path.
+- The CLI evaluates all tasks by default and supports seed, episode, format, and verbose options.
+- README baseline numbers were regenerated from the current codebase.
+
 ## Goal
 
 Create a truthful, reproducible baseline evaluation flow that can be run in one command and reported directly in the submission README.

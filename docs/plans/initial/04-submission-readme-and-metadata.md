@@ -1,5 +1,13 @@
 # Plan: Submission README And Metadata Hardening
 
+## Status
+
+Current state: complete
+
+- The top-level README was rewritten as a submission-facing document.
+- `openenv.yaml` and package metadata were tightened to match current behavior.
+- Scaffold-era language was removed from submission-facing metadata.
+
 ## Goal
 
 Rewrite the repository documentation and metadata so the project reads like a finished hackathon submission rather than a scaffold.

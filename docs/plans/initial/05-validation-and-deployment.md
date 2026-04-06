@@ -1,5 +1,15 @@
 # Plan: Validation And Deployment Readiness
 
+## Status
+
+Current state: partially complete
+
+- `pytest` passes.
+- API smoke tests pass locally.
+- `openenv validate` passes locally.
+- A repeatable local validation bundle exists.
+- Docker and container startup are still unverified on this machine because the `docker` CLI is unavailable.
+
 ## Goal
 
 Verify that the final repository satisfies the technical submission gates beyond local unit tests: validator compatibility, container startup, API behavior, and deployment readiness.

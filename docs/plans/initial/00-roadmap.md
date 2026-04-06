@@ -1,5 +1,13 @@
 # Roadmap To Submission Readiness
 
+## Status
+
+Current state: in progress
+
+- Phases 1 through 4 are complete.
+- Phase 5 is complete for local Python validation and OpenEnv validation.
+- Remaining blocker: Docker and container startup have not been verified on this machine.
+
 ## Objective
 
 Convert the current repository from a strong prototype into a submission-ready OpenEnv environment that can survive pass-fail validation and score competitively against the hackathon rubric.

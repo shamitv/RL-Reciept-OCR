@@ -10,6 +10,19 @@ The repository already has a usable environment scaffold. These plans focus on t
 
 Use [CHECKLIST.md](CHECKLIST.md) as the master progress tracker across all plan documents.
 
+## Current Status
+
+- `00-roadmap`: complete for the current implementation cycle
+- `01-real-dataset-integration`: complete
+- `02-baseline-inference-and-eval`: complete for the heuristic baseline path
+- `03-task-difficulty-and-environment-fidelity`: complete for the current task model
+- `04-submission-readme-and-metadata`: complete
+- `05-validation-and-deployment`: partially complete
+
+Remaining gap:
+
+- Docker build and container startup have not been verified on this machine because the `docker` CLI is unavailable.
+
 ## Planning Principles
 
 - Close pass-fail submission risks before optimizing polish.
@@ -62,6 +75,10 @@ The plan set can be considered executed when all of the following are true:
 - The README reads as a finished submission and matches the implemented behavior.
 - `openenv validate` is run and recorded.
 - The container and deployment path are verified end to end.
+
+Current state:
+
+- All listed conditions are satisfied except the final container and deployment verification step.
 
 ## Notes
 
