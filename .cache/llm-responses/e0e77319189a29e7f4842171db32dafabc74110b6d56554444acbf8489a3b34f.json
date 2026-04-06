@@ -1,0 +1,14 @@
+{
+  "key": "e0e77319189a29e7f4842171db32dafabc74110b6d56554444acbf8489a3b34f",
+  "created_at": "2026-04-06T13:59:50.441727+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Gordon Ramsay Steak Paris Las Vegas\",\n  \"date\": \"10/21/2014\",\n  \"address\": null,\n  \"total\": \"313.49\"\n}"
+        }
+      }
+    ]
+  }
+}

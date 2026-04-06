@@ -1,0 +1,14 @@
+{
+  "key": "27c00016a956c11e77cdf573bf229301ce420977153c05e19c5bd57fcd3cf9c0",
+  "created_at": "2026-04-06T13:51:49.176909+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Pita Pita - Lombard\",\n  \"date\": \"5/4/2017\",\n  \"address\": \"211 E Roosevelt Rd, Lombard, IL 60148\",\n  \"total\": \"228.92\"\n}"
+        }
+      }
+    ]
+  }
+}

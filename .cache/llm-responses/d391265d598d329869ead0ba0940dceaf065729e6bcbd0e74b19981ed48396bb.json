@@ -1,0 +1,14 @@
+{
+  "key": "d391265d598d329869ead0ba0940dceaf065729e6bcbd0e74b19981ed48396bb",
+  "created_at": "2026-04-06T13:55:43.867187+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"COLUMBUS RESTAURANT\",\n  \"date\": \"2018-01-27\",\n  \"address\": \"736 OCEAN DRIVE MIAMI BEACH, FL 33139\",\n  \"total\": \"184.47\"\n}"
+        }
+      }
+    ]
+  }
+}

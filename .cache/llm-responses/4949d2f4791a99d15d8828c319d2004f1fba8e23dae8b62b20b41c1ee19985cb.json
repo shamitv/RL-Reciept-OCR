@@ -1,0 +1,14 @@
+{
+  "key": "4949d2f4791a99d15d8828c319d2004f1fba8e23dae8b62b20b41c1ee19985cb",
+  "created_at": "2026-04-06T13:47:12.207793+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Daily Grill\",\n  \"date\": \"11/01/2018\",\n  \"address\": \"2501 Colorado Ave, Santa Monica, CA 90404\",\n  \"total\": \"91.45\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "35e41ac43916f85e9807bc71685d31f697a3f4dba1cb9ad36f38559baddb4044",
+  "created_at": "2026-04-06T13:57:56.627279+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"HIRO JAPANESE RESTAURANT\",\n  \"date\": \"2/13/2018\",\n  \"address\": \"3007 NE 163RD STREET, North Miami Beach, FL 33160\",\n  \"total\": \"$17.18\"\n}"
+        }
+      }
+    ]
+  }
+}

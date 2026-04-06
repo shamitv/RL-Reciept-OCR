@@ -1,0 +1,14 @@
+{
+  "key": "a465dd526caae9efa1b34a215da2bd2469b2bb6b1fd3eced3f9349a39cb3df1c",
+  "created_at": "2026-04-06T13:49:09.244944+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Cafe Eugene\",\n  \"date\": \"2016-04-10\",\n  \"address\": \"1175 Solano Avenue, Albany CA 94706\",\n  \"total\": \"$42.90\"\n}"
+        }
+      }
+    ]
+  }
+}

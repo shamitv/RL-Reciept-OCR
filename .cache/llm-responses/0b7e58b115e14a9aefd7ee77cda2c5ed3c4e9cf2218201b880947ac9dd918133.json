@@ -1,0 +1,14 @@
+{
+  "key": "0b7e58b115e14a9aefd7ee77cda2c5ed3c4e9cf2218201b880947ac9dd918133",
+  "created_at": "2026-04-06T14:05:34.181646+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"MIGUELS MEXICAN\",\n  \"date\": \"7-5-2017\",\n  \"address\": \"3035 W. KENNEDY BLVD TAMPA, FL.\",\n  \"total\": \"27.08\"\n}"
+        }
+      }
+    ]
+  }
+}

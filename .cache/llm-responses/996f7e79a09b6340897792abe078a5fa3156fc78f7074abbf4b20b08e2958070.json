@@ -1,0 +1,14 @@
+{
+  "key": "996f7e79a09b6340897792abe078a5fa3156fc78f7074abbf4b20b08e2958070",
+  "created_at": "2026-04-06T13:52:40.009135+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Firepoint Grill\",\n  \"date\": \"12/07/2016\",\n  \"address\": \"3739 West Chester Pike\\nNewtown Square, PA 19013\",\n  \"total\": \"142.93\"\n}"
+        }
+      }
+    ]
+  }
+}

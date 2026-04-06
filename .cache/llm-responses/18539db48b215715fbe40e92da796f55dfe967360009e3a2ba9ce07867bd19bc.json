@@ -1,0 +1,14 @@
+{
+  "key": "18539db48b215715fbe40e92da796f55dfe967360009e3a2ba9ce07867bd19bc",
+  "created_at": "2026-04-06T13:59:18.995184+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Denny's Restaurant #8129\",\n  \"date\": \"2015-08-30\",\n  \"address\": \"160 Eastern Boulevard, Canandaigua, NY 14424\",\n  \"total\": \"5.29\"\n}"
+        }
+      }
+    ]
+  }
+}

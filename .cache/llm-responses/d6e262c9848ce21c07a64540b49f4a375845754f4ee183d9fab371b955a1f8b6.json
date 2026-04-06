@@ -1,0 +1,14 @@
+{
+  "key": "d6e262c9848ce21c07a64540b49f4a375845754f4ee183d9fab371b955a1f8b6",
+  "created_at": "2026-04-06T13:58:46.070574+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"SHAKE SHACK\",\n  \"date\": \"03/03/2015\",\n  \"address\": \"1450 S. Dixie Highway\",\n  \"total\": \"25.47\"\n}"
+        }
+      }
+    ]
+  }
+}

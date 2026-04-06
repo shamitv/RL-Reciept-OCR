@@ -1,0 +1,14 @@
+{
+  "key": "b328f34f0568a9869e6d34b6a83aebdd7b5186225e2e712b0e0972e23fca31e0",
+  "created_at": "2026-04-06T14:06:06.399439+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Bar Rua\",\n  \"date\": \"17/08/2016\",\n  \"address\": \"32 Clarendon Street\",\n  \"total\": \"65.10\"\n}"
+        }
+      }
+    ]
+  }
+}

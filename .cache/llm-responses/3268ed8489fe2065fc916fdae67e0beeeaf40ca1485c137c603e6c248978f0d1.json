@@ -1,0 +1,14 @@
+{
+  "key": "3268ed8489fe2065fc916fdae67e0beeeaf40ca1485c137c603e6c248978f0d1",
+  "created_at": "2026-04-06T14:02:02.049629+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CARL'S JR\",\n  \"date\": \"9/27/2017\",\n  \"address\": \"11961 Beach Blvd. Stanton, CA 90680\",\n  \"total\": \"7.61\"\n}"
+        }
+      }
+    ]
+  }
+}

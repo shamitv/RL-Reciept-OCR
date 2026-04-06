@@ -1,0 +1,14 @@
+{
+  "key": "ae929b83e46a4a4456e4c5ac078809319dbf0fccff1c3048968c128ae63f8cd2",
+  "created_at": "2026-04-06T13:48:18.016089+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Caldera Brewery & Restaurant\",\n  \"date\": \"12/28/2017\",\n  \"address\": \"590 Clover Lane Ashland, Oregon 97520\",\n  \"total\": \"37.60\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "40507513986a67a7a93b5589fe8e5329c0d6ee26f4b369558e5f76fd65b4a49b",
+  "created_at": "2026-04-06T13:49:26.206163+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"River Village Family Restaurant\",\n  \"date\": \"08/12/19\",\n  \"address\": \"22825 Huron River Dr, Rockwood, MI 48173\",\n  \"total\": \"$10.90\"\n}"
+        }
+      }
+    ]
+  }
+}

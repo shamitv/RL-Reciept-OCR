@@ -1,0 +1,14 @@
+{
+  "key": "5a2295a5c352a1a41b7798add616f634e01da9dcebb0d48c1b241e363534c851",
+  "created_at": "2026-04-06T14:03:41.688812+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"company\": \"Bar Louie Huntsville\", \"date\": \"07/03/2015\", \"address\": \"365 The Bridge St.,Suite1 Huntsville, AL, 35806\", \"total\": \"7.56\"}"
+        }
+      }
+    ]
+  }
+}

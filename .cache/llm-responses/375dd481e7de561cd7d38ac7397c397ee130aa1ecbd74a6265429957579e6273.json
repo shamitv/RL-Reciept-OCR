@@ -1,0 +1,14 @@
+{
+  "key": "375dd481e7de561cd7d38ac7397c397ee130aa1ecbd74a6265429957579e6273",
+  "created_at": "2026-04-06T13:59:34.547620+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Kalooki's\",\n  \"date\": \"03/14/2015\",\n  \"address\": \"Bay Road, Blue Hills 01649 Providenciales\",\n  \"total\": \"$ 62.70\"\n}"
+        }
+      }
+    ]
+  }
+}

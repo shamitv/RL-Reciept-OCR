@@ -1,0 +1,14 @@
+{
+  "key": "a38b2ba900557f897cc3f85b8fef5288d7dd5240f3cf352998becae59b9d7795",
+  "created_at": "2026-04-06T14:06:39.497186+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"BAR RISTORANTE STABILIMENTO MARINO E TERMALE SAN MONTANO S.R.L.\",\n  \"date\": \"2018-08-28\",\n  \"address\": \"VIA S.MONTANO - LACCO AMENO (NA)\",\n  \"total\": \"34.00\"\n}"
+        }
+      }
+    ]
+  }
+}

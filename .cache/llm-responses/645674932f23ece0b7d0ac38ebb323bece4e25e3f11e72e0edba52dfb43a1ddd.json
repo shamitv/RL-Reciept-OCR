@@ -1,0 +1,14 @@
+{
+  "key": "645674932f23ece0b7d0ac38ebb323bece4e25e3f11e72e0edba52dfb43a1ddd",
+  "created_at": "2026-04-06T13:55:10.154006+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Lan Sheng\",\n  \"date\": \"06/13/17\",\n  \"address\": \"209 Paterson Ave. Wallington N. J. 07057\",\n  \"total\": \"$75.15\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "55ae57be029b073852a0cdb3d26bb19b76f5de2981e6275e6baa059a1ab43475",
+  "created_at": "2026-04-06T13:56:33.909514+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"KOBE JAPANESE STEAK\",\n  \"date\": \"02/22/19\",\n  \"address\": \"69838 HIGHWAY 111 RANCHO MIRAGE, CA, 92270-2837\",\n  \"total\": \"175.07\"\n}"
+        }
+      }
+    ]
+  }
+}

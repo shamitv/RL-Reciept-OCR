@@ -1,0 +1,14 @@
+{
+  "key": "5658d1ebd6ec81b555887145f58dc1d3a538108d146b3fe9e1f2ed2c4affc39e",
+  "created_at": "2026-04-06T13:51:32.798215+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Trattoria Saporito\",\n  \"date\": \"7/1/2018\",\n  \"address\": \"328 Washington Street, Hoboken, NJ 07030\",\n  \"total\": \"$125.99\"\n}"
+        }
+      }
+    ]
+  }
+}

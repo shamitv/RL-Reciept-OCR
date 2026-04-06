@@ -1,0 +1,14 @@
+{
+  "key": "c65e92565c6a285f24d3307ea78f601a7ed7ec7a0a3c5de6e865adf0395b0c56",
+  "created_at": "2026-04-06T14:04:45.619760+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"JT's Diner\",\n  \"date\": \"02/12/2016\",\n  \"address\": \"37011 Cook Street\",\n  \"total\": \"28.40\"\n}"
+        }
+      }
+    ]
+  }
+}

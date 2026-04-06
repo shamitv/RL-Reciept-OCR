@@ -1,0 +1,14 @@
+{
+  "key": "c9b2a55ba85b6bfd15758da21d9cfc127c46f35c369017e2525372bd7fd3992e",
+  "created_at": "2026-04-06T13:53:31.809973+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Kaiseki Japanese Cuisine\",\n  \"date\": \"07/28/2018\",\n  \"address\": \"7 West Merrick Rd, Valley Stream, NY 11580\",\n  \"total\": \"43.30\"\n}"
+        }
+      }
+    ]
+  }
+}

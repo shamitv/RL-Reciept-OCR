@@ -1,0 +1,14 @@
+{
+  "key": "13ed6ae738897e9eda3ecd280bd51f00b251c3c1568adae1b8ddd9b10f07708b",
+  "created_at": "2026-04-06T14:00:57.714082+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Angelo's Pizza Restaurant\",\n  \"date\": \"7/10/2017\",\n  \"address\": \"12247 Sheridan St\\nCooper Cityb, FL 33026\",\n  \"total\": \"$33.34\"\n}"
+        }
+      }
+    ]
+  }
+}

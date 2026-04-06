@@ -1,0 +1,14 @@
+{
+  "key": "fcc54fdb4d64edfb4c4e7383d6701764db607be434fc3a0549b736880ac84a21",
+  "created_at": "2026-04-06T14:02:18.178533+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Buca di Beppo\",\n  \"date\": \"07/15/2016\",\n  \"address\": \"Universal City, CA 91608\",\n  \"total\": \"109.28\"\n}"
+        }
+      }
+    ]
+  }
+}

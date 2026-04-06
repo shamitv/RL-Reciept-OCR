@@ -1,0 +1,14 @@
+{
+  "key": "8b48f55e341d3e3bf6d0d7eb23984763f8b377a28dc3e9b01c4283dbd7cc689a",
+  "created_at": "2026-04-06T13:45:15.147246+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"VILLA D'ESTE RESTAURANT\",\n  \"date\": \"12/8/2017\",\n  \"address\": \"186 Jericho Tpke floral park, NY 11001\",\n  \"total\": \"94.78\"\n}"
+        }
+      }
+    ]
+  }
+}

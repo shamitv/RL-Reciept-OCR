@@ -1,0 +1,14 @@
+{
+  "key": "a194cb35f61b5478af2f74c99594873bb484b54c089a33ad09cb519bca05cdca",
+  "created_at": "2026-04-06T13:55:27.531672+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"COMMANDER'S PALACE\",\n  \"date\": \"03/12/19\",\n  \"address\": \"1427 WASHINGTON AVE., NEW ORLEANS, LA\",\n  \"total\": \"55.95\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "35d0e0bf2e13a6c5cb6f40a18e598e18721c4cffabea7054e1bdf40dce580240",
+  "created_at": "2026-04-06T14:04:13.516709+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Finnegan's Way\",\n  \"date\": \"08/21/2017\",\n  \"address\": \"1344 Ocean Drive, Miami Beach Florida 33139\",\n  \"total\": \"50.80\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "9d784e3d6bcc4ada2cd1eda18c36e7b9db0c28c868659af1b066c2649da0ec13",
+  "created_at": "2026-04-06T13:49:42.826519+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"company\": \"Mr. M's Hot Wings & Things Inc\", \"date\": \"6/28/2019\", \"address\": \"886 N. Garfield Ave, Montebello, CA 90640\", \"total\": \"$10.95\"}"
+        }
+      }
+    ]
+  }
+}

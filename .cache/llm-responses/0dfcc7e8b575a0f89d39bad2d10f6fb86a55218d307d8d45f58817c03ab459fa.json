@@ -1,0 +1,14 @@
+{
+  "key": "0dfcc7e8b575a0f89d39bad2d10f6fb86a55218d307d8d45f58817c03ab459fa",
+  "created_at": "2026-04-06T14:03:08.028984+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Lalo's Mexican at Navy Pier\",\n  \"date\": \"8/24/2017\",\n  \"address\": \"600 E Grand Ave\",\n  \"total\": \"$16.56\"\n}"
+        }
+      }
+    ]
+  }
+}

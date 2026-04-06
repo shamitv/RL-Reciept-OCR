@@ -1,0 +1,14 @@
+{
+  "key": "861a372926055a30f857cc68edffcac7ceb7ff6f1e1707c4b31dedbdf723c02a",
+  "created_at": "2026-04-06T13:57:06.189679+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Panda Express\",\n  \"date\": \"12/22/2017\",\n  \"address\": \"Brooklyn, NY (718)246-3898\",\n  \"total\": \"27.44\"\n}"
+        }
+      }
+    ]
+  }
+}

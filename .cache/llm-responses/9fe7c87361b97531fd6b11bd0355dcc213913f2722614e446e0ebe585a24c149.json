@@ -1,0 +1,14 @@
+{
+  "key": "9fe7c87361b97531fd6b11bd0355dcc213913f2722614e446e0ebe585a24c149",
+  "created_at": "2026-04-06T13:44:25.568021+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"McDonald's Restaurant #3100\",\n  \"date\": \"02/7/2013\",\n  \"address\": \"1617 N EASTERN AVE LOS ANGELES, CA 90033-1053\",\n  \"total\": \"7.27\"\n}"
+        }
+      }
+    ]
+  }
+}

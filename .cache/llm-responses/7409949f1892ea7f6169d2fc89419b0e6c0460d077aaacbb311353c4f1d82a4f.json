@@ -1,0 +1,14 @@
+{
+  "key": "7409949f1892ea7f6169d2fc89419b0e6c0460d077aaacbb311353c4f1d82a4f",
+  "created_at": "2026-04-06T13:48:01.142438+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Nancy's\",\n  \"date\": \"09/24/2016\",\n  \"address\": \"255-41 Jericho Turnpike Floral Park, NY 11001\",\n  \"total\": \"$94.18\"\n}"
+        }
+      }
+    ]
+  }
+}

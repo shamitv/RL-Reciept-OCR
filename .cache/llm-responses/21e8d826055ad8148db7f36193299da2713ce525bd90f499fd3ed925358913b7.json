@@ -1,0 +1,14 @@
+{
+  "key": "21e8d826055ad8148db7f36193299da2713ce525bd90f499fd3ed925358913b7",
+  "created_at": "2026-04-06T14:02:51.476423+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"El Valle Mexican Restaurant\",\n  \"date\": \"2017-12-02\",\n  \"address\": \"305 W. John St.\\nMatthews, NC 28105\",\n  \"total\": \"$17.75\"\n}"
+        }
+      }
+    ]
+  }
+}

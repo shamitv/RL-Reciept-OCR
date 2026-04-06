@@ -1,0 +1,14 @@
+{
+  "key": "7592cf2aa176118c574dd4beb8fb8657316ff2861f9eaad0f1d2dbb6382ce2c7",
+  "created_at": "2026-04-06T13:53:15.288703+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CITY TASTE\",\n  \"date\": \"2018-11-05\",\n  \"address\": \"930 WAYNE AVE. #100 SILVER SPRING, MD 20910\",\n  \"total\": \"28.78\"\n}"
+        }
+      }
+    ]
+  }
+}

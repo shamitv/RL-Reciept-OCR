@@ -1,0 +1,14 @@
+{
+  "key": "24d0df7f0d535939a4d315c92412c1f81b6df4c40330daaf99472b7f2c92f3bc",
+  "created_at": "2026-04-06T13:54:04.769935+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"McDonald's\",\n  \"date\": \"03/10/2018\",\n  \"address\": \"16725 Stony Plain Rd Edmonton AB T5P 4A9\",\n  \"total\": \"192.00\"\n}"
+        }
+      }
+    ]
+  }
+}

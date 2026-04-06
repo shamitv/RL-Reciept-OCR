@@ -1,0 +1,14 @@
+{
+  "key": "36cd2fbee302cf3067eca9b2205a6a18dc0327e56a25a06209a1ec0010943a41",
+  "created_at": "2026-04-06T14:03:25.210855+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"ipanema Brazilian Steak House\",\n  \"date\": \"04/13/2018\",\n  \"address\": \"2023 South Pine Avenue Ocala, Florida 34471\",\n  \"total\": \"$55.38\"\n}"
+        }
+      }
+    ]
+  }
+}

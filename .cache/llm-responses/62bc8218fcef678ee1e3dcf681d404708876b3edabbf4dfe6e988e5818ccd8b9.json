@@ -1,0 +1,14 @@
+{
+  "key": "62bc8218fcef678ee1e3dcf681d404708876b3edabbf4dfe6e988e5818ccd8b9",
+  "created_at": "2026-04-06T13:45:32.107705+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Laurel Tavern Hermosa Beach\",\n  \"date\": \"01/12/2019\",\n  \"address\": \"1220 Hermosa Beach, Hermosa Beach, CA 90254\",\n  \"total\": \"44.35\"\n}"
+        }
+      }
+    ]
+  }
+}

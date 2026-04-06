@@ -1,0 +1,14 @@
+{
+  "key": "b68c51d2032088690ecd9c998dea337d3cc277cd477b50ab7c231553ec102a25",
+  "created_at": "2026-04-06T13:57:39.629501+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Firefly American Bistro\",\n  \"date\": \"12/28/2018\",\n  \"address\": \"5525 New Albany Road West, New Albany, OH 43054\",\n  \"total\": \"$83.64\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "ddfa18908a7e70073fddec459b20a391839eefaf6274f27ac3dc8ebf251eb580",
+  "created_at": "2026-04-06T13:58:29.571578+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Maui Teriyaki\",\n  \"date\": \"10/25/2017\",\n  \"address\": \"27000 Marine Ave #103, Redondo Beach, CA 90278\",\n  \"total\": \"$14.17\"\n}"
+        }
+      }
+    ]
+  }
+}

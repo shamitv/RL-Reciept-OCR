@@ -1,0 +1,14 @@
+{
+  "key": "9b1392c86e3e20c467527db3f9c1a6ff01bb2ca6aa7539cbda2bc3bed7bfc3e7",
+  "created_at": "2026-04-06T13:46:55.405659+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Araxi Burger Aventura\",\n  \"date\": \"03/17/2019\",\n  \"address\": \"17861 BISCAYNE BLVD Aventura, FL 33160\",\n  \"total\": \"$38.86\"\n}"
+        }
+      }
+    ]
+  }
+}

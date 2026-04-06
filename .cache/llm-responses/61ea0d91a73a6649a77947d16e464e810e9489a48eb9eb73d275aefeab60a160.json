@@ -1,0 +1,14 @@
+{
+  "key": "61ea0d91a73a6649a77947d16e464e810e9489a48eb9eb73d275aefeab60a160",
+  "created_at": "2026-04-06T14:05:50.515163+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"MOD Pizza\",\n  \"date\": \"5/19/2019\",\n  \"address\": \"26902 92nd Ave NW\\nSuite A\\nStanwood, WA 98292\",\n  \"total\": \"$29.98\"\n}"
+        }
+      }
+    ]
+  }
+}

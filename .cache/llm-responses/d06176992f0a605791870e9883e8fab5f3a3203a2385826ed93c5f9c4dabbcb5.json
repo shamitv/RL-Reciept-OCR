@@ -1,0 +1,14 @@
+{
+  "key": "d06176992f0a605791870e9883e8fab5f3a3203a2385826ed93c5f9c4dabbcb5",
+  "created_at": "2026-04-06T14:06:55.127092+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Nonna\",\n  \"date\": \"05/21/2012\",\n  \"address\": \"9255 West Sunset Blvd, West Hollywood, CA 90069\",\n  \"total\": \"128.33\"\n}"
+        }
+      }
+    ]
+  }
+}

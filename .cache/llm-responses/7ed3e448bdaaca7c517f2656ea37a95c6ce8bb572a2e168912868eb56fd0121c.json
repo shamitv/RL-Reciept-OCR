@@ -1,0 +1,14 @@
+{
+  "key": "7ed3e448bdaaca7c517f2656ea37a95c6ce8bb572a2e168912868eb56fd0121c",
+  "created_at": "2026-04-06T14:01:45.809582+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Pappadeaux Seafood Kitchen\",\n  \"date\": \"01/07/2017\",\n  \"address\": \"7800 Airport Blvd (HOU)\\nHouston, TX 77061\",\n  \"total\": \"42.16\"\n}"
+        }
+      }
+    ]
+  }
+}

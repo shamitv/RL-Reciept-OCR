@@ -1,0 +1,14 @@
+{
+  "key": "a684b10d2ceea8d5ef68fc308585857828b96977c2d9cebeaccb5603e866bc70",
+  "created_at": "2026-04-06T13:59:02.300032+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Blue Bear Tavern\",\n  \"date\": \"2012-01-13\",\n  \"address\": \"216 S 11th Street\",\n  \"total\": \"83.44\"\n}"
+        }
+      }
+    ]
+  }
+}

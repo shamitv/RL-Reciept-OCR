@@ -1,0 +1,14 @@
+{
+  "key": "bf4196ed51947d924080e4c8877ee9bfb20a0ccac1835ef072a9484119382441",
+  "created_at": "2026-04-06T13:47:29.676754+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"KICKIN KAJUN KAPOLEI\",\n  \"date\": \"7/18/19, 5:47 PM\",\n  \"address\": \"91-5431 Kapolei Parkway, Suite 426 Kapolei, HI 96707\",\n  \"total\": \"$77.49\"\n}"
+        }
+      }
+    ]
+  }
+}

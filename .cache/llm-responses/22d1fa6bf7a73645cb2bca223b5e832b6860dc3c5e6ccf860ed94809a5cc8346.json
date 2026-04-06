@@ -1,0 +1,14 @@
+{
+  "key": "22d1fa6bf7a73645cb2bca223b5e832b6860dc3c5e6ccf860ed94809a5cc8346",
+  "created_at": "2026-04-06T13:48:52.867430+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Taco Maria\",\n  \"date\": \"2018-01-23\",\n  \"address\": \"3313 Hyland Ave. Ste C21 Costa Mesa, CA 92626\",\n  \"total\": \"$45.79\"\n}"
+        }
+      }
+    ]
+  }
+}

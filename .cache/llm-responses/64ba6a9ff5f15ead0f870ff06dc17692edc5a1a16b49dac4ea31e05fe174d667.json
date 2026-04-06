@@ -1,0 +1,14 @@
+{
+  "key": "64ba6a9ff5f15ead0f870ff06dc17692edc5a1a16b49dac4ea31e05fe174d667",
+  "created_at": "2026-04-06T14:03:57.784328+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"El Charro Cafe Ventana\",\n  \"date\": \"06/24/2018\",\n  \"address\": \"6910 E SUNRISE DR\",\n  \"total\": \"47.90\"\n}"
+        }
+      }
+    ]
+  }
+}

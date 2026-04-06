@@ -1,0 +1,14 @@
+{
+  "key": "75cf015b59bffd1edcf7ae2b0022b365dff5ca54428b594d0b49ed005be083c9",
+  "created_at": "2026-04-06T13:49:59.090372+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Trinity Restaurant\",\n  \"date\": \"02/18/2017\",\n  \"address\": \"190 Jericho Tpke Floral Park NY 11001\",\n  \"total\": \"75.50\"\n}"
+        }
+      }
+    ]
+  }
+}

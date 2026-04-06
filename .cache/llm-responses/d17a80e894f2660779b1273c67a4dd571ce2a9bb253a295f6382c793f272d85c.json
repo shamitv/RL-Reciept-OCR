@@ -1,0 +1,14 @@
+{
+  "key": "d17a80e894f2660779b1273c67a4dd571ce2a9bb253a295f6382c793f272d85c",
+  "created_at": "2026-04-06T13:46:21.646220+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Panda Express\",\n  \"date\": \"3/16/2013\",\n  \"address\": \"Everett, WA\",\n  \"total\": \"164.89\"\n}"
+        }
+      }
+    ]
+  }
+}

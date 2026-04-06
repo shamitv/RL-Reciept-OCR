@@ -1,0 +1,14 @@
+{
+  "key": "8091f01eef0642319c65fb3ef70bd484c6d3a52f7db37ebd84443e41a0c629df",
+  "created_at": "2026-04-06T14:05:01.982295+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Spiral Diner & Bakery\",\n  \"date\": \"6/16/2019\",\n  \"address\": \"608 E Hickory St, Denton, TX 76205\",\n  \"total\": \"$50.38\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "14ef89542bb7a10a9cf1d0eab13ca7b831f6af92773e9131289e99ef0a44b4c8",
+  "created_at": "2026-04-06T14:00:07.891380+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"IKEA FOOD\",\n  \"date\": \"2016-04-11\",\n  \"address\": \"MILTON KEYNES 185 Address4 GB 52773320\",\n  \"total\": \"14.85\"\n}"
+        }
+      }
+    ]
+  }
+}

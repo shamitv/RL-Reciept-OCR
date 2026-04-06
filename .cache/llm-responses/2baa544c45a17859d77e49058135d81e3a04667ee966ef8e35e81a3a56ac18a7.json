@@ -1,0 +1,14 @@
+{
+  "key": "2baa544c45a17859d77e49058135d81e3a04667ee966ef8e35e81a3a56ac18a7",
+  "created_at": "2026-04-06T13:45:48.853745+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Uncle Julio's\",\n  \"date\": \"05/18/2019\",\n  \"address\": \"8030 Renaissance Parkway, Durham, NC 27713\",\n  \"total\": \"46.73\"\n}"
+        }
+      }
+    ]
+  }
+}

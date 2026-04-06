@@ -1,0 +1,14 @@
+{
+  "key": "ab6346d0895948e378965140ad22e4f6b4e6961c9c6051e2c283e5bb4cdce40b",
+  "created_at": "2026-04-06T13:57:22.446370+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Heart of Portugal Restaurant\",\n  \"date\": \"09/10/2017\",\n  \"address\": \"241 Mineola Blvd, Mineola, NY 11501\",\n  \"total\": \"$71.58\"\n}"
+        }
+      }
+    ]
+  }
+}

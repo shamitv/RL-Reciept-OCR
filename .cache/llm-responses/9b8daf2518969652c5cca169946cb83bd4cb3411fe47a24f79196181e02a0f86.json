@@ -1,0 +1,14 @@
+{
+  "key": "9b8daf2518969652c5cca169946cb83bd4cb3411fe47a24f79196181e02a0f86",
+  "created_at": "2026-04-06T13:53:48.595615+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Mexican Restaurant & Bar\",\n  \"date\": \"12/29/2017\",\n  \"address\": \"25 West San Fernando St. San Jose, CA 95113\",\n  \"total\": \"64.52\"\n}"
+        }
+      }
+    ]
+  }
+}

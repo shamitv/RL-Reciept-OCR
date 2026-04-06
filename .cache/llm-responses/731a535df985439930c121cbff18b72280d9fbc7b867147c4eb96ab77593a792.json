@@ -1,0 +1,14 @@
+{
+  "key": "731a535df985439930c121cbff18b72280d9fbc7b867147c4eb96ab77593a792",
+  "created_at": "2026-04-06T13:54:37.804381+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Crisfield Seafood Restaurant\",\n  \"date\": \"2017-12-29\",\n  \"address\": \"8012 Georgia Ave. Silver Spring, MD20910\",\n  \"total\": \"$42.74\"\n}"
+        }
+      }
+    ]
+  }
+}

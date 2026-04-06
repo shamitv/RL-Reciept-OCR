@@ -1,0 +1,14 @@
+{
+  "key": "8042dd9dbf98bf6c6bc9c9f140a876aca8cd39f75c6865e2bc97b14b65547509",
+  "created_at": "2026-04-06T13:56:49.707554+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Wendy's Restaurant\",\n  \"date\": \"03/18/2007\",\n  \"address\": \"401 Bergan St, Harrison, NJ 07029\",\n  \"total\": \"4.99\"\n}"
+        }
+      }
+    ]
+  }
+}

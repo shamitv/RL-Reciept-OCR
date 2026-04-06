@@ -1,0 +1,14 @@
+{
+  "key": "edf7928855724552896aa66b98b0e042229ca32b08c4b7c5dbb70d24d21905ff",
+  "created_at": "2026-04-06T13:58:13.053459+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CHRIS'S HAMBURGERS\",\n  \"date\": \"11-24-2017\",\n  \"address\": \"3950 E SLAUSON MAYWOOD, CA 90270\",\n  \"total\": \"$28.31\"\n}"
+        }
+      }
+    ]
+  }
+}

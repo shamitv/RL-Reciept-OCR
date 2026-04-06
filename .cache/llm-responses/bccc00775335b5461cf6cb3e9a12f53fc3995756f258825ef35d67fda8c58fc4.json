@@ -1,0 +1,14 @@
+{
+  "key": "bccc00775335b5461cf6cb3e9a12f53fc3995756f258825ef35d67fda8c58fc4",
+  "created_at": "2026-04-06T14:05:18.342793+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"New China\",\n  \"date\": \"2016-03-12\",\n  \"address\": \"1130 North Higley Rd, Suite#7-102 Mesa, AZ 85205\",\n  \"total\": \"26.96\"\n}"
+        }
+      }
+    ]
+  }
+}

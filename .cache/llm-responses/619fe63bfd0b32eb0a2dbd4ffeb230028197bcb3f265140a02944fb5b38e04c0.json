@@ -1,0 +1,14 @@
+{
+  "key": "619fe63bfd0b32eb0a2dbd4ffeb230028197bcb3f265140a02944fb5b38e04c0",
+  "created_at": "2026-04-06T13:47:45.276855+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"company\": \"GENERAL POOR'S TAVERN\", \"date\": \"2016-04-10\", \"address\": \"45 MAIN STREET HACKENSACK, NJ 07601\", \"total\": \"$10.70\"}"
+        }
+      }
+    ]
+  }
+}

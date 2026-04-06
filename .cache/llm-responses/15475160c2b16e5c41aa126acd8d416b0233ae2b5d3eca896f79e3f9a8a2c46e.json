@@ -1,0 +1,14 @@
+{
+  "key": "15475160c2b16e5c41aa126acd8d416b0233ae2b5d3eca896f79e3f9a8a2c46e",
+  "created_at": "2026-04-06T13:46:37.979269+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Carl's Jr\",\n  \"date\": \"12/19/2016\",\n  \"address\": \"8105 MADISON AVE FAIR OAKS, CA\",\n  \"total\": \"$13.05\"\n}"
+        }
+      }
+    ]
+  }
+}

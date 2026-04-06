@@ -1,0 +1,14 @@
+{
+  "key": "3218a2e5a91b21686230e85103d8481c09c04fe2ad42e9d85792f3fb0453c394",
+  "created_at": "2026-04-06T13:54:53.744858+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Don Juan Mexican Restaurant\",\n  \"date\": \"11/6/2013\",\n  \"address\": \"124 East Park Ave, Long Beach, NY 11561\",\n  \"total\": \"$56.38\"\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "03aa20e20a72aa35cc6dc42ca2526b2bdb2b9e3e8bbd41f51cff372258492ea0",
+  "created_at": "2026-04-06T14:01:29.085374+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"BEN'S BAYSIDE\",\n  \"date\": \"03/05/2017\",\n  \"address\": \"211-37 26th Avenue, Bayside, NY 11360\",\n  \"total\": \"41.32\"\n}"
+        }
+      }
+    ]
+  }
+}

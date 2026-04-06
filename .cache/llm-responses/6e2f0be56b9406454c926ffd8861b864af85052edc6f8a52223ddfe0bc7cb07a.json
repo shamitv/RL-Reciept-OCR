@@ -1,0 +1,14 @@
+{
+  "key": "6e2f0be56b9406454c926ffd8861b864af85052edc6f8a52223ddfe0bc7cb07a",
+  "created_at": "2026-04-06T13:54:21.418659+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"OM INDIAN FOOD\",\n  \"date\": \"4/15/16\",\n  \"address\": \"204 Spring St\\nNew York, NY 10012\",\n  \"total\": \"$16.24\"\n}"
+        }
+      }
+    ]
+  }
+}

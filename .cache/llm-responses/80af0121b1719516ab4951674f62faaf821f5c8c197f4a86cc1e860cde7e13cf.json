@@ -1,0 +1,14 @@
+{
+  "key": "80af0121b1719516ab4951674f62faaf821f5c8c197f4a86cc1e860cde7e13cf",
+  "created_at": "2026-04-06T14:00:25.161855+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"MITASU JAPANESE RESTAURANT SDN BHD\",\n  \"date\": \"2018-06-29\",\n  \"address\": \"B-01, CENTRAL PLAZA, 34,JALAN SULTAN ISMAIL, 50250 KUALA LUMPUR\",\n  \"total\": \"780.45\"\n}"
+        }
+      }
+    ]
+  }
+}

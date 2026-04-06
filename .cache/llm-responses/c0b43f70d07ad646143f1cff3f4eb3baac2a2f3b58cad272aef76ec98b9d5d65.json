@@ -1,0 +1,14 @@
+{
+  "key": "c0b43f70d07ad646143f1cff3f4eb3baac2a2f3b58cad272aef76ec98b9d5d65",
+  "created_at": "2026-04-06T14:04:29.640232+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"JALISCO\",\n  \"date\": \"5/19/2019\",\n  \"address\": \"244 Highway 290 W. Elgin TX 78621\",\n  \"total\": \"10.00\"\n}"
+        }
+      }
+    ]
+  }
+}

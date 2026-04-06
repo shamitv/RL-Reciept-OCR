@@ -1,0 +1,14 @@
+{
+  "key": "02e2f5cd2a2e559c22474ef52c9d0ea6efc4f36017f993ea9cfa502337535afb",
+  "created_at": "2026-04-06T13:52:05.590382+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Calagero's\",\n  \"date\": \"4/20/2018\",\n  \"address\": \"919 Franklin Ave, Garden City, NY 11530\",\n  \"total\": \"$157.51\"\n}"
+        }
+      }
+    ]
+  }
+}

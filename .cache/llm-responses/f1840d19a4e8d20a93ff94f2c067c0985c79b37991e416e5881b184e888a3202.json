@@ -1,0 +1,14 @@
+{
+  "key": "f1840d19a4e8d20a93ff94f2c067c0985c79b37991e416e5881b184e888a3202",
+  "created_at": "2026-04-06T13:44:42.042353+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CHRIS'S HAMBURGERS\",\n  \"date\": \"07/22/2018\",\n  \"address\": \"7701 ATLANTIC AVE. CUDAHY CA 9201\",\n  \"total\": \"$51.82\"\n}"
+        }
+      }
+    ]
+  }
+}

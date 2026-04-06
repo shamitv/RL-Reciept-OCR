@@ -1,0 +1,14 @@
+{
+  "key": "225c7e87d75526a719c433b381c5fd633904e749f760479c5a5d18a93903d04d",
+  "created_at": "2026-04-06T13:52:56.620371+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"FIVE GUYS\",\n  \"date\": \"5/25/2017\",\n  \"address\": \"2640 Reynolds Ranch Pkwy - Ste 140 Lodi, CA 95240\",\n  \"total\": \"$32.66\"\n}"
+        }
+      }
+    ]
+  }
+}

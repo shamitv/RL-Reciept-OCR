@@ -1,0 +1,14 @@
+{
+  "key": "650f617482db5511243a9bd7a91cd6c4d33a93ac9e229e3a25a02264b750ddd8",
+  "created_at": "2026-04-06T14:01:13.282877+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Dominican Restaurant\",\n  \"date\": \"11/10/18\",\n  \"address\": \"1019 Front St.\",\n  \"total\": \"53.23\"\n}"
+        }
+      }
+    ]
+  }
+}

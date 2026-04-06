@@ -1,0 +1,14 @@
+{
+  "key": "274517de08151d0d11b0b8e87a65215ee92c62453969c0164d9673475df79aa8",
+  "created_at": "2026-04-06T13:44:58.586237+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CARU, HAWAII Longboards\",\n  \"date\": \"01/11/2019\",\n  \"address\": \"92-161 Waipae Place Kapolei, HI 96707\",\n  \"total\": \"$44.31\"\n}"
+        }
+      }
+    ]
+  }
+}

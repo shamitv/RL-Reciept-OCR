@@ -1,0 +1,14 @@
+{
+  "key": "29d38f2f4f1d1b8eb690a2f308f4f03a75d0a95339d9b5792026a14ced9ead06",
+  "created_at": "2026-04-06T13:51:15.871141+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Newark Buffet\",\n  \"date\": \"06/29/2019\",\n  \"address\": \"35201 Newark Blvd. #W Newark CA 94560\",\n  \"total\": \"92.22\"\n}"
+        }
+      }
+    ]
+  }
+}

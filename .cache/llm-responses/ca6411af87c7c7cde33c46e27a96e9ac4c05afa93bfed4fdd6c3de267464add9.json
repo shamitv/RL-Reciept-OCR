@@ -1,0 +1,14 @@
+{
+  "key": "ca6411af87c7c7cde33c46e27a96e9ac4c05afa93bfed4fdd6c3de267464add9",
+  "created_at": "2026-04-06T13:56:00.729072+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Golden Panda Buffet\",\n  \"date\": \"6/02/2018\",\n  \"address\": \"14428 Ramona Blvd. #70 Baldwin Park, CA 91706\",\n  \"total\": \"29.96\"\n}"
+        }
+      }
+    ]
+  }
+}

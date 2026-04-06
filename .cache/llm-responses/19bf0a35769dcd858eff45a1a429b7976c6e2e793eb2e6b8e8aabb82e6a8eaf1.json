@@ -1,0 +1,14 @@
+{
+  "key": "19bf0a35769dcd858eff45a1a429b7976c6e2e793eb2e6b8e8aabb82e6a8eaf1",
+  "created_at": "2026-04-06T13:48:35.543914+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Chilli's Grill & Bar\",\n  \"date\": \"09/15/2018\",\n  \"address\": \"Puente Hills #25 17588 Castleton St City of Industry,CA 91748\",\n  \"total\": \"26.37\"\n}"
+        }
+      }
+    ]
+  }
+}
