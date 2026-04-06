@@ -1,5 +1,15 @@
 # RL Receipt OCR OpenEnv
 
+This README includes the core hackathon submission details:
+
+- [Environment description and motivation](#environment-description-and-motivation)
+- [Action and observation space definitions](#action-and-observation-space-definitions)
+- [Task descriptions with expected difficulty](#task-descriptions-with-expected-difficulty)
+- [Setup and usage instructions](#setup-and-usage-instructions)
+- [Baseline results](#baseline-results)
+
+## Environment Description And Motivation
+
 RL Receipt OCR OpenEnv is a sequential receipt extraction environment for the OpenEnv hackathon. An agent must inspect receipt text regions, request candidate values, edit a structured draft, validate uncertain fields, and decide when to submit the final extraction.
 
 The environment now uses a task-aware receipt schema:
@@ -9,6 +19,8 @@ The environment now uses a task-aware receipt schema:
 - `hard`: `company`, `date`, `subtotal`, `tax`, `total`, `line_items`
 
 The environment is designed as a real-world document extraction task rather than a single-step classifier. Agents operate through repeated `reset()` / `step()` / `state()` interactions and are scored by deterministic graders against annotated receipt data.
+
+The motivation for the environment is to model receipt understanding as a decision-making problem instead of a single one-shot prediction. A useful agent must decide what evidence to reveal, which fields to query, when to validate arithmetic consistency, when to gather more line-item evidence, and when the draft is good enough to submit.
 
 ## Learning Agent Design
 
@@ -59,7 +71,7 @@ What this design does not do:
 - directly learn OCR
 - directly generate raw text end to end via RL
 
-## Environment Definition
+## Action And Observation Space Definitions
 
 ### Observation space
 
@@ -108,12 +120,13 @@ The environment accepts typed structured actions, including:
 - Terminal reward is based on the deterministic final grade.
 - Episodes end on `submit` or when the task budget is exhausted.
 
-## Tasks
+## Task Descriptions With Expected Difficulty
 
 The environment keeps the public task IDs `easy`, `medium`, and `hard`, but they now correspond to different receipt objectives as well as different visibility/noise/budget settings.
 
 ### Easy
 
+- expected difficulty: lowest
 - header extraction for `company`, `date`, `address`, and `total`
 - broader starter reveal after `view_receipt`
 - all windows available for `list_text_regions`
@@ -122,6 +135,7 @@ The environment keeps the public task IDs `easy`, `medium`, and `hard`, but they
 
 ### Medium
 
+- expected difficulty: medium
 - monetary-summary extraction for `company`, `date`, `subtotal`, `tax`, and `total`
 - deterministic reconciliation between `subtotal + tax` and `total`
 - narrower starter reveal
@@ -131,6 +145,7 @@ The environment keeps the public task IDs `easy`, `medium`, and `hard`, but they
 
 ### Hard
 
+- expected difficulty: highest
 - summary extraction plus line-item reconstruction
 - deterministic reconciliation between line-item totals, `subtotal`, `tax`, and `total`
 - restricted starter reveal
@@ -155,7 +170,7 @@ At load time, the environment:
 
 You can override the dataset location through `RECEIPT_DATASET_ROOT`.
 
-## Setup
+## Setup And Usage Instructions
 
 ```bash
 python -m venv .venv
@@ -296,6 +311,8 @@ Current scores:
 - aggregate mean score: `0.233`
 
 These numbers reflect the current deterministic heuristic and current task constraints. They should be regenerated if task logic, grading, or dataset filtering changes.
+
+The full checked-in baseline report is in [docs/hackathon/baseline-scores.md](D:/work/RL-Reciept-OCR/docs/hackathon/baseline-scores.md).
 
 ## Project Layout
 
