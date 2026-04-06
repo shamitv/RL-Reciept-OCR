@@ -21,6 +21,7 @@ This directory is the documentation home for the project.
 - [Eval Plan 02: Eval API And UI](plans/eval/02-eval-api-ui.md)
 - [LLM Cache Plan](plans/llm-cache/01-llm-response-cache.md)
 - [RL Inference Plan](plans/rl/01-rl-inference.md)
+- [Receipt Reconciliation And Line-Item Plan](plans/rl/02-receipt-reconciliation-and-line-items.md)
 
 ## Hackathon Notes
 
