@@ -1,4 +1,4 @@
-# RL Receipt OCR OpenEnv
+# OpenEnv Receipt Understanding
 
 This README includes the core hackathon submission details:
 
@@ -10,7 +10,7 @@ This README includes the core hackathon submission details:
 
 ## Environment Description And Motivation
 
-RL Receipt OCR OpenEnv is a sequential receipt extraction environment for the OpenEnv hackathon. The motivation is to help equip small on-device models to extract structured data from receipts even when they cannot solve the whole document in one shot.
+OpenEnv Receipt Understanding is a sequential receipt extraction environment for the OpenEnv hackathon. The motivation is to help equip small on-device models to extract structured data from receipts even when they cannot solve the whole document in one shot.
 
 The environment now uses a task-aware receipt schema:
 

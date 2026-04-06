@@ -1,4 +1,4 @@
-# RL Receipt OCR Hackathon Review
+# OpenEnv Receipt Understanding Hackathon Review
 
 Date: April 6, 2026
 

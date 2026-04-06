@@ -1,4 +1,4 @@
-# OpenEnv Receipt Extraction — Option A Implementation Plan
+# OpenEnv Receipt Understanding — Option A Implementation Plan
 
 ## Goal
 

@@ -1,6 +1,6 @@
 # Architecture Docs
 
-This section describes how the system is organized today and how the planned RL workflow fits into it.
+This section describes how OpenEnv Receipt Understanding is organized today and how the planned RL workflow fits into it.
 
 ## Documents
 

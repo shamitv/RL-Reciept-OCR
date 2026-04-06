@@ -1,6 +1,6 @@
 # Docs Index
 
-This directory is the documentation home for the project.
+This directory is the documentation home for OpenEnv Receipt Understanding.
 
 ## Architecture
 

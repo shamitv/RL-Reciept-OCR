@@ -1,4 +1,4 @@
-# Baseline Scores
+# OpenEnv Receipt Understanding Baseline Scores
 
 Generated on `2026-04-06` from the current repository state.
 
