@@ -10,7 +10,7 @@ This README includes the core hackathon submission details:
 
 ## Environment Description And Motivation
 
-RL Receipt OCR OpenEnv is a sequential receipt extraction environment for the OpenEnv hackathon. An agent must inspect receipt text regions, request candidate values, edit a structured draft, validate uncertain fields, and decide when to submit the final extraction.
+RL Receipt OCR OpenEnv is a sequential receipt extraction environment for the OpenEnv hackathon. The motivation is to help equip small on-device models to extract structured data from receipts even when they cannot solve the whole document in one shot.
 
 The environment now uses a task-aware receipt schema:
 
@@ -20,7 +20,9 @@ The environment now uses a task-aware receipt schema:
 
 The environment is designed as a real-world document extraction task rather than a single-step classifier. Agents operate through repeated `reset()` / `step()` / `state()` interactions and are scored by deterministic graders against annotated receipt data.
 
-The motivation for the environment is to model receipt understanding as a decision-making problem instead of a single one-shot prediction. A useful agent must decide what evidence to reveal, which fields to query, when to validate arithmetic consistency, when to gather more line-item evidence, and when the draft is good enough to submit.
+The core idea is that lightweight receipt models will often fail on the first pass because the image is noisy, the OCR is incomplete, or the layout is messy. A useful agent should learn how to recover from those errors over multiple steps instead of relying on a single prediction.
+
+In that framing, receipt understanding becomes a decision-making problem: the agent must decide what evidence to reveal, which fields to query, when to validate arithmetic consistency, when to gather more line-item evidence, and when the draft is good enough to submit. This same motivation naturally extends to corrective actions for hard receipts, such as rotating the image, increasing contrast, or cropping to a relevant region, even when those image-transformation actions are not yet part of the current environment action space.
 
 ## Learning Agent Design
 
