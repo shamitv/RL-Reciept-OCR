@@ -123,7 +123,8 @@ button {
 }
 
 .summary-grid,
-.field-grid {
+.field-grid,
+.score-grid {
   display: grid;
   gap: 1rem;
 }
@@ -131,6 +132,10 @@ button {
 .summary-grid {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   margin-bottom: 1rem;
+}
+
+.component-grid {
+  margin-top: -0.2rem;
 }
 
 .stat-card {
@@ -152,7 +157,8 @@ button {
 .judge-panel,
 .empty-state,
 .image-panel,
-.detail-panel {
+.detail-panel,
+.panel-lite {
   padding: 1.25rem;
 }
 
@@ -317,6 +323,31 @@ tbody tr:hover {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
+.score-grid {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin: 1rem 0;
+}
+
+.stat-chip {
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(58, 45, 35, 0.08);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.stat-chip strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.4rem;
+}
+
+.panel-lite {
+  margin-top: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(58, 45, 35, 0.08);
+}
+
 .field-card {
   padding: 1rem;
   border-radius: 1rem;
@@ -356,6 +387,10 @@ tbody tr:hover {
 .field-notes {
   display: grid;
   gap: 0.9rem;
+}
+
+.tag-row.compact {
+  gap: 0.5rem;
 }
 
 .field-notes dt {

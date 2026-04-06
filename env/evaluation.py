@@ -5,8 +5,6 @@ import json
 import logging
 import mimetypes
 import os
-
-logger = logging.getLogger(__name__)
 from collections import Counter
 from datetime import datetime, timezone
 from json import JSONDecodeError, JSONDecoder
@@ -20,9 +18,11 @@ from pydantic import BaseModel, Field
 from env.dataset import ReceiptDataset
 from env.graders import grade_receipt
 from env.llm_cache import cached_chat_completion
-from env.models import ReceiptDraft
+from env.models import ReceiptDraft, ReceiptLineItem
 
-FIELD_NAMES = ("company", "date", "address", "total")
+logger = logging.getLogger(__name__)
+
+FIELD_NAMES = ("company", "date", "address", "subtotal", "tax", "total")
 DEFAULT_EVAL_OUTPUT_DIR = Path(__file__).resolve().parents[1] / "artifacts" / "eval" / "dataset-image-eval"
 
 DatasetStatus = Literal["runnable", "skipped_missing_labels", "skipped_unparseable_gold", "skipped_missing_image"]
@@ -31,8 +31,9 @@ FieldStatus = Literal["correct", "partial", "incorrect", "missing", "not_evaluat
 
 EXTRACTION_SYSTEM_PROMPT = (
     "You extract receipt fields from a single receipt image. "
-    "Return strict JSON only with keys company, date, address, total. "
-    "Use null for unknown values."
+    "Return strict JSON only with keys company, date, address, subtotal, tax, total, line_items. "
+    "line_items must be an array of objects with keys description and line_total. "
+    "Use null for unknown scalar values and [] for unknown line items."
 )
 
 JUDGE_SYSTEM_PROMPT = (
@@ -43,6 +44,7 @@ JUDGE_SYSTEM_PROMPT = (
 
 class DatasetAuditRecord(BaseModel):
     sample_id: str
+    task_id: str | None = None
     annotation_path: str
     image_path: str | None = None
     dataset_status: DatasetStatus
@@ -50,6 +52,7 @@ class DatasetAuditRecord(BaseModel):
     missing_categories: list[str] = Field(default_factory=list)
     unparseable_fields: list[str] = Field(default_factory=list)
     gold_fields: ReceiptDraft | None = None
+    gold_line_items: list[ReceiptLineItem] = Field(default_factory=list)
 
 
 class FieldEvaluation(BaseModel):
@@ -67,15 +70,24 @@ class JudgeEvaluation(BaseModel):
 
 class ReceiptEvalRecord(BaseModel):
     sample_id: str
+    task_id: str | None = None
     annotation_path: str
     image_path: str | None = None
     dataset_status: DatasetStatus
     status: EvalStatus
     skip_reason: str | None = None
     gold_fields: ReceiptDraft | None = None
+    gold_line_items: list[ReceiptLineItem] = Field(default_factory=list)
     predicted_fields: ReceiptDraft | None = None
+    predicted_line_items: list[ReceiptLineItem] = Field(default_factory=list)
     field_results: dict[str, FieldEvaluation] = Field(default_factory=dict)
     overall_score: float = 0.0
+    header_score: float = 0.0
+    summary_score: float = 0.0
+    line_items_score: float = 0.0
+    reconciliation_score: float = 0.0
+    reconciliation_delta: float | None = None
+    reconciliation_status: str | None = None
     deterministic_success: bool = False
     error: str | None = None
     judge: JudgeEvaluation | None = None
@@ -93,6 +105,7 @@ class EvalSummary(BaseModel):
     mean_score: float = 0.0
     records_with_errors: int = 0
     field_mean_scores: dict[str, float] = Field(default_factory=dict)
+    component_mean_scores: dict[str, float] = Field(default_factory=dict)
     top_failure_reasons: dict[str, int] = Field(default_factory=dict)
 
 
@@ -188,8 +201,22 @@ def message_text_from_completion(completion: Any) -> str:
     return str(content).strip()
 
 
+def _line_item_from_payload(payload: Any, index: int) -> ReceiptLineItem | None:
+    if not isinstance(payload, dict):
+        return None
+    description = payload.get("description")
+    line_total = payload.get("line_total")
+    if description is not None:
+        description = str(description).strip() or None
+    if line_total is not None:
+        line_total = str(line_total).strip() or None
+    if not description and not line_total:
+        return None
+    return ReceiptLineItem(item_id=f"predicted:{index}", description=description, line_total=line_total)
+
+
 def draft_from_payload(payload: dict[str, Any]) -> ReceiptDraft:
-    values: dict[str, str | None] = {}
+    values: dict[str, Any] = {}
     for field in FIELD_NAMES:
         value = payload.get(field)
         if value is None:
@@ -199,6 +226,15 @@ def draft_from_payload(payload: dict[str, Any]) -> ReceiptDraft:
             values[field] = normalized or None
         else:
             values[field] = str(value).strip() or None
+
+    raw_line_items = payload.get("line_items", [])
+    line_items: list[ReceiptLineItem] = []
+    if isinstance(raw_line_items, list):
+        for index, item in enumerate(raw_line_items):
+            parsed = _line_item_from_payload(item, index)
+            if parsed is not None:
+                line_items.append(parsed)
+    values["line_items"] = line_items
     return ReceiptDraft(**values)
 
 
@@ -284,8 +320,8 @@ def build_extraction_messages(record: DatasetAuditRecord) -> list[dict[str, Any]
                 {
                     "type": "text",
                     "text": (
-                        "Extract the receipt into JSON with keys company, date, address, total. "
-                        "Use date in the best normalized form you can infer and keep total as a string."
+                        "Extract the receipt into JSON with keys company, date, address, subtotal, tax, total, line_items. "
+                        "Each line_items entry should include description and line_total. Use null or [] for unknown values."
                     ),
                 },
                 {
@@ -297,14 +333,17 @@ def build_extraction_messages(record: DatasetAuditRecord) -> list[dict[str, Any]
     ]
 
 
-def build_judge_messages(record: DatasetAuditRecord, prediction: ReceiptDraft | None, field_scores: dict[str, float], error: str | None) -> list[dict[str, Any]]:
+def build_judge_messages(record: DatasetAuditRecord, prediction: ReceiptDraft | None, grade: dict[str, Any], error: str | None) -> list[dict[str, Any]]:
     gold_fields = record.gold_fields.model_dump() if record.gold_fields is not None else {}
     predicted_fields = prediction.model_dump() if prediction is not None else {field: None for field in FIELD_NAMES}
     payload = {
         "sample_id": record.sample_id,
+        "task_id": record.task_id,
         "gold_fields": gold_fields,
+        "gold_line_items": [item.model_dump() for item in record.gold_line_items],
         "predicted_fields": predicted_fields,
-        "field_scores": field_scores,
+        "predicted_line_items": [item.model_dump() for item in (prediction.line_items if prediction is not None else [])],
+        "grade": grade,
         "error": error,
         "instructions": (
             "Explain whether the extraction worked, what is wrong if it did not, "
@@ -341,7 +380,7 @@ def run_extraction_model(record: DatasetAuditRecord, client: Any, model_name: st
 def run_judge_model(
     record: DatasetAuditRecord,
     prediction: ReceiptDraft | None,
-    field_scores: dict[str, float],
+    grade_payload: dict[str, Any],
     error: str | None,
     client: Any,
     model_name: str,
@@ -349,7 +388,7 @@ def run_judge_model(
     completion = cached_chat_completion(
         client,
         model=model_name,
-        messages=build_judge_messages(record, prediction, field_scores, error),
+        messages=build_judge_messages(record, prediction, grade_payload, error),
         temperature=0,
         response_format={"type": "json_object"},
     )
@@ -379,7 +418,7 @@ def fallback_judge_evaluation(record: DatasetAuditRecord, field_results: dict[st
     if error:
         return JudgeEvaluation(summary=f"Evaluation failed before scoring completed: {error}", failure_reasons=["runtime_error"])
     if not incorrect_fields:
-        return JudgeEvaluation(summary="All four fields matched the gold labels under deterministic grading.")
+        return JudgeEvaluation(summary="All evaluated receipt fields matched the gold labels under deterministic grading.")
     return JudgeEvaluation(
         summary=f"Deterministic grading found issues in: {', '.join(incorrect_fields)}.",
         failure_reasons=[f"{field}_mismatch" for field in incorrect_fields],
@@ -397,57 +436,121 @@ def evaluate_audit_record(
     if record.dataset_status != "runnable":
         return ReceiptEvalRecord(
             sample_id=record.sample_id,
+            task_id=record.task_id,
             annotation_path=record.annotation_path,
             image_path=record.image_path,
             dataset_status=record.dataset_status,
             status="skipped",
             skip_reason=record.skip_reason,
             gold_fields=record.gold_fields,
+            gold_line_items=record.gold_line_items,
             field_results=build_field_results(None, record.gold_fields),
             judge=fallback_judge_evaluation(record, {}, None),
             created_at=created_at,
         )
 
     prediction: ReceiptDraft | None = None
-    field_scores: dict[str, float] = {}
+    grade_payload: dict[str, Any] = {}
     overall_score = 0.0
+    header_score = 0.0
+    summary_score = 0.0
+    line_items_score = 0.0
+    reconciliation_score = 0.0
+    reconciliation_delta: float | None = None
+    reconciliation_status: str | None = None
     deterministic_success = False
     error: str | None = None
 
     try:
         prediction = run_extraction_model(record, extractor_client, extractor_model)
-        grade = grade_receipt(prediction, record.gold_fields or ReceiptDraft())
-        field_scores = grade.field_scores
+        grade = grade_receipt(
+            prediction,
+            record.gold_fields or ReceiptDraft(),
+            task_id=record.task_id or "easy",
+            gold_line_items=record.gold_line_items,
+        )
+        grade_payload = grade.model_dump(mode="json")
         overall_score = float(grade.score)
+        header_score = float(grade.header_score)
+        summary_score = float(grade.summary_score)
+        line_items_score = float(grade.line_items_score)
+        reconciliation_score = float(grade.reconciliation_score)
+        reconciliation_delta = grade.reconciliation_delta
+        reconciliation_status = grade.reconciliation_status
         deterministic_success = bool(grade.success)
     except Exception as exc:  # pragma: no cover - exact client failures vary
         error = str(exc)
 
-    field_results = build_field_results(prediction, record.gold_fields, field_scores)
+    field_results = build_field_results(prediction, record.gold_fields, grade_payload.get("field_scores") if grade_payload else {})
     status = classify_eval_status(record.dataset_status, overall_score, prediction, error)
 
     judge: JudgeEvaluation | None = None
     try:
-        judge = run_judge_model(record, prediction, field_scores, error, judge_client, judge_model)
+        judge = run_judge_model(record, prediction, grade_payload, error, judge_client, judge_model)
     except Exception:  # pragma: no cover - exact client failures vary
         judge = fallback_judge_evaluation(record, field_results, error)
 
     return ReceiptEvalRecord(
         sample_id=record.sample_id,
+        task_id=record.task_id,
         annotation_path=record.annotation_path,
         image_path=record.image_path,
         dataset_status=record.dataset_status,
         status=status,
         skip_reason=record.skip_reason,
         gold_fields=record.gold_fields,
+        gold_line_items=record.gold_line_items,
         predicted_fields=prediction,
+        predicted_line_items=list(prediction.line_items) if prediction is not None else [],
         field_results=field_results,
         overall_score=round(overall_score, 6),
+        header_score=round(header_score, 6),
+        summary_score=round(summary_score, 6),
+        line_items_score=round(line_items_score, 6),
+        reconciliation_score=round(reconciliation_score, 6),
+        reconciliation_delta=reconciliation_delta,
+        reconciliation_status=reconciliation_status,
         deterministic_success=deterministic_success,
         error=error,
         judge=judge,
         created_at=created_at,
     )
+
+
+def _missing(values: dict[str, str | None], required_fields: tuple[str, ...]) -> list[str]:
+    return [field for field in required_fields if not values.get(field)]
+
+
+def _task_from_labels(label_presence: dict[str, bool]) -> tuple[str | None, list[str]]:
+    hard_required = {
+        "Business name": "company",
+        "Time and date": "date",
+        "Subtotal": "subtotal",
+        "Tax": "tax",
+        "Total": "total",
+        "Item information": "line_items",
+    }
+    medium_required = {
+        "Business name": "company",
+        "Time and date": "date",
+        "Subtotal": "subtotal",
+        "Tax": "tax",
+        "Total": "total",
+    }
+    easy_required = {
+        "Business name": "company",
+        "Business address": "address",
+        "Time and date": "date",
+        "Total": "total",
+    }
+    if all(label_presence.get(label, False) for label in hard_required):
+        return "hard", []
+    if all(label_presence.get(label, False) for label in medium_required):
+        return "medium", []
+    missing_easy = [label for label in easy_required if not label_presence.get(label, False)]
+    if not missing_easy:
+        return "easy", []
+    return None, missing_easy
 
 
 def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRecord]:
@@ -458,17 +561,16 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
         raise FileNotFoundError(f"Dataset root does not contain ann/ and img/: {dataset.dataset_root}")
 
     records: list[DatasetAuditRecord] = []
-    required_categories = {
-        "Business name": "company",
-        "Business address": "address",
-        "Time and date": "date",
-        "Total": "total",
+    task_requirements = {
+        "easy": ("company", "address", "date", "total"),
+        "medium": ("company", "date", "subtotal", "tax", "total"),
+        "hard": ("company", "date", "subtotal", "tax", "total"),
     }
-
     for annotation_path in sorted(ann_dir.glob("*.json")):
         payload = json.loads(annotation_path.read_text(encoding="utf-8"))
         objects = payload.get("objects", [])
         grouped_regions: dict[str, list[Any]] = {}
+        label_presence: dict[str, bool] = {}
 
         for obj in objects:
             region = dataset._build_region(obj)
@@ -477,6 +579,7 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
             category = dataset._tag_value(obj, "Category")
             if category:
                 grouped_regions.setdefault(category, []).append(region)
+                label_presence[category] = True
 
         sample_id = annotation_path.stem
         image_name = annotation_path.name[:-5]
@@ -493,8 +596,8 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
             )
             continue
 
-        missing_categories = [name for name in required_categories if not grouped_regions.get(name)]
-        if missing_categories:
+        labeled_task_id, missing_categories = _task_from_labels(label_presence)
+        if labeled_task_id is None:
             records.append(
                 DatasetAuditRecord(
                     sample_id=sample_id,
@@ -507,33 +610,45 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
             )
             continue
 
-        company = dataset._join_text(grouped_regions.get("Business name", []))
-        address = dataset._join_text(grouped_regions.get("Business address", []))
-        date = dataset._pick_date(grouped_regions.get("Time and date", []))
-        total = dataset._pick_total(grouped_regions.get("Total", []))
+        values = {
+            "company": dataset._join_text(grouped_regions.get("Business name", [])) or None,
+            "address": dataset._join_text(grouped_regions.get("Business address", [])) or None,
+            "date": dataset._pick_date(grouped_regions.get("Time and date", [])) or None,
+            "subtotal": dataset._pick_amount(grouped_regions.get("Subtotal", [])) or None,
+            "tax": dataset._pick_amount(grouped_regions.get("Tax", [])) or None,
+            "total": dataset._pick_amount(grouped_regions.get("Total", [])) or None,
+        }
+        gold_line_items = dataset._extract_line_items(grouped_regions.get("Item information", []))
+        gold_fields = ReceiptDraft(**values)
 
-        unparseable_fields: list[str] = []
-        if not company:
-            unparseable_fields.append("company")
-        if not address:
-            unparseable_fields.append("address")
-        if not date:
-            unparseable_fields.append("date")
-        if not total:
-            unparseable_fields.append("total")
-
-        gold_fields = ReceiptDraft(company=company or None, address=address or None, date=date or None, total=total or None)
+        if labeled_task_id == "hard" and gold_line_items and not _missing(values, task_requirements["hard"]):
+            resolved_task_id = "hard"
+            unparseable_fields: list[str] = []
+        elif labeled_task_id in {"hard", "medium"} and not _missing(values, task_requirements["medium"]):
+            resolved_task_id = "medium"
+            unparseable_fields = []
+        elif not _missing(values, task_requirements["easy"]):
+            resolved_task_id = "easy"
+            unparseable_fields = []
+        else:
+            resolved_task_id = labeled_task_id
+            required_fields = task_requirements["easy"] if labeled_task_id == "easy" else task_requirements["medium"]
+            unparseable_fields = _missing(values, required_fields)
+            if labeled_task_id == "hard" and not gold_line_items:
+                unparseable_fields.append("line_items")
 
         if unparseable_fields:
             records.append(
                 DatasetAuditRecord(
                     sample_id=sample_id,
+                    task_id=resolved_task_id,
                     annotation_path=str(annotation_path),
                     image_path=str(image_path),
                     dataset_status="skipped_unparseable_gold",
                     skip_reason="unparseable_gold_fields",
-                    unparseable_fields=unparseable_fields,
+                    unparseable_fields=sorted(set(unparseable_fields)),
                     gold_fields=gold_fields,
+                    gold_line_items=gold_line_items,
                 )
             )
             continue
@@ -541,10 +656,12 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
         records.append(
             DatasetAuditRecord(
                 sample_id=sample_id,
+                task_id=resolved_task_id,
                 annotation_path=str(annotation_path),
                 image_path=str(image_path),
                 dataset_status="runnable",
                 gold_fields=gold_fields,
+                gold_line_items=gold_line_items,
             )
         )
 
@@ -572,6 +689,13 @@ def build_eval_summary(
         for reason in record.judge.failure_reasons:
             failure_reasons[reason] += 1
 
+    component_mean_scores = {
+        "header_score": round(mean(record.header_score for record in scored_records), 6) if scored_records else 0.0,
+        "summary_score": round(mean(record.summary_score for record in scored_records), 6) if scored_records else 0.0,
+        "line_items_score": round(mean(record.line_items_score for record in scored_records), 6) if scored_records else 0.0,
+        "reconciliation_score": round(mean(record.reconciliation_score for record in scored_records), 6) if scored_records else 0.0,
+    }
+
     return EvalSummary(
         generated_at=now_utc_iso(),
         dataset_root=str(dataset_root),
@@ -583,6 +707,7 @@ def build_eval_summary(
         mean_score=round(mean(record.overall_score for record in scored_records), 6) if scored_records else 0.0,
         records_with_errors=sum(1 for record in records if record.error),
         field_mean_scores=field_mean_scores,
+        component_mean_scores=component_mean_scores,
         top_failure_reasons=dict(failure_reasons.most_common(10)),
     )
 
@@ -609,10 +734,14 @@ def render_markdown_report(summary: EvalSummary, records: list[ReceiptEvalRecord
         f"- Failed: `{summary.counts.get('failed', 0)}`",
         f"- Skipped: `{summary.counts.get('skipped', 0)}`",
         "",
-        "## Dataset Audit Status",
+        "## Component Means",
         "",
     ]
 
+    for name, score in summary.component_mean_scores.items():
+        lines.append(f"- `{name}`: `{score:.3f}`")
+
+    lines.extend(["", "## Dataset Audit Status", ""])
     for status_name, count in sorted(summary.dataset_status_counts.items()):
         lines.append(f"- `{status_name}`: `{count}`")
 
@@ -630,10 +759,14 @@ def render_markdown_report(summary: EvalSummary, records: list[ReceiptEvalRecord
 
         for record in section_records[:25]:
             issue_bits: list[str] = []
+            if record.task_id:
+                issue_bits.append(f"task={record.task_id}")
             if record.skip_reason:
                 issue_bits.append(f"skip={record.skip_reason}")
             if record.error:
                 issue_bits.append(f"error={record.error}")
+            if record.reconciliation_status:
+                issue_bits.append(f"reconciliation={record.reconciliation_status}")
             if record.judge and record.judge.failure_reasons:
                 issue_bits.append(f"judge={', '.join(record.judge.failure_reasons)}")
             issue_suffix = f" ({'; '.join(issue_bits)})" if issue_bits else ""
@@ -707,8 +840,8 @@ def evaluate_dataset_images(
             continue
         if limit is not None and processed >= limit:
             break
-        
-        logger.info(f"Evaluating receipt: {audit.sample_id}")
+
+        logger.info("Evaluating receipt: %s", audit.sample_id)
         record = evaluate_audit_record(audit, extractor_client, extractor_model, judge_client, judge_model)
         append_eval_record(resolved_output_dir, record)
         processed += 1
@@ -741,7 +874,7 @@ def evaluate_single_receipt(
     if audit is None:
         raise KeyError(f"Unknown sample_id={sample_id}")
 
-    logger.info(f"Evaluating single receipt: {sample_id}")
+    logger.info("Evaluating single receipt: %s", sample_id)
 
     dataset = ReceiptDataset(dataset_root=dataset_root)
     extractor_model = require_env("MODEL_NAME")
@@ -810,6 +943,7 @@ class EvalArtifactStore:
             items.append(
                 {
                     "sample_id": audit.sample_id,
+                    "task_id": audit.task_id,
                     "image_path": audit.image_path,
                     "dataset_status": audit.dataset_status,
                     "status": record.status if record is not None else "not_run",
@@ -824,6 +958,7 @@ class EvalArtifactStore:
             items.append(
                 {
                     "sample_id": record.sample_id,
+                    "task_id": record.task_id,
                     "image_path": record.image_path,
                     "dataset_status": record.dataset_status,
                     "status": record.status,
@@ -865,4 +1000,3 @@ class EvalArtifactStore:
             "total": len(records),
             "pages": max((len(records) + page_size - 1) // page_size, 1),
         }
-

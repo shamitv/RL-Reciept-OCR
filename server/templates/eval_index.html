@@ -22,6 +22,7 @@
           <strong>{{ item.sample_id }}</strong>
           <div class="receipt-menu-meta">
             <span class="pill {{ item.status }}">{{ item.status }}</span>
+            {% if item.task_id %}<span class="pill">{{ item.task_id }}</span>{% endif %}
             <span class="mono small">{{ item.dataset_status }}</span>
           </div>
         </div>
@@ -56,6 +57,15 @@
         <span class="label">Skipped</span>
         <strong>{{ summary.counts.get("skipped", 0) }}</strong>
       </article>
+    </section>
+
+    <section class="summary-grid component-grid">
+      {% for label, key in [("Header", "header_score"), ("Summary", "summary_score"), ("Line Items", "line_items_score"), ("Reconciliation", "reconciliation_score")] %}
+      <article class="panel stat-card">
+        <span class="label">{{ label }}</span>
+        <strong>{{ "%.3f"|format(summary.component_mean_scores.get(key, 0.0)) }}</strong>
+      </article>
+      {% endfor %}
     </section>
 
     <section class="panel">
@@ -105,8 +115,10 @@
           <thead>
             <tr>
               <th>Sample</th>
+              <th>Task</th>
               <th>Status</th>
               <th>Score</th>
+              <th>Reconciliation</th>
               <th>Dataset Status</th>
               <th>Judge</th>
             </tr>
@@ -115,10 +127,12 @@
             {% for record in listing["items"] %}
             <tr>
               <td><a href="/eval/receipts/{{ record.sample_id }}">{{ record.sample_id }}</a></td>
+              <td>{{ record.task_id or "-" }}</td>
               <td><span class="pill {{ record.status }}">{{ record.status }}</span></td>
               <td>{{ "%.3f"|format(record.overall_score) }}</td>
+              <td>{{ record.reconciliation_status or "-" }}</td>
               <td><span class="mono small">{{ record.dataset_status }}</span></td>
-              <td>{{ record.judge.summary if record.judge else "—" }}</td>
+              <td>{{ record.judge.summary if record.judge else "-" }}</td>
             </tr>
             {% endfor %}
           </tbody>

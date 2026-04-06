@@ -30,6 +30,26 @@ def eval_model_config() -> dict[str, str]:
     }
 
 
+def line_item_rows(record_payload: dict[str, Any]) -> list[dict[str, Any]]:
+    predicted_items = record_payload.get("predicted_line_items") or []
+    gold_items = record_payload.get("gold_line_items") or []
+    row_count = max(len(predicted_items), len(gold_items))
+    rows: list[dict[str, Any]] = []
+    for index in range(row_count):
+        predicted = predicted_items[index] if index < len(predicted_items) else {}
+        gold = gold_items[index] if index < len(gold_items) else {}
+        rows.append(
+            {
+                "index": index,
+                "predicted_description": predicted.get("description"),
+                "predicted_total": predicted.get("line_total"),
+                "gold_description": gold.get("description"),
+                "gold_total": gold.get("line_total"),
+            }
+        )
+    return rows
+
+
 def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str, Any] | None:
     audit = get_audit_record(sample_id)
     record = store.get_record(sample_id)
@@ -41,28 +61,39 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         payload = record.model_dump(mode="json")
         payload["processed"] = True
         payload["processable"] = record.dataset_status == "runnable"
+        payload["line_item_rows"] = line_item_rows(payload)
         return payload
 
     if record is not None:
         payload = record.model_dump(mode="json")
         payload["processed"] = True
         payload["processable"] = audit.dataset_status == "runnable"
+        payload["line_item_rows"] = line_item_rows(payload)
         return payload
 
     payload = {
         "sample_id": audit.sample_id,
+        "task_id": audit.task_id,
         "annotation_path": audit.annotation_path,
         "image_path": audit.image_path,
         "dataset_status": audit.dataset_status,
         "status": "not_run",
         "skip_reason": audit.skip_reason,
         "gold_fields": audit.gold_fields.model_dump(mode="json") if audit.gold_fields else None,
+        "gold_line_items": [item.model_dump(mode="json") for item in audit.gold_line_items],
         "predicted_fields": None,
+        "predicted_line_items": [],
         "field_results": {
             name: result.model_dump(mode="json")
             for name, result in build_field_results(None, audit.gold_fields).items()
         },
         "overall_score": 0.0,
+        "header_score": 0.0,
+        "summary_score": 0.0,
+        "line_items_score": 0.0,
+        "reconciliation_score": 0.0,
+        "reconciliation_delta": None,
+        "reconciliation_status": None,
         "deterministic_success": False,
         "error": None,
         "judge": None,
@@ -70,6 +101,7 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         "processed": False,
         "processable": audit.dataset_status == "runnable",
     }
+    payload["line_item_rows"] = line_item_rows(payload)
     return payload
 
 
