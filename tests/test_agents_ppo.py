@@ -28,19 +28,21 @@ def make_checkpoint_payload() -> dict:
         "list_text_regions": {"window": 4},
         "inspect_bbox": {"bbox_index": 8},
         "inspect_neighbors": {"bbox_index": 8, "radius_bucket": 3},
-        "query_candidates": {"field": 4},
-        "set_field_from_candidate": {"field": 4, "candidate_index": 8},
-        "normalize_field": {"field": 4},
-        "clear_field": {"field": 4},
+        "query_candidates": {"field": 6},
+        "set_field_from_candidate": {"field": 6, "candidate_index": 8},
+        "add_line_item_from_candidate": {"candidate_index": 8},
+        "remove_line_item": {"line_item_index": 8},
+        "normalize_field": {"field": 6},
+        "clear_field": {"field": 6},
     }
     assert set(PARAMETER_HEAD_REQUIREMENTS).issubset(param_heads)
     return {
         "model_state_dict": {},
-        "obs_dim": 26,
+        "obs_dim": 35,
         "action_types": list(SUPPORTED_PPO_ACTIONS),
         "param_heads": param_heads,
         "architecture": {"hidden_sizes": [16, 16], "activation": "relu"},
-        "encoder_version": "receipt-obs-v1",
+        "encoder_version": "receipt-obs-v2-summary-line-items",
     }
 
 

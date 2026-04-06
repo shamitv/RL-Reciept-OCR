@@ -15,9 +15,13 @@ SUPPORTED_PPO_ACTIONS = (
     "inspect_neighbors",
     "query_candidates",
     "set_field_from_candidate",
+    "query_line_item_candidates",
+    "add_line_item_from_candidate",
+    "remove_line_item",
     "normalize_field",
     "check_total_consistency",
     "check_date_format",
+    "check_receipt_consistency",
     "clear_field",
     "submit",
 )
@@ -29,6 +33,8 @@ PARAMETER_HEAD_REQUIREMENTS: dict[str, tuple[str, ...]] = {
     "inspect_neighbors": ("bbox_index", "radius_bucket"),
     "query_candidates": ("field",),
     "set_field_from_candidate": ("field", "candidate_index"),
+    "add_line_item_from_candidate": ("candidate_index",),
+    "remove_line_item": ("line_item_index",),
     "normalize_field": ("field",),
     "clear_field": ("field",),
 }
@@ -56,23 +62,27 @@ def _require_torch():
     return torch
 
 
+def active_fields(env: ReceiptExtractionEnv) -> list[str]:
+    return [field for field in FIELD_ORDER if field in env.task.target_fields]
+
+
 def filled_fields(env: ReceiptExtractionEnv) -> list[str]:
     obs = env.last_observation
-    return [field for field in FIELD_ORDER if getattr(obs.current_draft, field) is not None]
+    return [field for field in active_fields(env) if getattr(obs.current_draft, field) is not None]
 
 
 def queryable_fields(env: ReceiptExtractionEnv) -> list[str]:
     obs = env.last_observation
     return [
         field
-        for field in FIELD_ORDER
+        for field in active_fields(env)
         if not (obs.candidate_lists.get(field) and getattr(obs.current_draft, field) is not None)
     ]
 
 
 def candidate_fields(env: ReceiptExtractionEnv) -> list[str]:
     obs = env.last_observation
-    return [field for field in FIELD_ORDER if obs.candidate_lists.get(field)]
+    return [field for field in active_fields(env) if obs.candidate_lists.get(field)]
 
 
 def visible_region_ids(env: ReceiptExtractionEnv) -> list[str]:
@@ -90,11 +100,17 @@ def action_type_mask(env: ReceiptExtractionEnv) -> dict[str, bool]:
     mask["inspect_neighbors"] = bool(visible_ids)
     mask["query_candidates"] = bool(queryable_fields(env))
     mask["set_field_from_candidate"] = bool(candidate_fields(env))
+    mask["query_line_item_candidates"] = bool(env.task.requires_line_items and visible_ids)
+    mask["add_line_item_from_candidate"] = bool(env.task.requires_line_items and obs.line_item_candidates)
+    mask["remove_line_item"] = bool(env.task.requires_line_items and obs.current_draft.line_items)
     mask["normalize_field"] = bool(filled)
     mask["check_total_consistency"] = obs.current_draft.total is not None
     mask["check_date_format"] = obs.current_draft.date is not None
+    mask["check_receipt_consistency"] = env.task.task_id in {"medium", "hard"} and all(
+        getattr(obs.current_draft, field) is not None for field in ("subtotal", "tax", "total")
+    )
     mask["clear_field"] = bool(filled)
-    mask["submit"] = bool(obs.terminal_allowed and filled)
+    mask["submit"] = bool(obs.terminal_allowed and (filled or obs.current_draft.line_items))
     return mask
 
 
@@ -109,6 +125,10 @@ def parameter_choices(env: ReceiptExtractionEnv, action_type: str) -> dict[str, 
         return {"field": queryable_fields(env)}
     if action_type == "set_field_from_candidate":
         return {"field": candidate_fields(env)}
+    if action_type == "add_line_item_from_candidate":
+        return {"candidate_index": [candidate.candidate_id for candidate in env.last_observation.line_item_candidates]}
+    if action_type == "remove_line_item":
+        return {"line_item_index": list(range(len(env.last_observation.current_draft.line_items)))}
     if action_type == "normalize_field":
         return {"field": filled_fields(env)}
     if action_type == "clear_field":
@@ -318,6 +338,17 @@ class PolicyRuntime:
         candidate_index = _masked_argmax(self.torch, logits, mask)
         return candidates[candidate_index].candidate_id
 
+    def _select_line_item_candidate_id(self, logits: Any, env: ReceiptExtractionEnv) -> str:
+        candidates = list(env.last_observation.line_item_candidates)
+        mask = _mask_for_count(self.torch, len(candidates), logits)
+        candidate_index = _masked_argmax(self.torch, logits, mask)
+        return candidates[candidate_index].candidate_id
+
+    def _select_line_item_index(self, logits: Any, env: ReceiptExtractionEnv) -> int:
+        line_items = list(env.last_observation.current_draft.line_items)
+        mask = _mask_for_count(self.torch, len(line_items), logits)
+        return _masked_argmax(self.torch, logits, mask)
+
     def decode_action(self, action_type: str, parameter_outputs: dict[str, Any], env: ReceiptExtractionEnv) -> ReceiptAction:
         if action_type == "view_receipt":
             return ReceiptAction(action_type=action_type)
@@ -338,11 +369,19 @@ class PolicyRuntime:
             field = self._select_field(parameter_outputs["field"][0], candidate_fields(env))
             candidate_id = self._select_candidate_id(parameter_outputs["candidate_index"][0], env, field)
             return ReceiptAction(action_type=action_type, field=field, candidate_id=candidate_id)
+        if action_type == "query_line_item_candidates":
+            return ReceiptAction(action_type=action_type)
+        if action_type == "add_line_item_from_candidate":
+            return ReceiptAction(action_type=action_type, candidate_id=self._select_line_item_candidate_id(parameter_outputs["candidate_index"][0], env))
+        if action_type == "remove_line_item":
+            return ReceiptAction(action_type=action_type, line_item_index=self._select_line_item_index(parameter_outputs["line_item_index"][0], env))
         if action_type == "normalize_field":
             return ReceiptAction(action_type=action_type, field=self._select_field(parameter_outputs["field"][0], filled_fields(env)))
         if action_type == "check_total_consistency":
             return ReceiptAction(action_type=action_type)
         if action_type == "check_date_format":
+            return ReceiptAction(action_type=action_type)
+        if action_type == "check_receipt_consistency":
             return ReceiptAction(action_type=action_type)
         if action_type == "clear_field":
             return ReceiptAction(action_type=action_type, field=self._select_field(parameter_outputs["field"][0], filled_fields(env)))

@@ -35,7 +35,7 @@ def test_encode_observation_values_handles_empty_regions_and_candidates() -> Non
     encoded = encode_observation_values(env.last_observation, env.task)
 
     assert encoded[3] == 0.0
-    assert encoded[8:12] == [0.0, 0.0, 0.0, 0.0]
+    assert encoded[8:14] == [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 
 def test_encode_observation_values_marks_filled_fields() -> None:
@@ -45,4 +45,4 @@ def test_encode_observation_values_marks_filled_fields() -> None:
 
     encoded = encode_observation_values(env.last_observation, env.task)
 
-    assert encoded[18:22] == [1.0, 1.0, 0.0, 1.0]
+    assert encoded[22:28] == [1.0, 1.0, 0.0, 0.0, 0.0, 1.0]

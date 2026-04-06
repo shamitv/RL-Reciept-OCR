@@ -4,10 +4,10 @@ from statistics import mean
 
 from env.models import OCRRegion, ReceiptObservation, TaskConfig
 
-FIELD_ORDER = ("company", "date", "address", "total")
+FIELD_ORDER = ("company", "date", "address", "subtotal", "tax", "total")
 DIFFICULTY_ORDER = ("easy", "medium", "hard")
-OBSERVATION_DIM = 26
-ENCODER_VERSION = "receipt-obs-v1"
+OBSERVATION_DIM = 35
+ENCODER_VERSION = "receipt-obs-v2-summary-line-items"
 
 
 def _require_torch():
@@ -45,6 +45,7 @@ def encode_observation_values(obs: ReceiptObservation, task: TaskConfig) -> list
     visible_regions = list(obs.visible_regions)
     max_steps = max(1, task.max_steps)
     confidence_values = [region.confidence if region.confidence is not None else 1.0 for region in visible_regions]
+    all_feedback = list(obs.validation_feedback) + list(obs.reconciliation_feedback)
 
     values: list[float] = []
     values.extend(1.0 if obs.difficulty == difficulty else 0.0 for difficulty in DIFFICULTY_ORDER)
@@ -62,9 +63,12 @@ def encode_observation_values(obs: ReceiptObservation, task: TaskConfig) -> list
         values.append(max((candidate.heuristic_score for candidate in candidates), default=0.0))
     for field in FIELD_ORDER:
         values.append(1.0 if getattr(obs.current_draft, field) else 0.0)
-    values.append(float(len(obs.validation_feedback)))
-    values.append(_feedback_flag(obs.validation_feedback, ("valid", "matches")))
-    values.append(_feedback_flag(obs.validation_feedback, ("invalid", "weakly")))
+    values.append(float(len(obs.line_item_candidates)))
+    values.append(float(len(obs.current_draft.line_items)))
+    values.append(float(len(all_feedback)))
+    values.append(_feedback_flag(all_feedback, ("valid", "matches", "passed", "reconcile")))
+    values.append(_feedback_flag(all_feedback, ("invalid", "weakly", "failed", "does not", "close")))
+    values.append(1.0 if obs.current_reconciliation_status is not None else 0.0)
     values.append(float(obs.terminal_allowed))
     return values
 
