@@ -1,0 +1,305 @@
+:root {
+  --bg: #f4efe5;
+  --panel: rgba(255, 252, 247, 0.86);
+  --ink: #1f1a17;
+  --muted: #6c6056;
+  --border: rgba(58, 45, 35, 0.12);
+  --worked: #1f7a5b;
+  --partial: #b26b18;
+  --failed: #b33b2e;
+  --skipped: #7b7f87;
+  --accent: #1d4b74;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(29, 75, 116, 0.14), transparent 28rem),
+    radial-gradient(circle at top right, rgba(178, 107, 24, 0.16), transparent 24rem),
+    linear-gradient(180deg, #f8f3eb 0%, var(--bg) 100%);
+  font-family: "Aptos", "Segoe UI Variable", "Segoe UI", sans-serif;
+}
+
+.page-shell {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 3rem;
+}
+
+.hero,
+.section-heading,
+.detail-nav,
+.filter-bar,
+.tag-row,
+.pagination,
+.field-card header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 1.4rem;
+  background: linear-gradient(135deg, rgba(255, 250, 243, 0.95), rgba(247, 239, 230, 0.8));
+  box-shadow: 0 24px 60px rgba(68, 47, 26, 0.08);
+}
+
+.hero h1,
+.section-heading h2,
+.field-card h3 {
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-weight: 700;
+}
+
+.hero-actions a,
+.detail-nav a,
+.pagination a,
+button {
+  color: white;
+  background: var(--accent);
+  text-decoration: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.hero-actions {
+  flex-wrap: wrap;
+}
+
+.eyebrow,
+.label,
+.meta,
+.small,
+.mono {
+  color: var(--muted);
+}
+
+.eyebrow,
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.mono {
+  font-family: "Consolas", "SFMono-Regular", monospace;
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  background: var(--panel);
+  box-shadow: 0 18px 45px rgba(68, 47, 26, 0.05);
+}
+
+.summary-grid,
+.field-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  padding: 1.1rem;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.9rem;
+}
+
+.panel + .panel {
+  margin-top: 1rem;
+}
+
+.filter-bar,
+.field-grid,
+.judge-panel,
+.empty-state,
+.image-panel,
+.detail-panel {
+  padding: 1.25rem;
+}
+
+.filter-bar {
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+.filter-bar label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 180px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(58, 45, 35, 0.15);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.9rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(58, 45, 35, 0.08);
+  vertical-align: top;
+}
+
+tbody tr:hover {
+  background: rgba(29, 75, 116, 0.05);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  background: rgba(123, 127, 135, 0.12);
+}
+
+.worked,
+.correct {
+  color: var(--worked);
+}
+
+.partial {
+  color: var(--partial);
+}
+
+.failed,
+.incorrect,
+.missing {
+  color: var(--failed);
+}
+
+.skipped,
+.not_evaluated {
+  color: var(--skipped);
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.2fr);
+  gap: 1rem;
+}
+
+.receipt-image {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 1rem;
+  background: #fdf9f1;
+  border: 1px solid rgba(58, 45, 35, 0.1);
+}
+
+.field-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.field-card {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(58, 45, 35, 0.08);
+}
+
+.field-card p,
+.judge-panel p {
+  margin: 0.6rem 0;
+}
+
+.field-card p span {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.banner {
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  font-weight: 600;
+}
+
+.banner.failed {
+  background: rgba(179, 59, 46, 0.12);
+}
+
+.banner.skipped {
+  background: rgba(123, 127, 135, 0.12);
+}
+
+.field-notes {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.field-notes dt {
+  font-weight: 700;
+}
+
+.field-notes dd {
+  margin: 0.2rem 0 0;
+}
+
+.empty-copy {
+  color: var(--muted);
+}
+
+.pagination {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.pagination a.current {
+  background: var(--worked);
+}
+
+@media (max-width: 900px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero,
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

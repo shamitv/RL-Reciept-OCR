@@ -2,6 +2,7 @@ fastapi>=0.115.0
 uvicorn>=0.34.0
 pydantic>=2.10.0
 python-dateutil>=2.9.0
+jinja2>=3.1.0
 openai>=1.75.0
 python-dotenv>=1.0.1
 openenv-core>=0.2.0

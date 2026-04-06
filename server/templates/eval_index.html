@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="summary-grid">
+  <article class="panel stat-card">
+    <span class="label">Expected Records</span>
+    <strong>{{ summary.expected_total_records }}</strong>
+  </article>
+  <article class="panel stat-card">
+    <span class="label">Completed</span>
+    <strong>{{ summary.completed_records }}</strong>
+  </article>
+  <article class="panel stat-card worked">
+    <span class="label">Worked</span>
+    <strong>{{ summary.counts.get("worked", 0) }}</strong>
+  </article>
+  <article class="panel stat-card partial">
+    <span class="label">Partial</span>
+    <strong>{{ summary.counts.get("partial", 0) }}</strong>
+  </article>
+  <article class="panel stat-card failed">
+    <span class="label">Failed</span>
+    <strong>{{ summary.counts.get("failed", 0) }}</strong>
+  </article>
+  <article class="panel stat-card skipped">
+    <span class="label">Skipped</span>
+    <strong>{{ summary.counts.get("skipped", 0) }}</strong>
+  </article>
+</section>
+
+<section class="panel">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Filters</p>
+      <h2>Browse Receipts</h2>
+    </div>
+    <p class="meta">Mean score: {{ "%.3f"|format(summary.mean_score) }}</p>
+  </div>
+  <form method="get" class="filter-bar">
+    <label>
+      <span>Status</span>
+      <select name="status">
+        <option value="">All</option>
+        {% for option in ["worked", "partial", "failed", "skipped"] %}
+        <option value="{{ option }}" {% if status_filter == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      <span>Sample ID</span>
+      <input type="text" name="sample_id" value="{{ sample_filter }}" placeholder="Search sample id">
+    </label>
+    <label>
+      <span>Has Errors</span>
+      <select name="has_errors">
+        <option value="" {% if has_errors_filter is none %}selected{% endif %}>Either</option>
+        <option value="true" {% if has_errors_filter == true %}selected{% endif %}>Yes</option>
+        <option value="false" {% if has_errors_filter == false %}selected{% endif %}>No</option>
+      </select>
+    </label>
+    <button type="submit">Apply</button>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Results</p>
+      <h2>Receipt Records</h2>
+    </div>
+    <p class="meta">Page {{ listing["page"] }} of {{ listing["pages"] }}</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Sample</th>
+          <th>Status</th>
+          <th>Score</th>
+          <th>Dataset Status</th>
+          <th>Judge</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in listing["items"] %}
+        <tr>
+          <td><a href="/eval/receipts/{{ record.sample_id }}">{{ record.sample_id }}</a></td>
+          <td><span class="pill {{ record.status }}">{{ record.status }}</span></td>
+          <td>{{ "%.3f"|format(record.overall_score) }}</td>
+          <td><span class="mono small">{{ record.dataset_status }}</span></td>
+          <td>{{ record.judge.summary if record.judge else "—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if listing["total"] == 0 %}
+  <p class="empty-copy">No receipts matched the current filters.</p>
+  {% endif %}
+
+  <div class="pagination">
+    {% for page_number in page_numbers %}
+    <a
+      class="{% if page_number == listing['page'] %}current{% endif %}"
+      href="?page={{ page_number }}&page_size={{ listing['page_size'] }}&status={{ status_filter }}&sample_id={{ sample_filter }}{% if has_errors_filter is not none %}&has_errors={{ 'true' if has_errors_filter else 'false' }}{% endif %}"
+    >
+      {{ page_number }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

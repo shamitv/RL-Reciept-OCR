@@ -1,5 +1,18 @@
 # Plan: Eval API And UI
 
+## Status
+
+- Current state: implemented
+- Implemented outputs:
+  - `env/eval_api.py`
+  - new `/api/eval/*` endpoints in the existing FastAPI app
+  - server-rendered UI under `/eval`
+  - templates and styles in `server/templates/` and `server/static/`
+- Implemented behavior:
+  - artifact-backed summary, list, detail, image, and report endpoints
+  - per-receipt UI showing image, gold fields, predicted fields, and correct/incorrect field states
+  - tests covering API responses, image serving, and UI rendering
+
 ## Summary
 
 - Add a new plan doc at `docs/plans/eval/02-eval-api-ui.md`.

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel empty-state">
+  <h2>No Eval Artifacts Yet</h2>
+  <p>The dashboard is waiting for `results.jsonl`, `summary.json`, and `report.md`.</p>
+  <p class="mono">{{ output_dir }}</p>
+  <p>Run <span class="mono">python scripts/evaluate_dataset_images.py</span> to generate the artifacts.</p>
+</section>
+{% endblock %}

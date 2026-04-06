@@ -109,12 +109,16 @@ Create a `.env` file in the repo root if you want local environment variables lo
 ```dotenv
 API_BASE_URL=https://router.huggingface.co/v1
 MODEL_NAME=gpt-4o-mini
+EVAL_API_BASE_URL=https://router.huggingface.co/v1
+EVAL_MODEL=gpt-4.1
 OPENAI_API_KEY=your-key-here
 HF_TOKEN=your-hf-token-here
 RECEIPT_DATASET_ROOT=dataset/Receipt dataset/ds0
+RECEIPT_EVAL_OUTPUT_DIR=artifacts/eval/dataset-image-eval
 ```
 
 `RECEIPT_DATASET_ROOT` is optional. If unset, the loader defaults to the bundled prepared dataset.
+`RECEIPT_EVAL_OUTPUT_DIR` is optional. If unset, the eval pipeline writes to `artifacts/eval/dataset-image-eval`.
 
 ## Local Usage
 
@@ -150,6 +154,26 @@ Useful options:
 - `python inference.py --format json`
 - `python inference.py --episodes 3 --seed 7`
 
+### Run dataset-wide image evaluation
+
+```bash
+python scripts/evaluate_dataset_images.py
+```
+
+Useful options:
+
+- `python scripts/evaluate_dataset_images.py --limit 10`
+- `python scripts/evaluate_dataset_images.py --resume`
+- `python scripts/evaluate_dataset_images.py --output-dir artifacts/eval/dataset-image-eval`
+
+Artifacts written by the evaluator:
+
+- `artifacts/eval/dataset-image-eval/results.jsonl`
+- `artifacts/eval/dataset-image-eval/summary.json`
+- `artifacts/eval/dataset-image-eval/report.md`
+
+The evaluator walks every annotation file in the dataset, records skipped items explicitly, grades runnable samples deterministically against gold fields, and uses a larger eval model for validation notes.
+
 ### Run the API server
 
 ```bash
@@ -161,6 +185,13 @@ Endpoints:
 - `POST /reset`
 - `POST /step`
 - `GET /state`
+- `GET /api/eval/summary`
+- `GET /api/eval/receipts`
+- `GET /api/eval/receipts/{sample_id}`
+- `GET /api/eval/receipts/{sample_id}/image`
+- `GET /api/eval/report`
+- `GET /eval`
+- `GET /eval/receipts/{sample_id}`
 
 ## Baseline Results
 
@@ -182,9 +213,11 @@ These numbers reflect the current deterministic heuristic and current task const
 ## Project Layout
 
 - `env/` environment package, graders, rewards, dataset loader, API server
+- `server/templates/` built-in eval UI templates
+- `server/static/` built-in eval UI styles
 - `training/` BC and PPO placeholders
 - `tests/` deterministic unit tests
-- `scripts/` local preparation and smoke-test helpers
+- `scripts/` local preparation, smoke-test helpers, and dataset eval runner
 - `docs/` hackathon notes and execution plans
 
 ## Deployment And Validation
@@ -236,4 +269,5 @@ docker run -p 7860:7860 rl-receipt-ocr
 
 - the training package still contains placeholder scripts for BC and PPO
 - the current baseline is heuristic-only; no API-backed policy mode is implemented
+- dataset-wide image eval depends on configured OpenAI-compatible model endpoints for extraction and validation
 - final `openenv validate` and deployment verification are still pending

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="detail-layout">
+  <article class="panel image-panel">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Receipt</p>
+        <h2>{{ record.sample_id }}</h2>
+      </div>
+      <span class="pill {{ record.status }}">{{ record.status }}</span>
+    </div>
+    {% if record.image_path %}
+    <img class="receipt-image" src="/api/eval/receipts/{{ record.sample_id }}/image" alt="{{ record.sample_id }}">
+    {% else %}
+    <p class="empty-copy">No image path recorded for this sample.</p>
+    {% endif %}
+    <div class="detail-nav">
+      {% if previous_id %}<a href="/eval/receipts/{{ previous_id }}">Previous</a>{% endif %}
+      <a href="/eval">Back to Dashboard</a>
+      {% if next_id %}<a href="/eval/receipts/{{ next_id }}">Next</a>{% endif %}
+    </div>
+  </article>
+
+  <article class="panel detail-panel">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Deterministic Score</p>
+        <h2>{{ "%.3f"|format(record.overall_score) }}</h2>
+      </div>
+      <p class="meta mono">{{ record.dataset_status }}</p>
+    </div>
+
+    {% if record.skip_reason %}
+    <p class="banner skipped">Skipped: {{ record.skip_reason }}</p>
+    {% endif %}
+    {% if record.error %}
+    <p class="banner failed">Error: {{ record.error }}</p>
+    {% endif %}
+
+    <div class="field-grid">
+      {% for field_name, field_result in record.field_results.items() %}
+      <section class="field-card {{ field_result.status }}">
+        <header>
+          <h3>{{ field_name }}</h3>
+          <span class="pill {{ field_result.status }}">{{ field_result.status }}</span>
+        </header>
+        <p><strong>Predicted</strong><span>{{ field_result.predicted or "—" }}</span></p>
+        <p><strong>Gold</strong><span>{{ field_result.gold or "—" }}</span></p>
+        <p><strong>Score</strong><span>{{ "%.3f"|format(field_result.score) }}</span></p>
+      </section>
+      {% endfor %}
+    </div>
+
+    {% if record.judge %}
+    <section class="judge-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Judge</p>
+          <h2>Validation Notes</h2>
+        </div>
+      </div>
+      <p>{{ record.judge.summary }}</p>
+      {% if record.judge.failure_reasons %}
+      <div class="tag-row">
+        {% for reason in record.judge.failure_reasons %}
+        <span class="pill failed">{{ reason }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if record.judge.field_notes %}
+      <dl class="field-notes">
+        {% for field_name, note in record.judge.field_notes.items() %}
+        <div>
+          <dt>{{ field_name }}</dt>
+          <dd>{{ note }}</dd>
+        </div>
+        {% endfor %}
+      </dl>
+      {% endif %}
+    </section>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}

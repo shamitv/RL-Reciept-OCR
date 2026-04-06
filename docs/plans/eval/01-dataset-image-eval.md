@@ -1,5 +1,18 @@
 # Plan: Dataset-Wide Image Eval With LLM Validation
 
+## Status
+
+- Current state: implemented
+- Implemented outputs:
+  - `scripts/evaluate_dataset_images.py`
+  - `env/evaluation.py`
+  - `artifacts/eval/dataset-image-eval/{results.jsonl,summary.json,report.md}` output contract
+- Implemented behavior:
+  - dataset-wide audit over every annotation file
+  - resumable JSONL artifact generation
+  - deterministic grading plus larger-model validation notes
+  - tests covering audit coverage, skip reasons, and artifact generation
+
 ## Summary
 
 - Add a new plan doc at `docs/plans/eval/01-dataset-image-eval.md`.
