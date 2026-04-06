@@ -282,7 +282,7 @@ docker run -p 7860:7860 rl-receipt-ocr
 
 The repository now passes `openenv validate` in the local development environment after adding:
 
-- `openenv-core>=0.2.0` as a declared dependency
+- `openenv-core>=0.2.3` as a declared dependency
 - `server/app.py` as the deployment entrypoint wrapper
 - a generated `uv.lock`
 
