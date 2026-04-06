@@ -15,10 +15,14 @@ dependencies = [
     "python-dateutil>=2.9.0",
     "openai>=1.75.0",
     "python-dotenv>=1.0.1",
+    "openenv-core>=0.2.0",
 ]
+
+[project.scripts]
+server = "server.app:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
 [tool.setuptools.packages.find]
-include = ["env*"]
+include = ["env*", "server*"]

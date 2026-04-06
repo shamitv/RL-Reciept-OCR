@@ -124,6 +124,12 @@ RECEIPT_DATASET_ROOT=dataset/Receipt dataset/ds0
 pytest
 ```
 
+### Run the local validation bundle
+
+```bash
+python scripts/validate_local.py
+```
+
 ### Smoke test the environment package
 
 ```bash
@@ -192,11 +198,30 @@ docker run -p 7860:7860 rl-receipt-ocr
 
 ### OpenEnv validation
 
-The repository includes `openenv.yaml`, but `openenv validate` has not yet been recorded in this README. That remains part of the final validation pass.
+The repository now passes `openenv validate` in the local development environment after adding:
+
+- `openenv-core>=0.2.0` as a declared dependency
+- `server/app.py` as the deployment entrypoint wrapper
+- a generated `uv.lock`
+
+The validation command used was:
+
+```bash
+openenv validate
+```
 
 ### Hugging Face Spaces
 
 The repository includes a container entrypoint suitable for a Space-style deployment, but final deployment verification is still pending.
+
+### Docker status
+
+Docker validation has not been executed on this machine because the `docker` CLI is not installed in the current environment. The intended commands are:
+
+```bash
+docker build -t rl-receipt-ocr .
+docker run -p 7860:7860 rl-receipt-ocr
+```
 
 ## Current Status
 
@@ -205,6 +230,7 @@ The repository includes a container entrypoint suitable for a Space-style deploy
 - task difficulty now affects runtime behavior, not only step budget
 - the heuristic baseline evaluates all three tasks deterministically by default
 - local pytest currently passes
+- `openenv validate` currently passes in the local Python environment
 
 ## Limitations
 
