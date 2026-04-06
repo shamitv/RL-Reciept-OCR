@@ -133,6 +133,7 @@ If `scripts/evaluate_dataset_images.py` fails immediately:
 - check that `MODEL_NAME` and `API_BASE_URL` are set
 - check that `EVAL_MODEL` and `EVAL_API_BASE_URL` are set
 - check that `OPENAI_API_KEY`, `HF_TOKEN`, or `API_KEY` is available
+- if you previously saw `ModuleNotFoundError: No module named 'env'`, update to the current repo version; the script now bootstraps the repo root automatically
 
 If `/eval` opens but shows no results:
 
