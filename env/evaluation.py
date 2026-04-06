@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 
 from env.dataset import ReceiptDataset
 from env.graders import grade_receipt
+from env.llm_cache import cached_chat_completion
 from env.models import ReceiptDraft
 
 FIELD_NAMES = ("company", "date", "address", "total")
@@ -323,7 +324,8 @@ def build_judge_messages(record: DatasetAuditRecord, prediction: ReceiptDraft | 
 
 
 def run_extraction_model(record: DatasetAuditRecord, client: Any, model_name: str) -> ReceiptDraft:
-    completion = client.chat.completions.create(
+    completion = cached_chat_completion(
+        client,
         model=model_name,
         messages=build_extraction_messages(record),
         temperature=0,
@@ -341,7 +343,8 @@ def run_judge_model(
     client: Any,
     model_name: str,
 ) -> JudgeEvaluation:
-    completion = client.chat.completions.create(
+    completion = cached_chat_completion(
+        client,
         model=model_name,
         messages=build_judge_messages(record, prediction, field_scores, error),
         temperature=0,

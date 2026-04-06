@@ -18,16 +18,17 @@
 ## Implementation Changes
 
 - Introduce a shared cache module, likely `env/llm_cache.py`, that:
-  - computes a canonical cache key from the full request payload
+  - computes a canonical cache key using a cryptographic hash (e.g., `hashlib.sha256().hexdigest()`) of the full request payload to avoid filesystem limits.
   - stores cached responses on disk
   - enforces TTL checks on read
-  - writes new responses after successful model calls
+  - writes new responses after successful model calls using atomic disk writes (e.g., write to a temporary file and atomically rename it) to prevent corruption during parallel evaluations.
+  - implements graceful degradation by catching I/O exceptions on disk operations, logging a warning, and falling back to calling the live model instead of crashing the core application.
 - Route all current LLM requests through one cached helper instead of calling `client.chat.completions.create(...)` directly.
 - Define exact-match cache semantics:
   - same base URL
   - same model
   - same endpoint type
-  - same request body after canonical JSON serialization
+  - same request body after canonical JSON serialization using `json.dumps(..., sort_keys=True)` to prevent ordering-based cache misses.
   - same message content, including image inputs and response-format parameters
   - same sampling parameters such as `temperature`
 - For multimodal inputs, include the exact image payload reference in the cache key:
@@ -55,6 +56,7 @@
 - Add a small wrapper API that callers use instead of raw OpenAI client calls, for example:
   - `cached_chat_completion(...)`
   - or a thin cached client wrapper around the OpenAI-compatible client
+- When returning cached data, the wrapper must reconstruct the raw JSON payload into an object that provides identical attribute access (e.g., `completion.choices[0].message.content`) to a real OpenAI `ChatCompletion` object, ensuring existing call sites don't break.
 - Return metadata to callers when helpful, such as whether the response came from cache, but keep the primary return shape compatible with the current code.
 
 ## Scope Rules
@@ -66,6 +68,7 @@
   - cache directory creation and safe file naming
   - tests for hit, miss, and expiry behavior
 - Out of scope:
+  - requests that specify `stream=True` (these should either bypass the cache entirely or raise a `NotImplementedError`)
   - semantic or approximate matching
   - distributed/shared cache services
   - cache invalidation by model quality heuristics

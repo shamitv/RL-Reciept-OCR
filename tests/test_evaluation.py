@@ -46,6 +46,7 @@ class _FakeClient:
     def __init__(self, responses: list[str]) -> None:
         self.completions = _FakeCompletions(responses)
         self.chat = SimpleNamespace(completions=self.completions)
+        self.base_url = "https://fake.client/v1"
 
 
 def test_audit_dataset_accounts_for_all_annotation_files_and_skip_reasons(tmp_path: Path) -> None:
