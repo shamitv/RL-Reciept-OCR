@@ -20,6 +20,7 @@ This directory is the documentation home for the project.
 - [Eval Plan 01: Dataset Image Eval](plans/eval/01-dataset-image-eval.md)
 - [Eval Plan 02: Eval API And UI](plans/eval/02-eval-api-ui.md)
 - [LLM Cache Plan](plans/llm-cache/01-llm-response-cache.md)
+- [RL Inference Plan](plans/rl/01-rl-inference.md)
 
 ## Hackathon Notes
 

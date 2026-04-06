@@ -22,5 +22,5 @@ This section describes how the system is organized today and how the planned RL 
 
 ## Current State
 
-- The environment, API server, deterministic grading, eval pipeline, and eval UI are implemented.
-- The intended learning-agent design is documented, but PPO and BC training code are still placeholders in `training/`.
+- The environment, API server, deterministic grading, eval pipeline, eval UI, and PPO inference runtime are implemented.
+- PPO and BC training code are still placeholders in `training/`.

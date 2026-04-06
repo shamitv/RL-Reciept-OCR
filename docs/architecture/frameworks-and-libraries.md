@@ -92,6 +92,21 @@ This is significant because much of the system’s actual logic is implemented i
 
 ## Model And Evaluation Integrations
 
+### PyTorch
+
+- package: optional extra `ppo = ["torch>=2.0"]`
+
+Used for:
+
+- loading learned-policy checkpoints for PPO inference
+- encoding observations into tensors
+- running the MLP policy trunk, action head, and parameter heads
+
+Architectural note:
+
+- PyTorch is optional because heuristic-only usage does not need it
+- PPO training is still not implemented, but the inference runtime now depends on PyTorch when `--agent ppo` is used
+
 ### OpenAI Python Client
 
 - package: `openai`
@@ -167,7 +182,6 @@ Used for:
 These are intentionally absent from the current checked-in implementation:
 
 - LangGraph
-- PyTorch
 - TensorFlow
 - JAX
 - Stable-Baselines3
@@ -183,15 +197,15 @@ That absence matters because it tells you the current codebase is:
 
 ## Planned But Not Yet Implemented RL Stack
 
-The architecture and plans describe a future PPO-based learning agent, but the training code is still placeholder-only.
+The architecture and plans describe a broader PPO-based learning stack, but the training code is still placeholder-only.
 
 That means the likely future framework set will need to add at least:
 
-- a numerical/ML framework for policy training
 - rollout collection and optimization tooling
-- model checkpointing and policy inference support
+- a PPO training loop on top of the existing PyTorch-based inference runtime
+- possibly a Gymnasium adapter or higher-level RL library if the training plan chooses one
 
-Those libraries are not yet part of the project’s declared runtime dependencies.
+Those training-specific libraries are not yet part of the project’s declared runtime dependencies.
 
 ## Practical Summary
 
@@ -202,6 +216,7 @@ Implemented stack today:
 - FastAPI
 - Uvicorn
 - Jinja2
+- optional PyTorch for PPO inference
 - OpenAI client
 - python-dotenv
 - python-dateutil
@@ -210,4 +225,4 @@ Implemented stack today:
 
 Planned stack for learned-policy work:
 
-- PPO training framework and supporting ML dependencies, still to be chosen and implemented
+- PPO training framework and supporting optimization tooling, still to be chosen and implemented

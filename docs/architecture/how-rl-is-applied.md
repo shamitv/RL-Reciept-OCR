@@ -117,14 +117,14 @@ That makes the problem a good fit for RL because the challenge is partly about s
 Implemented today:
 
 - the environment, observation model, actions, rewards, and heuristic policy baseline
+- a checkpoint-backed PPO inference path that can load a learned policy and run it through `inference.py --agent ppo`
 
 Not yet implemented:
 
 - the PPO learner
 - the behavior-cloning warm start
-- the learned policy inference path
 
-In other words, the codebase is currently RL-ready in problem formulation, but not yet RL-complete in training implementation.
+In other words, the codebase now supports learned-policy inference, but is still not RL-complete on the training side.
 
 ## Planned Training Loop
 
@@ -156,3 +156,28 @@ So the architectural split is:
 - RL learns the action policy
 - deterministic code defines the environment and grading
 - optional LLM calls assist specific tasks but remain frozen
+
+## Inference-Time PPO Runtime
+
+The implemented PPO inference path uses:
+
+- a fixed-width observation encoder over the structured environment observation
+- a small MLP policy checkpoint loaded from disk
+- an action-type head plus parameter heads for structured action payloads
+- action masking so impossible choices are filtered before execution
+
+The initial PPO-supported action subset is narrower than the full environment action enum. Inference currently supports:
+
+- `view_receipt`
+- `list_text_regions`
+- `inspect_bbox`
+- `inspect_neighbors`
+- `query_candidates`
+- `set_field_from_candidate`
+- `normalize_field`
+- `check_total_consistency`
+- `check_date_format`
+- `clear_field`
+- `submit`
+
+Free-form and combinatorial actions such as `set_field_manual` and `merge_spans` remain environment-valid, but are intentionally excluded from the initial learned-policy runtime.

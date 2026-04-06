@@ -21,8 +21,10 @@ flowchart LR
     C --> F["Observation / State / Reward"]
     C --> G["Deterministic grader + rewards"]
 
-    D --> H["Heuristic baseline (implemented)"]
-    D --> I["PPO policy (planned)"]
+    D --> H["Heuristic agent (implemented)"]
+    D --> I["Checkpoint-backed PPO inference (implemented)"]
+    I --> Q["PyTorch policy runtime + action decoder"]
+    R["PPO training loop (planned)"] --> I
 
     A --> J["Dataset-wide eval pipeline"]
     J --> K["OpenAI-compatible extraction call"]
@@ -98,11 +100,9 @@ This layer is deliberately rule-based so the environment stays auditable and tes
 
 Current implementation:
 
-- `inference.py` contains a heuristic policy that drives the environment using hard-coded action selection rules
-
-Planned extension:
-
-- a trainable external PPO policy that chooses actions from observations and reward feedback
+- `agents/heuristic.py` provides the rule-based baseline used by default
+- `agents/ppo.py` provides a checkpoint-backed PPO inference runtime
+- `inference.py` selects the requested agent and runs the shared episode loop
 
 Important boundary:
 
@@ -217,7 +217,8 @@ Model-based components:
 
 - extraction LLM used by the dataset eval pipeline
 - judge LLM used by the dataset eval pipeline
-- planned PPO policy for RL training and inference
+- implemented PPO inference runtime
+- planned PPO training loop
 
 This separation is intentional. The environment remains stable and reproducible even if the model-backed evaluation path changes.
 
@@ -228,6 +229,7 @@ Implemented today:
 - dataset loading
 - environment loop
 - deterministic heuristic baseline
+- checkpoint-backed PPO inference path
 - FastAPI server
 - dataset-wide image evaluation
 - artifact-backed eval API and UI
@@ -237,4 +239,3 @@ Documented but not yet implemented:
 
 - PPO training loop
 - BC training loop
-- learned policy inference path
