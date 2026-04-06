@@ -16,4 +16,4 @@ artifacts/
 logs/
 .DS_Store
 Thumbs.db
-.cache/
+
