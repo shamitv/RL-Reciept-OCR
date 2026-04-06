@@ -79,8 +79,36 @@ def test_grade_receipt_reconciliation_and_line_item_scores() -> None:
 
     assert exact.reconciliation_status == "pass"
     assert exact.line_items_score == 0.45
+    assert exact.line_item_gold_available is True
+    assert exact.gold_line_item_count == 2
+    assert exact.predicted_line_item_count == 2
+    assert exact.line_item_count_delta == 0
+    assert exact.line_item_count_score == 1.0
     assert partial.reconciliation_status == "partial"
     assert partial.reconciliation_score == 0.125
+    assert partial.line_item_reconciliation_status == "not_evaluated"
+    assert partial.line_item_count_score is None
+
+
+def test_grade_receipt_marks_line_item_metrics_not_evaluated_without_gold_rows() -> None:
+    grade = grade_receipt(
+        ReceiptDraft(
+            company="Demo Cafe",
+            date="2019-03-25",
+            subtotal="8.00",
+            tax="0.48",
+            total="8.48",
+            line_items=[ReceiptLineItem(description="LATTE", line_total="4.50")],
+        ),
+        ReceiptDraft(company="Demo Cafe", date="2019-03-25", subtotal="8.00", tax="0.48", total="8.48"),
+        task_id="hard",
+        gold_line_items=[],
+    )
+
+    assert grade.line_item_gold_available is False
+    assert grade.line_item_count_score is None
+    assert grade.line_item_reconciliation_status == "not_evaluated"
+    assert grade.reconciliation_status == "pass"
 
 
 def test_environment_hard_line_item_actions_and_reconciliation_feedback() -> None:

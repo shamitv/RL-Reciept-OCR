@@ -68,6 +68,21 @@
       {% endfor %}
     </section>
 
+    <section class="summary-grid component-grid">
+      <article class="panel stat-card">
+        <span class="label">Gold Line-Item Receipts</span>
+        <strong>{{ summary.line_item_availability_counts.get("with_gold_line_items", 0) }}</strong>
+      </article>
+      <article class="panel stat-card">
+        <span class="label">No Gold Line Items</span>
+        <strong>{{ summary.line_item_availability_counts.get("without_gold_line_items", 0) }}</strong>
+      </article>
+      <article class="panel stat-card">
+        <span class="label">Count Match</span>
+        <strong>{{ "%.3f"|format(summary.component_mean_scores.get("line_item_count_score", 0.0)) }}</strong>
+      </article>
+    </section>
+
     <section class="panel">
       <div class="section-heading">
         <div>

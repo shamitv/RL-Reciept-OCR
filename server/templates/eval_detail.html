@@ -96,10 +96,46 @@
           <strong>{{ "%.3f"|format(record.line_items_score or 0.0) }}</strong>
         </section>
         <section class="stat-chip">
+          <span class="label">Line Item Count</span>
+          <strong>
+            {% if record.line_item_count_score is not none %}
+            {{ "%.3f"|format(record.line_item_count_score) }}
+            {% else %}
+            —
+            {% endif %}
+          </strong>
+        </section>
+        <section class="stat-chip">
           <span class="label">Reconciliation</span>
           <strong>{{ "%.3f"|format(record.reconciliation_score or 0.0) }}</strong>
         </section>
       </div>
+
+      <section class="panel-lite">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Line Item Evidence</p>
+            <h2>Availability And Count</h2>
+          </div>
+          <span class="pill {{ 'worked' if record.line_item_gold_available else 'not_evaluated' }}">
+            {{ 'available' if record.line_item_gold_available else 'missing' }}
+          </span>
+        </div>
+        <div class="score-grid compact-grid">
+          <section class="stat-chip">
+            <span class="label">Gold Rows</span>
+            <strong>{{ record.gold_line_item_count or 0 }}</strong>
+          </section>
+          <section class="stat-chip">
+            <span class="label">Predicted Rows</span>
+            <strong>{{ record.predicted_line_item_count or 0 }}</strong>
+          </section>
+          <section class="stat-chip">
+            <span class="label">Count Delta</span>
+            <strong>{{ record.line_item_count_delta if record.line_item_count_delta is not none else "—" }}</strong>
+          </section>
+        </div>
+      </section>
 
       <div class="field-grid">
         {% for field_name, field_result in record.field_results.items() %}
@@ -127,6 +163,22 @@
           </span>
         </div>
         <p><strong>Delta</strong> <span class="mono">{{ "%.2f"|format(record.reconciliation_delta) if record.reconciliation_delta is not none else "—" }}</span></p>
+        <div class="field-grid reconciliation-grid">
+          <section class="field-card {{ record.summary_reconciliation_status or 'not_evaluated' }}">
+            <header>
+              <h3>Summary Reconciliation</h3>
+              <span class="pill {{ record.summary_reconciliation_status or 'not_evaluated' }}">{{ record.summary_reconciliation_status or "not_evaluated" }}</span>
+            </header>
+            <p><strong>Delta</strong><span>{{ "%.2f"|format(record.summary_reconciliation_delta) if record.summary_reconciliation_delta is not none else "—" }}</span></p>
+          </section>
+          <section class="field-card {{ record.line_item_reconciliation_status or 'not_evaluated' }}">
+            <header>
+              <h3>Line-Item Reconciliation</h3>
+              <span class="pill {{ record.line_item_reconciliation_status or 'not_evaluated' }}">{{ record.line_item_reconciliation_status or "not_evaluated" }}</span>
+            </header>
+            <p><strong>Delta</strong><span>{{ "%.2f"|format(record.line_item_reconciliation_delta) if record.line_item_reconciliation_delta is not none else "—" }}</span></p>
+          </section>
+        </div>
       </section>
       {% endif %}
 

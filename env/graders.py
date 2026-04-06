@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from collections import Counter
 from decimal import Decimal, InvalidOperation
-from math import inf
-
 from env.models import GradeResult, ReceiptDraft, ReceiptLineItem
 from env.normalizers import normalize_address, normalize_amount, normalize_date, normalize_text, tokenize
 from env.utils import clamp
@@ -103,37 +101,76 @@ def score_line_items(
     return clamp(matched_similarity / float(denominator))
 
 
-def reconciliation_component(
-    prediction: ReceiptDraft,
-    task_id: str,
-) -> tuple[float, str, float | None]:
+def score_line_item_count(
+    predicted_items: list[ReceiptLineItem],
+    gold_items: list[ReceiptLineItem],
+) -> tuple[float | None, int | None]:
+    if not gold_items:
+        return None, None
+    predicted_count = len(predicted_items)
+    gold_count = len(gold_items)
+    delta = abs(predicted_count - gold_count)
+    denominator = max(predicted_count, gold_count, 1)
+    return clamp(1.0 - (delta / float(denominator))), delta
+
+
+def _delta_to_status(delta: Decimal | None) -> tuple[float, str, float | None]:
+    if delta is None:
+        return 0.0, "not_evaluated", None
+    if delta <= Decimal("0.01"):
+        return 1.0, "pass", float(delta)
+    if delta <= Decimal("0.05"):
+        return 0.5, "partial", float(delta)
+    return 0.0, "fail", float(delta)
+
+
+def summary_reconciliation_component(prediction: ReceiptDraft) -> tuple[float, str, float | None]:
     subtotal = _decimal_amount(prediction.subtotal)
     tax = _decimal_amount(prediction.tax)
     total = _decimal_amount(prediction.total)
-    primary_delta: Decimal | None = None
+    if subtotal is None or tax is None or total is None:
+        return 0.0, "not_evaluated", None
+    return _delta_to_status(abs((subtotal + tax) - total))
 
-    if subtotal is not None and tax is not None and total is not None:
-        primary_delta = abs((subtotal + tax) - total)
 
-    line_items_delta: Decimal | None = None
-    if task_id == "hard":
-        if subtotal is None or not prediction.line_items:
-            return 0.0, "fail", float(primary_delta) if primary_delta is not None else None
-        line_item_amounts = [_decimal_amount(item.line_total) for item in prediction.line_items]
-        if any(amount is None for amount in line_item_amounts):
-            return 0.0, "fail", float(primary_delta) if primary_delta is not None else None
-        line_items_total = sum((amount for amount in line_item_amounts if amount is not None), Decimal("0.00"))
-        line_items_delta = abs(line_items_total - subtotal)
+def line_item_reconciliation_component(
+    prediction: ReceiptDraft,
+    gold_line_items: list[ReceiptLineItem],
+) -> tuple[float, str, float | None]:
+    if not gold_line_items:
+        return 0.0, "not_evaluated", None
 
-    if primary_delta is None:
+    subtotal = _decimal_amount(prediction.subtotal)
+    if subtotal is None or not prediction.line_items:
         return 0.0, "fail", None
 
-    combined_delta = max(primary_delta, line_items_delta or Decimal("0.00"))
-    if combined_delta <= Decimal("0.01"):
-        return 1.0, "pass", float(combined_delta)
-    if combined_delta <= Decimal("0.05"):
-        return 0.5, "partial", float(combined_delta)
-    return 0.0, "fail", float(combined_delta)
+    line_item_amounts = [_decimal_amount(item.line_total) for item in prediction.line_items]
+    if any(amount is None for amount in line_item_amounts):
+        return 0.0, "fail", None
+    line_items_total = sum((amount for amount in line_item_amounts if amount is not None), Decimal("0.00"))
+    return _delta_to_status(abs(line_items_total - subtotal))
+
+
+def combine_reconciliation(
+    summary_result: tuple[float, str, float | None],
+    line_item_result: tuple[float, str, float | None],
+) -> tuple[float, str, float | None]:
+    summary_score_value, summary_status, summary_delta = summary_result
+    line_item_score_value, line_item_status, line_item_delta = line_item_result
+
+    if line_item_status == "not_evaluated":
+        return summary_score_value, summary_status, summary_delta
+    if summary_status == "not_evaluated":
+        return line_item_score_value, line_item_status, line_item_delta
+
+    combined_delta_values = [value for value in (summary_delta, line_item_delta) if value is not None]
+    combined_delta = max(combined_delta_values) if combined_delta_values else None
+
+    if "fail" in {summary_status, line_item_status}:
+        return 0.0, "fail", combined_delta
+    if "partial" in {summary_status, line_item_status}:
+        return 0.5, "partial", combined_delta
+    return 1.0, "pass", combined_delta
 
 
 def grade_receipt(
@@ -158,6 +195,14 @@ def grade_receipt(
     reconciliation_score = 0.0
     reconciliation_delta: float | None = None
     reconciliation_status: str | None = None
+    summary_reconciliation_delta: float | None = None
+    summary_reconciliation_status: str | None = None
+    line_item_reconciliation_delta: float | None = None
+    line_item_reconciliation_status: str | None = None
+    line_item_gold_available = bool(gold_line_items)
+    gold_line_item_count = len(gold_line_items)
+    predicted_line_item_count = len(prediction.line_items)
+    line_item_count_score, line_item_count_delta = score_line_item_count(prediction.line_items, gold_line_items)
 
     if task_id == "easy":
         header_score = clamp(
@@ -172,7 +217,10 @@ def grade_receipt(
         summary_score = clamp(
             (0.15 * field_scores["subtotal"]) + (0.15 * field_scores["tax"]) + (0.25 * field_scores["total"])
         )
-        reconciliation_component_score, reconciliation_status, reconciliation_delta = reconciliation_component(prediction, task_id)
+        reconciliation_component_score, reconciliation_status, reconciliation_delta = summary_reconciliation_component(prediction)
+        summary_reconciliation_status = reconciliation_status
+        summary_reconciliation_delta = reconciliation_delta
+        line_item_reconciliation_status = "not_evaluated"
         reconciliation_score = clamp(0.25 * reconciliation_component_score)
         final_score = clamp(header_score + summary_score + reconciliation_score)
     else:
@@ -181,7 +229,13 @@ def grade_receipt(
             (0.05 * field_scores["subtotal"]) + (0.05 * field_scores["tax"]) + (0.10 * field_scores["total"])
         )
         line_items_score = clamp(0.45 * score_line_items(prediction.line_items, gold_line_items))
-        reconciliation_component_score, reconciliation_status, reconciliation_delta = reconciliation_component(prediction, task_id)
+        summary_result = summary_reconciliation_component(prediction)
+        line_item_result = line_item_reconciliation_component(prediction, gold_line_items)
+        summary_reconciliation_status = summary_result[1]
+        summary_reconciliation_delta = summary_result[2]
+        line_item_reconciliation_status = line_item_result[1]
+        line_item_reconciliation_delta = line_item_result[2]
+        reconciliation_component_score, reconciliation_status, reconciliation_delta = combine_reconciliation(summary_result, line_item_result)
         reconciliation_score = clamp(0.25 * reconciliation_component_score)
         final_score = clamp(header_score + summary_score + line_items_score + reconciliation_score)
 
@@ -195,4 +249,13 @@ def grade_receipt(
         reconciliation_score=reconciliation_score,
         reconciliation_delta=reconciliation_delta,
         reconciliation_status=reconciliation_status,
+        summary_reconciliation_delta=summary_reconciliation_delta,
+        summary_reconciliation_status=summary_reconciliation_status,
+        line_item_reconciliation_delta=line_item_reconciliation_delta,
+        line_item_reconciliation_status=line_item_reconciliation_status,
+        line_item_gold_available=line_item_gold_available,
+        gold_line_item_count=gold_line_item_count,
+        predicted_line_item_count=predicted_line_item_count,
+        line_item_count_delta=line_item_count_delta,
+        line_item_count_score=line_item_count_score,
     )

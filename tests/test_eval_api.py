@@ -91,6 +91,7 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     detail_response = client.get("/api/eval/receipts/sample-1")
     assert detail_response.status_code == 200
     assert detail_response.json()["status"] == "worked"
+    assert "line_item_gold_available" in detail_response.json()
 
     image_response = client.get("/api/eval/receipts/sample-1/image")
     assert image_response.status_code == 200
@@ -108,6 +109,7 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     detail_page_response = client.get("/eval/receipts/sample-2")
     assert detail_page_response.status_code == 200
     assert "Model failed to extract fields" in detail_page_response.text
+    assert "Availability And Count" in detail_page_response.text
 
 
 def test_eval_ui_includes_unprocessed_receipts_and_single_run_action(monkeypatch, tmp_path: Path) -> None:

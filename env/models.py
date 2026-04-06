@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 FieldName = Literal["company", "date", "address", "subtotal", "tax", "total"]
 Difficulty = Literal["easy", "medium", "hard"]
-ReconciliationStatus = Literal["pass", "partial", "fail"]
+ReconciliationStatus = Literal["pass", "partial", "fail", "not_evaluated"]
 ActionType = Literal[
     "view_receipt",
     "list_text_regions",
@@ -140,6 +140,15 @@ class GradeResult(BaseModel):
     reconciliation_score: float = 0.0
     reconciliation_delta: float | None = None
     reconciliation_status: ReconciliationStatus | None = None
+    summary_reconciliation_delta: float | None = None
+    summary_reconciliation_status: ReconciliationStatus | None = None
+    line_item_reconciliation_delta: float | None = None
+    line_item_reconciliation_status: ReconciliationStatus | None = None
+    line_item_gold_available: bool = False
+    gold_line_item_count: int = 0
+    predicted_line_item_count: int = 0
+    line_item_count_delta: int | None = None
+    line_item_count_score: float | None = None
 
 
 class TaskConfig(BaseModel):

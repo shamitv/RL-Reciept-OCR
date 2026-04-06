@@ -85,9 +85,18 @@ class ReceiptEvalRecord(BaseModel):
     header_score: float = 0.0
     summary_score: float = 0.0
     line_items_score: float = 0.0
+    line_item_gold_available: bool = False
+    gold_line_item_count: int = 0
+    predicted_line_item_count: int = 0
+    line_item_count_delta: int | None = None
+    line_item_count_score: float | None = None
     reconciliation_score: float = 0.0
     reconciliation_delta: float | None = None
     reconciliation_status: str | None = None
+    summary_reconciliation_delta: float | None = None
+    summary_reconciliation_status: str | None = None
+    line_item_reconciliation_delta: float | None = None
+    line_item_reconciliation_status: str | None = None
     deterministic_success: bool = False
     error: str | None = None
     judge: JudgeEvaluation | None = None
@@ -106,6 +115,7 @@ class EvalSummary(BaseModel):
     records_with_errors: int = 0
     field_mean_scores: dict[str, float] = Field(default_factory=dict)
     component_mean_scores: dict[str, float] = Field(default_factory=dict)
+    line_item_availability_counts: dict[str, int] = Field(default_factory=dict)
     top_failure_reasons: dict[str, int] = Field(default_factory=dict)
 
 
@@ -455,9 +465,18 @@ def evaluate_audit_record(
     header_score = 0.0
     summary_score = 0.0
     line_items_score = 0.0
+    line_item_gold_available = bool(record.gold_line_items)
+    gold_line_item_count = len(record.gold_line_items)
+    predicted_line_item_count = 0
+    line_item_count_delta: int | None = None
+    line_item_count_score: float | None = None
     reconciliation_score = 0.0
     reconciliation_delta: float | None = None
     reconciliation_status: str | None = None
+    summary_reconciliation_delta: float | None = None
+    summary_reconciliation_status: str | None = None
+    line_item_reconciliation_delta: float | None = None
+    line_item_reconciliation_status: str | None = None
     deterministic_success = False
     error: str | None = None
 
@@ -474,9 +493,18 @@ def evaluate_audit_record(
         header_score = float(grade.header_score)
         summary_score = float(grade.summary_score)
         line_items_score = float(grade.line_items_score)
+        line_item_gold_available = bool(grade.line_item_gold_available)
+        gold_line_item_count = int(grade.gold_line_item_count)
+        predicted_line_item_count = int(grade.predicted_line_item_count)
+        line_item_count_delta = grade.line_item_count_delta
+        line_item_count_score = grade.line_item_count_score
         reconciliation_score = float(grade.reconciliation_score)
         reconciliation_delta = grade.reconciliation_delta
         reconciliation_status = grade.reconciliation_status
+        summary_reconciliation_delta = grade.summary_reconciliation_delta
+        summary_reconciliation_status = grade.summary_reconciliation_status
+        line_item_reconciliation_delta = grade.line_item_reconciliation_delta
+        line_item_reconciliation_status = grade.line_item_reconciliation_status
         deterministic_success = bool(grade.success)
     except Exception as exc:  # pragma: no cover - exact client failures vary
         error = str(exc)
@@ -507,9 +535,18 @@ def evaluate_audit_record(
         header_score=round(header_score, 6),
         summary_score=round(summary_score, 6),
         line_items_score=round(line_items_score, 6),
+        line_item_gold_available=line_item_gold_available,
+        gold_line_item_count=gold_line_item_count,
+        predicted_line_item_count=predicted_line_item_count,
+        line_item_count_delta=line_item_count_delta,
+        line_item_count_score=None if line_item_count_score is None else round(float(line_item_count_score), 6),
         reconciliation_score=round(reconciliation_score, 6),
         reconciliation_delta=reconciliation_delta,
         reconciliation_status=reconciliation_status,
+        summary_reconciliation_delta=summary_reconciliation_delta,
+        summary_reconciliation_status=summary_reconciliation_status,
+        line_item_reconciliation_delta=line_item_reconciliation_delta,
+        line_item_reconciliation_status=line_item_reconciliation_status,
         deterministic_success=deterministic_success,
         error=error,
         judge=judge,
@@ -689,11 +726,21 @@ def build_eval_summary(
         for reason in record.judge.failure_reasons:
             failure_reasons[reason] += 1
 
+    line_item_availability_counts = Counter(
+        "with_gold_line_items" if record.line_item_gold_available else "without_gold_line_items"
+        for record in records
+    )
     component_mean_scores = {
         "header_score": round(mean(record.header_score for record in scored_records), 6) if scored_records else 0.0,
         "summary_score": round(mean(record.summary_score for record in scored_records), 6) if scored_records else 0.0,
         "line_items_score": round(mean(record.line_items_score for record in scored_records), 6) if scored_records else 0.0,
         "reconciliation_score": round(mean(record.reconciliation_score for record in scored_records), 6) if scored_records else 0.0,
+        "line_item_count_score": round(
+            mean(record.line_item_count_score for record in scored_records if record.line_item_count_score is not None),
+            6,
+        )
+        if any(record.line_item_count_score is not None for record in scored_records)
+        else 0.0,
     }
 
     return EvalSummary(
@@ -708,6 +755,7 @@ def build_eval_summary(
         records_with_errors=sum(1 for record in records if record.error),
         field_mean_scores=field_mean_scores,
         component_mean_scores=component_mean_scores,
+        line_item_availability_counts=dict(line_item_availability_counts),
         top_failure_reasons=dict(failure_reasons.most_common(10)),
     )
 
@@ -740,6 +788,11 @@ def render_markdown_report(summary: EvalSummary, records: list[ReceiptEvalRecord
 
     for name, score in summary.component_mean_scores.items():
         lines.append(f"- `{name}`: `{score:.3f}`")
+
+    if summary.line_item_availability_counts:
+        lines.extend(["", "## Line Item Gold Availability", ""])
+        for name, count in sorted(summary.line_item_availability_counts.items()):
+            lines.append(f"- `{name}`: `{count}`")
 
     lines.extend(["", "## Dataset Audit Status", ""])
     for status_name, count in sorted(summary.dataset_status_counts.items()):

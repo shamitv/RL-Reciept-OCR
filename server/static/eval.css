@@ -138,6 +138,14 @@ button {
   margin-top: -0.2rem;
 }
 
+.compact-grid {
+  margin-top: 0.75rem;
+}
+
+.reconciliation-grid {
+  margin-top: 1rem;
+}
+
 .stat-card {
   padding: 1.1rem;
 }
