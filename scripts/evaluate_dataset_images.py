@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
+import logging
 import sys
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,32 +25,35 @@ def build_parser() -> argparse.ArgumentParser:
         help="Directory for results.jsonl, summary.json, and report.md. Defaults to artifacts/eval/dataset-image-eval.",
     )
     parser.add_argument("--limit", type=int, default=None, help="Process only the first N dataset records after resume filtering.")
-    parser.add_argument("--resume", action="store_true", help="Skip sample IDs that already exist in results.jsonl.")
+    parser.add_argument("--force", action="store_true", help="Force re-processing of images even if they already exist in results.jsonl.")
     return parser
 
 
 def main() -> int:
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    logger.info("Starting dataset evaluation script")
+    
     load_environment()
     parser = build_parser()
     args = parser.parse_args()
+    
+    resume = not args.force
+    logger.info(f"Running evaluation (limit={args.limit}, resume={resume})")
+    
     result = evaluate_dataset_images(
         dataset_root=args.dataset_root,
         output_dir=args.output_dir,
         limit=args.limit,
-        resume=args.resume,
+        resume=resume,
     )
-    print(
-        (
-            "[EVAL] processed_records={processed} expected_total_records={expected} "
-            "results={results} summary={summary} report={report}"
-        ).format(
-            processed=result.processed_records,
-            expected=result.expected_total_records,
-            results=result.results_path,
-            summary=result.summary_path,
-            report=result.report_path,
-        ),
-        flush=True,
+    
+    logger.info(
+        "Evaluation completed.\n"
+        f"  Processed records: {result.processed_records}\n"
+        f"  Expected total: {result.expected_total_records}\n"
+        f"  Results file: {result.results_path}\n"
+        f"  Summary file: {result.summary_path}\n"
+        f"  Report file: {result.report_path}"
     )
     return 0
 
