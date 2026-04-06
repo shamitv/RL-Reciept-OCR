@@ -24,6 +24,7 @@ Used for:
 
 - typed action, observation, state, and result models
 - structured environment payloads
+- structured receipt drafts, line-item rows, and task-aware eval artifacts
 - validation and serialization across the API boundary
 
 Primary role in architecture:
@@ -38,7 +39,7 @@ Used for:
 
 - OpenEnv endpoints: `/reset`, `/step`, `/state`
 - eval endpoints under `/api/eval`
-- serving the evaluation UI
+- serving the evaluation UI for per-receipt score breakdowns, reconciliation, and line-item review
 
 Primary role in architecture:
 

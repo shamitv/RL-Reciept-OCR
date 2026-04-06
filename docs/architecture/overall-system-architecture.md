@@ -4,9 +4,10 @@
 
 The project is a receipt-extraction environment built around the OpenEnv interaction model. The system exposes:
 
-- a sequential environment for receipt extraction
+- a sequential receipt-extraction environment
 - a deterministic heuristic baseline
-- an evaluation pipeline that runs model-based extraction and judging over dataset images
+- a checkpoint-backed PPO inference runtime
+- a dataset-wide LLM evaluation pipeline
 - a FastAPI server that serves both the OpenEnv API and a read-only evaluation UI
 
 ## High-Level View
@@ -16,24 +17,24 @@ flowchart LR
     A["Dataset: annotation JSON + receipt images"] --> B["ReceiptDataset loader"]
     B --> C["ReceiptExtractionEnv"]
     C --> D["Agent loop"]
-    D --> E["Actions"]
+    D --> E["Typed actions"]
     E --> C
     C --> F["Observation / State / Reward"]
-    C --> G["Deterministic grader + rewards"]
+    C --> G["Deterministic grading + reward shaping"]
 
-    D --> H["Heuristic agent (implemented)"]
-    D --> I["Checkpoint-backed PPO inference (implemented)"]
-    I --> Q["PyTorch policy runtime + action decoder"]
-    R["PPO training loop (planned)"] --> I
+    D --> H["Heuristic agent"]
+    D --> I["Checkpoint-backed PPO inference"]
+    I --> J["PyTorch policy runtime + action decoder"]
+    K["PPO training loop (planned)"] --> I
 
-    A --> J["Dataset-wide eval pipeline"]
-    J --> K["OpenAI-compatible extraction call"]
-    J --> L["OpenAI-compatible judge call"]
-    K --> M["LLM cache on disk"]
-    L --> M
-    J --> N["Eval artifacts: results.jsonl / summary.json / report.md"]
-    N --> O["FastAPI eval API"]
-    N --> P["Server-rendered eval UI"]
+    A --> L["Dataset image eval pipeline"]
+    L --> M["OpenAI-compatible extractor"]
+    L --> N["OpenAI-compatible judge"]
+    M --> O["Disk LLM cache"]
+    N --> O
+    L --> P["Eval artifacts: results.jsonl / summary.json / report.md"]
+    P --> Q["FastAPI eval API"]
+    P --> R["Server-rendered eval UI"]
 ```
 
 ## Main Subsystems
@@ -42,11 +43,12 @@ flowchart LR
 
 Primary responsibilities:
 
-- locate the receipt dataset root
+- locate the dataset root
 - parse annotation JSON files
 - reconstruct OCR regions from annotation boxes and transcriptions
-- derive gold fields for `company`, `date`, `address`, and `total`
-- bucket valid samples into easy, medium, and hard pools
+- derive gold header and summary fields for `company`, `date`, `address`, `subtotal`, `tax`, and `total`
+- derive gold line-item rows from `Item information`
+- bucket samples into semantic `easy`, `medium`, and `hard` task pools
 
 Key module:
 
@@ -54,8 +56,11 @@ Key module:
 
 Important behavior:
 
-- if the expected dataset directories are missing, the loader falls back to small built-in mock samples
-- only records with all four target fields are accepted into the environment sample pool
+- if the expected dataset directories are missing, the loader falls back to built-in mock samples
+- task eligibility is now semantic:
+  - `easy` requires header labels
+  - `medium` requires summary labels
+  - `hard` requires summary labels plus line-item labels
 
 ### 2. Environment Layer
 
@@ -65,8 +70,9 @@ Primary responsibilities:
 - expose `reset()`, `step()`, and `state()`
 - reveal OCR evidence incrementally
 - apply typed actions
+- maintain scalar candidate lists, line-item candidates, and reconciliation feedback
 - compute step and terminal rewards
-- grade final drafts deterministically
+- grade final drafts deterministically across headers, summaries, reconciliation, and line items
 
 Key modules:
 
@@ -78,15 +84,16 @@ Key modules:
 
 Important design choice:
 
-- the environment is sequential and partially observable; the agent must gather evidence over multiple steps before submitting
+- the environment is sequential and partially observable, so the agent must gather evidence over multiple steps before submitting
 
 ### 3. Candidate And Normalization Layer
 
 Primary responsibilities:
 
 - generate candidate values from visible OCR regions
+- generate line-item candidates for hard receipts
 - normalize text, dates, addresses, and amounts
-- keep field grading deterministic and reproducible
+- keep grading deterministic and reproducible
 
 Key modules:
 
@@ -94,20 +101,20 @@ Key modules:
 - `env/normalizers.py`
 - `env/graders.py`
 
-This layer is deliberately rule-based so the environment stays auditable and testable.
+This layer is intentionally rule-based so the environment stays auditable and testable.
 
 ### 4. Agent Layer
 
 Current implementation:
 
-- `agents/heuristic.py` provides the rule-based baseline used by default
-- `agents/ppo.py` provides a checkpoint-backed PPO inference runtime
-- `inference.py` selects the requested agent and runs the shared episode loop
+- `agents/heuristic.py` provides the default rule-based baseline
+- `agents/ppo.py` provides checkpoint-backed PPO inference
+- `inference.py` runs the shared episode loop for both agent types
 
 Important boundary:
 
-- the agent is separate from the environment
-- the environment provides observations, rewards, and episode boundaries; the policy decides what to do next
+- the environment provides observations, rewards, and episode boundaries
+- the policy decides what to do next
 
 ### 5. Evaluation Layer
 
@@ -115,8 +122,8 @@ Primary responsibilities:
 
 - walk all receipt annotation/image pairs
 - classify records as runnable or skipped
-- run extraction and judge LLM calls for runnable records
-- compute deterministic scores against gold fields
+- run extractor and judge LLM calls for runnable records
+- compute deterministic task-aware scores against gold fields and line items
 - emit artifact files for later inspection
 
 Key module:
@@ -143,7 +150,7 @@ Key modules:
 
 Important design choice:
 
-- LLMs are currently used in the evaluation path, not in the environment’s core deterministic grading path
+- LLMs are used in the evaluation path, not in the environment's deterministic grading path
 
 ### 7. API And UI Layer
 
@@ -173,7 +180,7 @@ Used when:
 
 - running the environment directly
 - calling the environment API
-- running heuristic baseline evaluation
+- running heuristic or PPO inference evaluation locally
 
 Flow:
 
@@ -201,7 +208,7 @@ Flow:
 6. write eval artifacts
 7. serve artifacts through API/UI
 
-## Boundaries Between Deterministic And Model-Based Logic
+## Deterministic vs. Model-Based Logic
 
 Deterministic components:
 
@@ -220,16 +227,17 @@ Model-based components:
 - implemented PPO inference runtime
 - planned PPO training loop
 
-This separation is intentional. The environment remains stable and reproducible even if the model-backed evaluation path changes.
+This separation keeps the environment stable and reproducible even if model-backed evaluation behavior changes.
 
 ## Current Implementation Status
 
 Implemented today:
 
 - dataset loading
+- semantic easy/medium/hard task pools
 - environment loop
 - deterministic heuristic baseline
-- checkpoint-backed PPO inference path
+- checkpoint-backed PPO inference
 - FastAPI server
 - dataset-wide image evaluation
 - artifact-backed eval API and UI

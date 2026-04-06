@@ -2,12 +2,11 @@
 
 RL Receipt OCR OpenEnv is a sequential receipt extraction environment for the OpenEnv hackathon. An agent must inspect receipt text regions, request candidate values, edit a structured draft, validate uncertain fields, and decide when to submit the final extraction.
 
-The target schema is fixed to four fields:
+The environment now uses a task-aware receipt schema:
 
-- `company`
-- `date`
-- `address`
-- `total`
+- `easy`: `company`, `date`, `address`, `total`
+- `medium`: `company`, `date`, `subtotal`, `tax`, `total`
+- `hard`: `company`, `date`, `subtotal`, `tax`, `total`, `line_items`
 
 The environment is designed as a real-world document extraction task rather than a single-step classifier. Agents operate through repeated `reset()` / `step()` / `state()` interactions and are scored by deterministic graders against annotated receipt data.
 
@@ -70,9 +69,11 @@ Each observation includes:
 - instruction string
 - receipt image reference
 - currently visible OCR regions
-- candidate lists requested so far
+- candidate lists requested so far, including `subtotal` and `tax`
+- line-item candidates for hard receipts
 - current extraction draft
 - validation feedback
+- reconciliation feedback and delta
 - last action result
 - remaining step budget
 - step index
@@ -93,6 +94,10 @@ The environment accepts typed structured actions, including:
 - `normalize_field`
 - `check_total_consistency`
 - `check_date_format`
+- `query_line_item_candidates`
+- `add_line_item_from_candidate`
+- `remove_line_item`
+- `check_receipt_consistency`
 - `clear_field`
 - `submit`
 
@@ -105,10 +110,11 @@ The environment accepts typed structured actions, including:
 
 ## Tasks
 
-The environment defines three task presets with deterministic behavior differences.
+The environment keeps the public task IDs `easy`, `medium`, and `hard`, but they now correspond to different receipt objectives as well as different visibility/noise/budget settings.
 
 ### Easy
 
+- header extraction for `company`, `date`, `address`, and `total`
 - broader starter reveal after `view_receipt`
 - all windows available for `list_text_regions`
 - lowest candidate reranking noise
@@ -116,6 +122,8 @@ The environment defines three task presets with deterministic behavior differenc
 
 ### Medium
 
+- monetary-summary extraction for `company`, `date`, `subtotal`, `tax`, and `total`
+- deterministic reconciliation between `subtotal + tax` and `total`
 - narrower starter reveal
 - `all` window is unavailable
 - moderate deterministic candidate reranking noise
@@ -123,6 +131,8 @@ The environment defines three task presets with deterministic behavior differenc
 
 ### Hard
 
+- summary extraction plus line-item reconstruction
+- deterministic reconciliation between line-item totals, `subtotal`, `tax`, and `total`
 - restricted starter reveal
 - only `top` and `bottom` windows available
 - highest deterministic candidate reranking noise
@@ -136,9 +146,12 @@ At load time, the environment:
 
 - reads rectangle annotations from `ann/`
 - reconstructs OCR regions from annotation boxes and transcriptions
-- derives gold `company`, `address`, `date`, and `total` fields from labeled categories
-- filters out incomplete records that do not contain all four target fields
-- buckets valid records into deterministic easy, medium, and hard sample pools
+- derives gold `company`, `address`, `date`, `subtotal`, `tax`, and `total` fields from labeled categories
+- derives gold line-item rows directly from `Item information` labels
+- builds deterministic task pools from label coverage:
+  - `easy` requires header labels
+  - `medium` requires summary labels
+  - `hard` requires summary labels plus line-item labels
 
 You can override the dataset location through `RECEIPT_DATASET_ROOT`.
 
@@ -246,6 +259,7 @@ Artifacts written by the evaluator:
 - `artifacts/eval/dataset-image-eval/report.md`
 
 The evaluator walks every annotation file in the dataset, records skipped items explicitly, grades runnable samples deterministically against gold fields, and uses a larger eval model for validation notes.
+Eval artifacts now also persist task-aware component scores for headers, summaries, reconciliation, and line-item extraction so the dashboard can show what is correct or incorrect per receipt.
 
 ### Run the API server
 
@@ -277,9 +291,9 @@ Current reproducible heuristic baseline:
 Current scores:
 
 - `easy`: mean score `0.400`
-- `medium`: mean score `0.400`
-- `hard`: mean score `0.400`
-- aggregate mean score: `0.400`
+- `medium`: mean score `0.200`
+- `hard`: mean score `0.100`
+- aggregate mean score: `0.233`
 
 These numbers reflect the current deterministic heuristic and current task constraints. They should be regenerated if task logic, grading, or dataset filtering changes.
 

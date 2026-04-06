@@ -21,9 +21,11 @@ The policy can observe structured environment output such as:
 
 - task and difficulty
 - visible OCR regions
-- candidate lists
+- scalar candidate lists for header and summary fields
+- line-item candidates for hard receipts
 - current draft
 - validation feedback
+- reconciliation feedback and delta
 - remaining step budget
 - step index
 
@@ -34,8 +36,11 @@ The policy chooses from typed actions, including:
 - reveal the receipt or a window of OCR text
 - inspect a region or nearby regions
 - query candidates for one field
+- query line-item candidates
 - set or clear a field
+- add or remove a line item
 - normalize or validate a field
+- check receipt-level consistency
 - submit the final draft
 
 ### Reward
@@ -174,9 +179,13 @@ The initial PPO-supported action subset is narrower than the full environment ac
 - `inspect_neighbors`
 - `query_candidates`
 - `set_field_from_candidate`
+- `query_line_item_candidates`
+- `add_line_item_from_candidate`
+- `remove_line_item`
 - `normalize_field`
 - `check_total_consistency`
 - `check_date_format`
+- `check_receipt_consistency`
 - `clear_field`
 - `submit`
 
