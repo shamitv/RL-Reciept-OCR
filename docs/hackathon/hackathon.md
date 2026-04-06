@@ -28,11 +28,6 @@
 
 
 
-\*\*Welcome Shamit Verma!\*\*
-
-
-
-Email: `sci.hkthn.26@shamit.in`
 
 
 
