@@ -6,6 +6,8 @@ This guide shows how to:
 - start the FastAPI server
 - open the API and browser UI locally
 
+For baseline environment setup and local inference commands, start with [local-setup-and-baseline.md](local-setup-and-baseline.md).
+
 ## 1. Prerequisites
 
 From the repo root:
@@ -144,3 +146,5 @@ If an image does not render in the detail page:
 
 - confirm the dataset image file still exists at the path recorded in `results.jsonl`
 - try `GET /api/eval/receipts/{sample_id}/image` directly
+
+If you need to re-check the baseline environment flow after debugging the UI, go back to [local-setup-and-baseline.md](local-setup-and-baseline.md).

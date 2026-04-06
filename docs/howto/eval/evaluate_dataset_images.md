@@ -2,6 +2,8 @@
 
 The `scripts/evaluate_dataset_images.py` script is the primary tool for running bulk evaluations of LLM receipt extraction performance across your dataset.
 
+For baseline local setup and environment-level inference commands, see [local-setup-and-baseline.md](../local-setup-and-baseline.md). For the browser UI over these artifacts, see [run-eval-api-ui.md](../run-eval-api-ui.md).
+
 ## How It Works
 
 The evaluation pipeline performs the following steps for each receipt image in the dataset:

@@ -5,12 +5,14 @@ This README includes the core hackathon submission details:
 - [Environment description and motivation](#environment-description-and-motivation)
 - [Action and observation space definitions](#action-and-observation-space-definitions)
 - [Task descriptions with expected difficulty](#task-descriptions-with-expected-difficulty)
-- [Setup and usage instructions](#setup-and-usage-instructions)
 - [Baseline results](#baseline-results)
+- [Quickstart and detailed docs](#quickstart-and-detailed-docs)
 
 ## Environment Description And Motivation
 
-OpenEnv Receipt Understanding is a sequential receipt extraction environment for the OpenEnv hackathon. The motivation is to help equip small on-device models to extract structured data from receipts even when they cannot solve the whole document in one shot.
+OpenEnv Receipt Understanding is a sequential receipt extraction environment for the OpenEnv hackathon. The motivation is to help small on-device models turn messy receipt images into reliable structured data even when they cannot solve the whole document in one shot.
+
+That matters for expense capture, bookkeeping, reimbursement, and merchant workflows where privacy, latency, and cost make small local models attractive, but messy real receipts still break one-shot extraction.
 
 The environment now uses a task-aware receipt schema:
 
@@ -20,9 +22,9 @@ The environment now uses a task-aware receipt schema:
 
 The environment is designed as a real-world document extraction task rather than a single-step classifier. Agents operate through repeated `reset()` / `step()` / `state()` interactions and are scored by deterministic graders against annotated receipt data.
 
-The core idea is that lightweight receipt models will often fail on the first pass because the image is noisy, the OCR is incomplete, or the layout is messy. A useful agent should learn how to recover from those errors over multiple steps instead of relying on a single prediction.
+The real-world pain is that receipts are rarely clean. Mobile captures are often skewed or rotated, shadows hide totals, thermal paper fades, contrast is low, long receipts get cropped badly, and OCR misses parts of the layout. A lightweight model running on-device may be cheap and private, but it will often need help recovering from those errors.
 
-In that framing, receipt understanding becomes a decision-making problem: the agent must decide what evidence to reveal, which fields to query, when to validate arithmetic consistency, when to gather more line-item evidence, and when the draft is good enough to submit. This same motivation naturally extends to corrective actions for hard receipts, such as rotating the image, increasing contrast, or cropping to a relevant region, even when those image-transformation actions are not yet part of the current environment action space.
+That is why this environment treats receipt understanding as a decision-making problem instead of a single prediction. A good agent should learn when to inspect more evidence, when to query candidates, when to validate arithmetic consistency, when to gather more line-item evidence, and when the draft is good enough to submit. As the environment evolves, the same framework can support recovery actions such as changing contrast, sharpening, rotating, or cropping before retrying extraction. Those image-transformation actions are part of the motivating direction for the project, not part of the currently implemented action space.
 
 ## Learning Agent Design
 
@@ -172,131 +174,6 @@ At load time, the environment:
 
 You can override the dataset location through `RECEIPT_DATASET_ROOT`.
 
-## Setup And Usage Instructions
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-pytest
-```
-
-`requirements.txt` now includes the local PPO inference runtime dependency (`torch`) so a standard repo setup can run both heuristic and checkpoint-backed PPO inference.
-
-### Optional PPO package extra
-
-If you are installing the project as a package instead of using `requirements.txt`, you can still opt into the PPO runtime with the package extra.
-
-```bash
-pip install -e ".[ppo]"
-```
-
-### Optional `.env` configuration
-
-Create a `.env` file in the repo root if you want local environment variables loaded automatically.
-
-```dotenv
-API_BASE_URL=https://router.huggingface.co/v1
-MODEL_NAME=gpt-4o-mini
-EVAL_API_BASE_URL=https://router.huggingface.co/v1
-EVAL_MODEL=gpt-4.1
-OPENAI_API_KEY=your-key-here
-HF_TOKEN=your-hf-token-here
-RECEIPT_DATASET_ROOT=dataset/Receipt dataset/ds0
-RECEIPT_EVAL_OUTPUT_DIR=artifacts/eval/dataset-image-eval
-```
-
-`RECEIPT_DATASET_ROOT` is optional. If unset, the loader defaults to the bundled prepared dataset.
-`RECEIPT_EVAL_OUTPUT_DIR` is optional. If unset, the eval pipeline writes to `artifacts/eval/dataset-image-eval`.
-
-## Local Usage
-
-### Run tests
-
-```bash
-pytest
-```
-
-### Run the local validation bundle
-
-```bash
-python scripts/validate_local.py
-```
-
-### Smoke test the environment package
-
-```bash
-python scripts/smoke_test.py
-```
-
-### Run heuristic baseline evaluation
-
-```bash
-python inference.py
-```
-
-Useful options:
-
-- `python inference.py --task easy`
-- `python inference.py --task medium`
-- `python inference.py --task hard`
-- `python inference.py --format json`
-- `python inference.py --episodes 3 --seed 7`
-
-### Run PPO inference from a checkpoint
-
-```bash
-python inference.py --agent ppo --checkpoint checkpoints/policy.pt
-```
-
-Useful options:
-
-- `python inference.py --agent ppo --checkpoint checkpoints/policy.pt --task hard`
-- `python inference.py --agent ppo --checkpoint checkpoints/policy.pt --episodes 3`
-- `python inference.py --agent ppo --checkpoint checkpoints/policy.pt --device cpu`
-
-`--agent ppo` requires both a checkpoint and `torch`. A standard local setup via `pip install -r requirements.txt` now includes it; package installs can use `pip install -e ".[ppo]"`.
-
-### Run dataset-wide image evaluation
-
-```bash
-python scripts/evaluate_dataset_images.py
-```
-
-Useful options:
-
-- `python scripts/evaluate_dataset_images.py --limit 10`
-- `python scripts/evaluate_dataset_images.py --resume`
-- `python scripts/evaluate_dataset_images.py --output-dir artifacts/eval/dataset-image-eval`
-
-Artifacts written by the evaluator:
-
-- `artifacts/eval/dataset-image-eval/results.jsonl`
-- `artifacts/eval/dataset-image-eval/summary.json`
-- `artifacts/eval/dataset-image-eval/report.md`
-
-The evaluator walks every annotation file in the dataset, records skipped items explicitly, grades runnable samples deterministically against gold fields, and uses a larger eval model for validation notes.
-Eval artifacts now also persist task-aware component scores for headers, summaries, reconciliation, and line-item extraction so the dashboard can show what is correct or incorrect per receipt.
-
-### Run the API server
-
-```bash
-uvicorn env.server:app --host 0.0.0.0 --port 7860
-```
-
-Endpoints:
-
-- `POST /reset`
-- `POST /step`
-- `GET /state`
-- `GET /api/eval/summary`
-- `GET /api/eval/receipts`
-- `GET /api/eval/receipts/{sample_id}`
-- `GET /api/eval/receipts/{sample_id}/image`
-- `GET /api/eval/report`
-- `GET /eval`
-- `GET /eval/receipts/{sample_id}`
-
 ## Baseline Results
 
 Current reproducible heuristic baseline:
@@ -315,6 +192,31 @@ Current scores:
 These numbers reflect the current deterministic heuristic and current task constraints. They should be regenerated if task logic, grading, or dataset filtering changes.
 
 The full checked-in baseline report is in [docs/hackathon/baseline-scores.md](D:/work/RL-Reciept-OCR/docs/hackathon/baseline-scores.md).
+
+## Quickstart And Detailed Docs
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python inference.py --format text
+```
+
+This quickstart is enough to install the project and run the reproducible heuristic baseline. `requirements.txt` includes the local PPO inference runtime dependency (`torch`) so a standard repo setup can run both heuristic and checkpoint-backed PPO inference.
+
+Detailed runbooks:
+
+- [Local setup and baseline usage](D:/work/RL-Reciept-OCR/docs/howto/local-setup-and-baseline.md)
+- [Run the eval API and UI](D:/work/RL-Reciept-OCR/docs/howto/run-eval-api-ui.md)
+- [Evaluate dataset images](D:/work/RL-Reciept-OCR/docs/howto/eval/evaluate_dataset_images.md)
+- [Docs index](D:/work/RL-Reciept-OCR/docs/README.md)
+
+Evaluator-facing shortcuts:
+
+- baseline entrypoint: `python inference.py --format text`
+- environment API entrypoint: `uvicorn env.server:app --host 0.0.0.0 --port 7860`
+- eval dashboard: `GET /eval`
+- full baseline report: [docs/hackathon/baseline-scores.md](D:/work/RL-Reciept-OCR/docs/hackathon/baseline-scores.md)
 
 ## Project Layout
 

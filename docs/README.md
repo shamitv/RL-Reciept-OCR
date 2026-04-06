@@ -11,6 +11,7 @@ This directory is the documentation home for OpenEnv Receipt Understanding.
 
 ## How-To Guides
 
+- [Local Setup And Baseline Usage](howto/local-setup-and-baseline.md)
 - [Run The Eval API And UI](howto/run-eval-api-ui.md)
 - [Evaluate Dataset Images](howto/eval/evaluate_dataset_images.md)
 
