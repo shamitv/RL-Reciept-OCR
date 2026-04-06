@@ -19,6 +19,9 @@ dependencies = [
     "openenv-core>=0.2.3",
 ]
 
+[project.optional-dependencies]
+ppo = ["torch>=2.0"]
+
 [project.scripts]
 server = "server.app:main"
 
@@ -26,7 +29,7 @@ server = "server.app:main"
 testpaths = ["tests"]
 
 [tool.setuptools.packages.find]
-include = ["env*", "server*"]
+include = ["agents*", "env*", "server*"]
 
 [tool.setuptools.package-data]
 server = ["templates/*.html", "static/*.css"]

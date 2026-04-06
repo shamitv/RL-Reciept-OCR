@@ -5,31 +5,15 @@ import json
 from statistics import mean
 from typing import Any
 
+from agents.base import Agent
+from agents.heuristic import HeuristicAgent
 from env.config import load_environment
 from env.environment import ReceiptExtractionEnv
-from env.models import ReceiptAction
 from env.tasks import TASKS
 
 load_environment()
 
 TASK_ORDER = tuple(TASKS.keys())
-
-
-def tried_windows(env: ReceiptExtractionEnv) -> set[str]:
-    return {
-        entry.get("action", {}).get("window")
-        for entry in env.state().history
-        if entry.get("action", {}).get("action_type") == "list_text_regions" and entry.get("action", {}).get("window")
-    }
-
-
-def next_window_to_reveal(env: ReceiptExtractionEnv) -> str | None:
-    preferred_order = [window for window in ("all", "top", "middle", "bottom") if window in env.task.visible_windows]
-    attempted = tried_windows(env)
-    for window in preferred_order:
-        if window not in attempted:
-            return window
-    return None
 
 
 def log_start(task: str, env_name: str, agent: str, seed: int) -> None:
@@ -48,41 +32,28 @@ def log_end(success: bool, steps: int, score: float, rewards: list[float]) -> No
     print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
 
 
-def heuristic_action(env: ReceiptExtractionEnv) -> ReceiptAction:
-    state = env.state()
-    obs = env.last_observation
+def default_agent() -> Agent:
+    return HeuristicAgent()
 
-    if state.step_index == 0:
-        return ReceiptAction(action_type="view_receipt")
 
-    if not obs.visible_regions:
-        window = next_window_to_reveal(env) or env.task.visible_windows[0]
-        return ReceiptAction(action_type="list_text_regions", window=window)
+def build_agent(agent_name: str = "heuristic", checkpoint: str | None = None, device: str = "cpu") -> Agent:
+    if agent_name == "heuristic":
+        return HeuristicAgent()
+    if agent_name == "ppo":
+        if not checkpoint:
+            raise ValueError("--checkpoint is required when --agent ppo")
+        from agents.ppo import PPOAgent
 
-    for field in ("company", "date", "address", "total"):
-        if not obs.candidate_lists.get(field):
-            if field in obs.candidate_lists and not obs.candidate_lists[field]:
-                next_window = next_window_to_reveal(env)
-                if next_window is not None:
-                    return ReceiptAction(action_type="list_text_regions", window=next_window)
-            return ReceiptAction(action_type="query_candidates", field=field)
-        if getattr(obs.current_draft, field) is None and obs.candidate_lists[field]:
-            return ReceiptAction(action_type="set_field_from_candidate", field=field, candidate_id=obs.candidate_lists[field][0].candidate_id)
-
-    if obs.current_draft.date and not any("date" in item.lower() for item in obs.validation_feedback):
-        return ReceiptAction(action_type="check_date_format")
-
-    if obs.current_draft.total and not any("total" in item.lower() for item in obs.validation_feedback):
-        return ReceiptAction(action_type="check_total_consistency")
-
-    return ReceiptAction(action_type="submit")
+        return PPOAgent(checkpoint_path=checkpoint, device=device)
+    raise ValueError(f"unsupported agent: {agent_name}")
 
 
 def episode_seed(base_seed: int, task: str, episode_index: int) -> int:
     return base_seed + (TASK_ORDER.index(task) * 1000) + episode_index
 
 
-def run_episode(task: str, seed: int, verbose: bool = False) -> dict[str, Any]:
+def run_episode(task: str, seed: int, agent: Agent | None = None, verbose: bool = False) -> dict[str, Any]:
+    selected_agent = agent or default_agent()
     env = ReceiptExtractionEnv()
     result = env.reset(task_name=task, seed=seed)
     rewards: list[float] = []
@@ -91,11 +62,11 @@ def run_episode(task: str, seed: int, verbose: bool = False) -> dict[str, Any]:
     success = False
 
     if verbose:
-        log_start(task=task, env_name="rl-receipt-ocr", agent="heuristic", seed=seed)
+        log_start(task=task, env_name="rl-receipt-ocr", agent=selected_agent.name, seed=seed)
 
     while not result.done and steps < env.task.max_steps:
         steps += 1
-        action = heuristic_action(env)
+        action = selected_agent.select_action(env)
         result = env.step(action)
         rewards.append(result.reward)
         if verbose:
@@ -135,14 +106,18 @@ def summarize_task_runs(task: str, runs: list[dict[str, Any]]) -> dict[str, Any]
     }
 
 
-def evaluate_tasks(tasks: list[str], seed: int = 7, episodes: int = 1, verbose: bool = False) -> dict[str, Any]:
+def evaluate_tasks(tasks: list[str], seed: int = 7, episodes: int = 1, agent: Agent | None = None, verbose: bool = False) -> dict[str, Any]:
+    selected_agent = agent or default_agent()
     task_summaries: list[dict[str, Any]] = []
     for task in tasks:
-        runs = [run_episode(task=task, seed=episode_seed(seed, task, episode_index), verbose=verbose) for episode_index in range(episodes)]
+        runs = [
+            run_episode(task=task, seed=episode_seed(seed, task, episode_index), agent=selected_agent, verbose=verbose)
+            for episode_index in range(episodes)
+        ]
         task_summaries.append(summarize_task_runs(task, runs))
 
     return {
-        "agent": "heuristic",
+        "agent": selected_agent.name,
         "base_seed": seed,
         "episodes_per_task": episodes,
         "tasks": task_summaries,
@@ -187,7 +162,9 @@ def print_text_summary(summary: dict[str, Any]) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--agent", choices=["heuristic"], default="heuristic")
+    parser.add_argument("--agent", choices=["heuristic", "ppo"], default="heuristic")
+    parser.add_argument("--checkpoint")
+    parser.add_argument("--device", default="cpu")
     parser.add_argument("--task", choices=[*TASK_ORDER, "all"], default="all")
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--episodes", type=int, default=1)
@@ -196,11 +173,17 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+
+    try:
+        agent = build_agent(agent_name=args.agent, checkpoint=args.checkpoint, device=args.device)
+    except (FileNotFoundError, ImportError, ValueError, RuntimeError) as exc:
+        parser.error(str(exc))
+
     tasks = resolve_tasks(args.task)
-    summary = evaluate_tasks(tasks=tasks, seed=args.seed, episodes=args.episodes, verbose=args.verbose)
+    summary = evaluate_tasks(tasks=tasks, seed=args.seed, episodes=args.episodes, agent=agent, verbose=args.verbose)
     if args.format == "json":
         print(json.dumps(summary, indent=2), flush=True)
     else:
