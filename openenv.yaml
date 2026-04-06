@@ -1,0 +1,17 @@
+name: rl-receipt-ocr
+version: 0.1.0
+description: Sequential receipt extraction environment scaffold for OpenEnv.
+entrypoint: env.server:app
+runtime:
+  python: "3.11"
+tasks:
+  - id: easy
+    difficulty: easy
+  - id: medium
+    difficulty: medium
+  - id: hard
+    difficulty: hard
+metadata:
+  domain: document-extraction
+  dataset: sroie-2019
+  baseline_agent: heuristic
