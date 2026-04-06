@@ -151,6 +151,16 @@ pip install -r requirements.txt
 pytest
 ```
 
+`requirements.txt` now includes the local PPO inference runtime dependency (`torch`) so a standard repo setup can run both heuristic and checkpoint-backed PPO inference.
+
+### Optional PPO package extra
+
+If you are installing the project as a package instead of using `requirements.txt`, you can still opt into the PPO runtime with the package extra.
+
+```bash
+pip install -e ".[ppo]"
+```
+
 ### Optional `.env` configuration
 
 Create a `.env` file in the repo root if you want local environment variables loaded automatically.
@@ -189,7 +199,7 @@ python scripts/validate_local.py
 python scripts/smoke_test.py
 ```
 
-### Run baseline evaluation
+### Run heuristic baseline evaluation
 
 ```bash
 python inference.py
@@ -202,6 +212,20 @@ Useful options:
 - `python inference.py --task hard`
 - `python inference.py --format json`
 - `python inference.py --episodes 3 --seed 7`
+
+### Run PPO inference from a checkpoint
+
+```bash
+python inference.py --agent ppo --checkpoint checkpoints/policy.pt
+```
+
+Useful options:
+
+- `python inference.py --agent ppo --checkpoint checkpoints/policy.pt --task hard`
+- `python inference.py --agent ppo --checkpoint checkpoints/policy.pt --episodes 3`
+- `python inference.py --agent ppo --checkpoint checkpoints/policy.pt --device cpu`
+
+`--agent ppo` requires both a checkpoint and `torch`. A standard local setup via `pip install -r requirements.txt` now includes it; package installs can use `pip install -e ".[ppo]"`.
 
 ### Run dataset-wide image evaluation
 
@@ -261,10 +285,11 @@ These numbers reflect the current deterministic heuristic and current task const
 
 ## Project Layout
 
+- `agents/` heuristic and checkpoint-backed PPO inference runtimes
 - `env/` environment package, graders, rewards, dataset loader, API server
 - `server/templates/` built-in eval UI templates
 - `server/static/` built-in eval UI styles
-- `training/` planned BC and PPO entrypoints, currently placeholders
+- `training/` PPO and BC entrypoints; training remains placeholder-only
 - `tests/` deterministic unit tests
 - `scripts/` local preparation, smoke-test helpers, and dataset eval runner
 - `docs/` hackathon notes and execution plans
@@ -311,13 +336,14 @@ docker run -p 7860:7860 rl-receipt-ocr
 - the environment implements typed models and `reset()` / `step()` / `state()`
 - task difficulty now affects runtime behavior, not only step budget
 - the heuristic baseline evaluates all three tasks deterministically by default
+- checkpoint-backed PPO inference is implemented behind `python inference.py --agent ppo --checkpoint ...`
 - the intended learning architecture is an external PPO-trained policy over environment observations, while any helper LLM remains frozen
 - local pytest currently passes
 - `openenv validate` currently passes in the local Python environment
 
 ## Limitations
 
-- the PPO and behavior-cloning training scripts are still placeholders, so the learning agent design is documented but not yet implemented in code
-- the current baseline is heuristic-only; no API-backed policy mode is implemented
+- PPO and behavior-cloning training are still placeholders, so learned-policy optimization is not implemented yet
+- PPO inference requires a compatible checkpoint and the optional `torch` extra
 - dataset-wide image eval depends on configured OpenAI-compatible model endpoints for extraction and validation
 - final `openenv validate` and deployment verification are still pending
