@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "rl-receipt-ocr"
 version = "0.1.0"
-description = "OpenEnv receipt extraction environment scaffold"
+description = "OpenEnv receipt extraction environment for sequential structured receipt parsing"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
