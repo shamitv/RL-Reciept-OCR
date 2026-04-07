@@ -5,10 +5,11 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, Request
-from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 
 from env.evaluation import EvalArtifactStore, build_field_results, evaluate_single_receipt, get_audit_record
+from env.image_store import ImageStoreError, decode_image_json_bytes
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 TEMPLATES = Jinja2Templates(directory=str(BASE_DIR / "server" / "templates"))
@@ -64,6 +65,7 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         payload = record.model_dump(mode="json")
         payload["processed"] = True
         payload["processable"] = record.dataset_status == "runnable"
+        payload["has_image"] = bool(record.image_json_path and record.dataset_status != "skipped_missing_image")
         payload["line_item_rows"] = line_item_rows(payload)
         return payload
 
@@ -71,6 +73,7 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         payload = record.model_dump(mode="json")
         payload["processed"] = True
         payload["processable"] = audit.dataset_status == "runnable"
+        payload["has_image"] = bool(payload.get("image_json_path") and audit.dataset_status != "skipped_missing_image")
         payload["line_item_rows"] = line_item_rows(payload)
         return payload
 
@@ -78,7 +81,9 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         "sample_id": audit.sample_id,
         "task_id": audit.task_id,
         "annotation_path": audit.annotation_path,
-        "image_path": audit.image_path,
+        "image_id": audit.image_id,
+        "image_json_path": audit.image_json_path,
+        "has_image": bool(audit.image_json_path and audit.dataset_status != "skipped_missing_image"),
         "dataset_status": audit.dataset_status,
         "status": "not_run",
         "skip_reason": audit.skip_reason,
@@ -167,20 +172,21 @@ def eval_receipt_run(sample_id: str) -> dict[str, Any]:
 
 
 @api_router.get("/receipts/{sample_id}/image")
-def eval_receipt_image(sample_id: str) -> FileResponse:
+def eval_receipt_image(sample_id: str) -> Response:
     store = get_store()
     record = store.get_record(sample_id)
-    image_path_str = record.image_path if record is not None else None
-    if not image_path_str:
+    image_json_path = record.image_json_path if record is not None else None
+    if not image_json_path:
         audit = get_audit_record(sample_id)
-        image_path_str = audit.image_path if audit is not None else None
-    if not image_path_str:
-        raise HTTPException(status_code=404, detail=f"Receipt image not found for sample_id={sample_id}")
+        image_json_path = audit.image_json_path if audit is not None else None
+    if not image_json_path:
+        raise HTTPException(status_code=404, detail=f"Receipt image JSON not found for sample_id={sample_id}")
 
-    image_path = Path(image_path_str)
-    if not image_path.exists():
-        raise HTTPException(status_code=404, detail=f"Receipt image file missing for sample_id={sample_id}")
-    return FileResponse(image_path)
+    try:
+        image_bytes, media_type = decode_image_json_bytes(image_json_path)
+    except ImageStoreError as exc:
+        raise HTTPException(status_code=404, detail=f"Receipt image JSON unavailable for sample_id={sample_id}: {exc}") from exc
+    return Response(content=image_bytes, media_type=media_type)
 
 
 @api_router.get("/report", response_model=None)

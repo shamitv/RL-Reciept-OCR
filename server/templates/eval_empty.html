@@ -13,7 +13,7 @@
     <div class="receipt-menu-list">
       {% for item in receipt_menu %}
       <a class="receipt-menu-item" href="/eval/receipts/{{ item.sample_id }}">
-        {% if item.image_path %}
+        {% if item.has_image %}
         <img src="/api/eval/receipts/{{ item.sample_id }}/image" alt="{{ item.sample_id }}" loading="lazy">
         {% else %}
         <div class="receipt-thumb empty">No image</div>

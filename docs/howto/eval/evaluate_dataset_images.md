@@ -6,9 +6,9 @@ For baseline local setup and environment-level inference commands, see [local-se
 
 ## How It Works
 
-The evaluation pipeline performs the following steps for each receipt image in the dataset:
+The evaluation pipeline performs the following steps for each receipt image JSON asset in the dataset:
 
-1. **Extraction**: Calls your target LLM (defined by `MODEL_NAME` and `API_BASE_URL` in your `.env`) to extract receipt information such as the company name, date, address, and total amount.
+1. **Extraction**: Decodes the matching `img_json/<sample_id>.json` base64 image and calls your target LLM (defined by `MODEL_NAME` and `API_BASE_URL` in your `.env`) to extract receipt information such as the company name, date, address, and total amount.
 2. **Deterministic Grading**: Automatically compares the LLM's predicted extraction against the gold annotations, assigning a deterministic score (0.0 to 1.0) for each field.
 3. **LLM Judge**: Passes the extraction failures or discrepancies to a secondary Judge Model (e.g., `EVAL_MODEL` and `EVAL_API_BASE_URL`) to generate a textual evaluation, summary, and pinpoint specific failure reasons (e.g., Hallucination vs. Unclear text).
 4. **Resiliency & Caching**: 
@@ -20,7 +20,7 @@ The evaluation pipeline performs the following steps for each receipt image in t
 All processed results are stored by default in `artifacts/eval/dataset-image-eval`. 
 You can expect the following three files to be managed by the script:
 
-- `results.jsonl`: The core data-store. An append-only JSON Lines file storing the full `ReceiptEvalRecord` per receipt (predicted text, gold text, judge response, and individual field scores).
+- `results.jsonl`: The core data-store. An append-only JSON Lines file storing the full `ReceiptEvalRecord` per receipt, including `image_id` and `image_json_path` references, predicted text, gold text, judge response, and individual field scores.
 - `summary.json`: An aggregated summary showing the final mean score, total error counts, and top LLM failure reasons.
 - `report.md`: A readable markdown file outlining the score of every receipt organized by Worked, Partial, Skipped, and Failed buckets.
 

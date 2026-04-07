@@ -14,7 +14,7 @@ The project is a receipt-extraction environment built around the OpenEnv interac
 
 ```mermaid
 flowchart LR
-    A["Dataset: annotation JSON + receipt images"] --> B["ReceiptDataset loader"]
+    A["Dataset: annotation JSON + base64 image JSON"] --> B["ReceiptDataset loader"]
     B --> C["ReceiptExtractionEnv"]
     C --> D["Agent loop"]
     D --> E["Typed actions"]
@@ -120,7 +120,7 @@ Important boundary:
 
 Primary responsibilities:
 
-- walk all receipt annotation/image pairs
+- walk all receipt annotation/image JSON pairs
 - classify records as runnable or skipped
 - run extractor and judge LLM calls for runnable records
 - compute deterministic task-aware scores against gold fields and line items

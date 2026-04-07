@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 from pathlib import Path
 from random import Random
@@ -19,11 +20,26 @@ def _annotation_object(object_id: int, transcription: str, category: str, bbox: 
     }
 
 
+def _write_image_json(root: Path, image_id: str, payload: bytes = b"image") -> Path:
+    image_json_dir = root / "img_json"
+    image_json_dir.mkdir(parents=True, exist_ok=True)
+    path = image_json_dir / f"{image_id}.json"
+    path.write_text(
+        json.dumps(
+            {
+                "image_id": image_id,
+                "mime_type": "image/jpeg",
+                "image_data": base64.b64encode(payload).decode("ascii"),
+            }
+        ),
+        encoding="utf-8",
+    )
+    return path
+
+
 def test_dataset_loads_from_prepared_directory(tmp_path: Path) -> None:
     ann_dir = tmp_path / "ann"
-    img_dir = tmp_path / "img"
     ann_dir.mkdir()
-    img_dir.mkdir()
     payload = {
         "objects": [
             _annotation_object(1, "Store Name", "Business name", (10, 10, 120, 30)),
@@ -35,13 +51,15 @@ def test_dataset_loads_from_prepared_directory(tmp_path: Path) -> None:
     }
     annotation_path = ann_dir / "demo-receipt.jpg.json"
     annotation_path.write_text(json.dumps(payload), encoding="utf-8")
-    (img_dir / "demo-receipt.jpg").write_bytes(b"image")
+    image_json_path = _write_image_json(tmp_path, "demo-receipt.jpg")
 
     dataset = ReceiptDataset(dataset_root=tmp_path)
     sample = dataset.sample("easy", Random(0))
 
     assert sample.sample_id == "demo-receipt.jpg"
-    assert sample.image_ref == str(img_dir / "demo-receipt.jpg")
+    assert sample.image_id == "demo-receipt.jpg"
+    assert sample.image_json_path == str(image_json_path)
+    assert sample.image_ref == str(image_json_path)
     assert sample.gold_fields.company == "Store Name"
     assert sample.gold_fields.address == "123 Main St Springfield"
     assert sample.gold_fields.date == "2019-03-25"
@@ -50,9 +68,7 @@ def test_dataset_loads_from_prepared_directory(tmp_path: Path) -> None:
 
 def test_dataset_skips_incomplete_records(tmp_path: Path) -> None:
     ann_dir = tmp_path / "ann"
-    img_dir = tmp_path / "img"
     ann_dir.mkdir()
-    img_dir.mkdir()
     payload = {
         "objects": [
             _annotation_object(1, "Only Name", "Business name", (10, 10, 120, 30)),
@@ -62,7 +78,7 @@ def test_dataset_skips_incomplete_records(tmp_path: Path) -> None:
     }
     annotation_path = ann_dir / "incomplete-receipt.jpg.json"
     annotation_path.write_text(json.dumps(payload), encoding="utf-8")
-    (img_dir / "incomplete-receipt.jpg").write_bytes(b"image")
+    _write_image_json(tmp_path, "incomplete-receipt.jpg")
 
     dataset = ReceiptDataset(dataset_root=tmp_path)
 
@@ -73,4 +89,4 @@ def test_default_dataset_prefers_real_receipt_samples() -> None:
     dataset = ReceiptDataset()
 
     assert dataset.samples
-    assert any(not str(sample.image_ref).startswith("mock://") for sample in dataset.samples)
+    assert any(str(sample.image_json_path).endswith(".json") for sample in dataset.samples)

@@ -118,13 +118,15 @@ def build_llm_client_from_env() -> tuple[Any, str]:
 
 def audit_record_from_env(env: ReceiptExtractionEnv) -> DatasetAuditRecord:
     hidden_state = env.hidden_state
-    if not hidden_state.image_ref:
-        raise ValueError("LLM inference requires the selected receipt to have a local image path")
+    image_json_path = hidden_state.image_json_path or hidden_state.image_ref
+    if not image_json_path:
+        raise ValueError("LLM inference requires the selected receipt to have an image JSON asset")
     return DatasetAuditRecord(
         sample_id=hidden_state.sample_id,
         task_id=hidden_state.task_id,
         annotation_path=f"{hidden_state.sample_id}.json",
-        image_path=hidden_state.image_ref,
+        image_id=hidden_state.image_id or hidden_state.sample_id,
+        image_json_path=image_json_path,
         dataset_status="runnable",
         gold_fields=hidden_state.gold_fields,
         gold_line_items=hidden_state.gold_line_items,
@@ -134,10 +136,14 @@ def audit_record_from_env(env: ReceiptExtractionEnv) -> DatasetAuditRecord:
 def audit_record_from_selected_record(record: dict[str, Any], manifest_path: Path) -> DatasetAuditRecord:
     sample_id = str(record["sample_id"])
     selected_dataset_dir = manifest_path.parent / "dataset"
-    selected_image_path = selected_dataset_dir / "img" / sample_id
+    selected_image_json_path = selected_dataset_dir / "img_json" / f"{sample_id}.json"
     selected_annotation_path = selected_dataset_dir / "ann" / f"{sample_id}.json"
 
-    image_path = selected_image_path if selected_image_path.exists() else Path(str(record.get("image_path", "")))
+    image_json_path = (
+        selected_image_json_path
+        if selected_image_json_path.exists()
+        else Path(str(record.get("image_json_path", selected_image_json_path)))
+    )
     annotation_path = (
         selected_annotation_path
         if selected_annotation_path.exists()
@@ -150,7 +156,8 @@ def audit_record_from_selected_record(record: dict[str, Any], manifest_path: Pat
         sample_id=sample_id,
         task_id=record.get("task_id"),
         annotation_path=str(annotation_path),
-        image_path=str(image_path),
+        image_id=str(record.get("image_id") or sample_id),
+        image_json_path=str(image_json_path),
         dataset_status=record.get("dataset_status", "runnable"),
         skip_reason=record.get("skip_reason"),
         missing_categories=list(record.get("missing_categories") or []),
@@ -289,7 +296,9 @@ def run_llm_episode(task: str, seed: int, client: Any, model_name: str, emit_log
 def sample_from_audit_record(record: DatasetAuditRecord) -> ReceiptSample:
     return ReceiptSample(
         sample_id=record.sample_id,
-        image_ref=record.image_path,
+        image_ref=record.image_json_path,
+        image_id=record.image_id,
+        image_json_path=record.image_json_path,
         regions=[],
         gold_fields=record.gold_fields or ReceiptDraft(),
         gold_line_items=record.gold_line_items,

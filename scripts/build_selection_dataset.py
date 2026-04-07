@@ -83,7 +83,8 @@ def process_record(record: DatasetAuditRecord, client: Any, model_name: str) -> 
         "sample_id": record.sample_id,
         "task_id": record.task_id,
         "annotation_path": record.annotation_path,
-        "image_path": record.image_path,
+        "image_id": record.image_id,
+        "image_json_path": record.image_json_path,
         "dataset_status": record.dataset_status,
         "skip_reason": record.skip_reason,
         "missing_categories": record.missing_categories,
@@ -208,7 +209,7 @@ def select_records(records: list[dict[str, Any]], target_size: int) -> tuple[lis
     candidates = [
         record
         for record in records
-        if record["dataset_status"] == "runnable" and record.get("image_path") and record.get("annotation_path") and not record.get("error")
+        if record["dataset_status"] == "runnable" and record.get("image_json_path") and record.get("annotation_path") and not record.get("error")
     ]
     if len(candidates) < target_size:
         raise ValueError(f"Only {len(candidates)} scored runnable records are available; cannot select {target_size}")
@@ -296,18 +297,22 @@ def select_records(records: list[dict[str, Any]], target_size: int) -> tuple[lis
 def copy_subset_files(selected_records: list[dict[str, Any]], output_dir: Path) -> dict[str, str]:
     dataset_dir = output_dir / "dataset"
     ann_dir = dataset_dir / "ann"
-    img_dir = dataset_dir / "img"
+    image_json_dir = dataset_dir / "img_json"
     ann_dir.mkdir(parents=True, exist_ok=True)
-    img_dir.mkdir(parents=True, exist_ok=True)
+    image_json_dir.mkdir(parents=True, exist_ok=True)
 
     for record in selected_records:
         annotation_path = Path(record["annotation_path"])
-        image_path = Path(record["image_path"])
+        image_json_path = Path(record["image_json_path"])
         if annotation_path.exists():
-            shutil.copy2(annotation_path, ann_dir / annotation_path.name)
-        if image_path.exists():
-            shutil.copy2(image_path, img_dir / image_path.name)
-    return {"dataset_dir": str(dataset_dir), "ann_dir": str(ann_dir), "img_dir": str(img_dir)}
+            copied_annotation_path = ann_dir / annotation_path.name
+            shutil.copy2(annotation_path, copied_annotation_path)
+            record["annotation_path"] = str(copied_annotation_path)
+        if image_json_path.exists():
+            copied_image_json_path = image_json_dir / image_json_path.name
+            shutil.copy2(image_json_path, copied_image_json_path)
+            record["image_json_path"] = str(copied_image_json_path)
+    return {"dataset_dir": str(dataset_dir), "ann_dir": str(ann_dir), "image_json_dir": str(image_json_dir)}
 
 
 def write_selected_csv(selected_records: list[dict[str, Any]], output_dir: Path) -> None:

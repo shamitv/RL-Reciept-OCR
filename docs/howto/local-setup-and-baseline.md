@@ -44,6 +44,7 @@ RECEIPT_EVAL_OUTPUT_DIR=artifacts/eval/dataset-image-eval
 Notes:
 
 - `RECEIPT_DATASET_ROOT` is optional. If unset, the loader defaults to the bundled prepared dataset.
+- Dataset receipt images are stored as per-image base64 JSON files under `img_json/`; raw `img/` image files are not required at runtime.
 - `RECEIPT_EVAL_OUTPUT_DIR` is optional. If unset, the eval pipeline writes to `artifacts/eval/dataset-image-eval`.
 - `MODEL_NAME` / `API_BASE_URL` and `EVAL_MODEL` / `EVAL_API_BASE_URL` are only required for the dataset image evaluation pipeline, not for the local heuristic baseline.
 

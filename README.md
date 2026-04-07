@@ -175,6 +175,7 @@ The default runtime dataset is loaded from the prepared receipt annotations in `
 At load time, the environment:
 
 - reads rectangle annotations from `ann/`
+- loads receipt images from per-image base64 JSON assets in `img_json/`
 - reconstructs OCR regions from annotation boxes and transcriptions
 - derives gold `company`, `address`, `date`, `subtotal`, `tax`, and `total` fields from labeled categories
 - derives gold line-item rows directly from `Item information` labels
@@ -192,7 +193,7 @@ Submitted LLM baseline:
 - command: `python inference.py`
 - required environment variables: `API_BASE_URL`, `MODEL_NAME`, `HF_TOKEN`
 - default sample set: the selected 50-image manifest at `artifacts/datasets/receipt-selection-50/selected_manifest.json`, when present
-- LLM client: the root inference script builds an OpenAI-compatible client from those variables and uses the existing receipt-image extraction pipeline before submitting the extracted draft through the environment.
+- LLM client: the root inference script builds an OpenAI-compatible client from those variables and uses the receipt image JSON extraction pipeline before submitting the extracted draft through the environment.
 - fallback all-task smoke run: `python inference.py --no-manifest`
 
 Offline reproducible heuristic baseline:

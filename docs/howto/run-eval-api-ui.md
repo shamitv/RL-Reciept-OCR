@@ -37,6 +37,7 @@ Notes:
 
 - `MODEL_NAME` and `API_BASE_URL` are used for the primary extraction pass.
 - `EVAL_MODEL` and `EVAL_API_BASE_URL` are used for the larger validation model.
+- Dataset receipt images are read from per-image base64 JSON files under `img_json/`.
 - `RECEIPT_EVAL_OUTPUT_DIR` is optional. If omitted, artifacts go to `artifacts/eval/dataset-image-eval`.
 
 ## 2. Generate Eval Artifacts
@@ -98,7 +99,7 @@ Main UI pages:
 
 The detail page shows:
 
-- the receipt image
+- the receipt image decoded from `img_json/<sample_id>.json`
 - gold fields
 - predicted fields
 - field-by-field correct, partial, missing, or incorrect status
@@ -144,7 +145,7 @@ If `/eval` opens but shows no results:
 
 If an image does not render in the detail page:
 
-- confirm the dataset image file still exists at the path recorded in `results.jsonl`
+- confirm `img_json/<sample_id>.json` exists and contains valid `image_id`, `mime_type`, and base64 `image_data`
 - try `GET /api/eval/receipts/{sample_id}/image` directly
 
 If you need to re-check the baseline environment flow after debugging the UI, go back to [local-setup-and-baseline.md](local-setup-and-baseline.md).

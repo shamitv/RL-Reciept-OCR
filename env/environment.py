@@ -30,6 +30,8 @@ class HiddenState:
     difficulty: str = "easy"
     task_id: str = "easy"
     image_ref: str | None = None
+    image_id: str | None = None
+    image_json_path: str | None = None
     gold_fields: ReceiptDraft = field(default_factory=ReceiptDraft)
     gold_line_items: list[ReceiptLineItem] = field(default_factory=list)
     all_regions: list[OCRRegion] = field(default_factory=list)
@@ -85,6 +87,8 @@ class ReceiptExtractionEnv:
             difficulty=self.task.difficulty,
             task_id=self.task.task_id,
             image_ref=sample.image_ref,
+            image_id=sample.image_id,
+            image_json_path=sample.image_json_path,
             gold_fields=sample.gold_fields,
             gold_line_items=sample.gold_line_items,
             all_regions=sample.regions,
@@ -453,6 +457,8 @@ class ReceiptExtractionEnv:
             difficulty=self.task.difficulty,
             instruction=self.task.instruction,
             image_ref=self.hidden_state.image_ref,
+            image_id=self.hidden_state.image_id,
+            image_json_path=self.hidden_state.image_json_path,
             visible_regions=self._visible_regions(),
             candidate_lists=self.hidden_state.candidate_lists,
             line_item_candidates=list(self.hidden_state.line_item_candidates),

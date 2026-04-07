@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import base64
 import json
 import logging
-import mimetypes
 import os
 from collections import Counter
 from datetime import datetime, timezone
@@ -17,6 +15,14 @@ from pydantic import BaseModel, Field
 
 from env.dataset import ReceiptDataset
 from env.graders import grade_receipt
+from env.image_store import (
+    IMAGE_JSON_DIR_NAME,
+    ImageStoreError,
+    image_id_from_annotation_path,
+    image_json_path_for_id,
+    image_json_to_data_url,
+    load_image_json_asset,
+)
 from env.llm_cache import cached_chat_completion
 from env.models import ReceiptDraft, ReceiptLineItem
 
@@ -46,7 +52,8 @@ class DatasetAuditRecord(BaseModel):
     sample_id: str
     task_id: str | None = None
     annotation_path: str
-    image_path: str | None = None
+    image_id: str | None = None
+    image_json_path: str | None = None
     dataset_status: DatasetStatus
     skip_reason: str | None = None
     missing_categories: list[str] = Field(default_factory=list)
@@ -72,7 +79,8 @@ class ReceiptEvalRecord(BaseModel):
     sample_id: str
     task_id: str | None = None
     annotation_path: str
-    image_path: str | None = None
+    image_id: str | None = None
+    image_json_path: str | None = None
     dataset_status: DatasetStatus
     status: EvalStatus
     skip_reason: str | None = None
@@ -294,12 +302,8 @@ def classify_eval_status(dataset_status: DatasetStatus, score: float, predicted_
     return "failed"
 
 
-def image_to_data_url(image_path: str | Path) -> str:
-    path = Path(image_path)
-    mime_type, _ = mimetypes.guess_type(path.name)
-    mime_type = mime_type or "application/octet-stream"
-    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
-    return f"data:{mime_type};base64,{encoded}"
+def image_to_data_url(image_json_path: str | Path) -> str:
+    return image_json_to_data_url(image_json_path)
 
 
 def resolve_api_key() -> str:
@@ -336,7 +340,7 @@ def build_extraction_messages(record: DatasetAuditRecord) -> list[dict[str, Any]
                 },
                 {
                     "type": "image_url",
-                    "image_url": {"url": image_to_data_url(record.image_path or "")},
+                    "image_url": {"url": image_to_data_url(record.image_json_path or "")},
                 },
             ],
         },
@@ -368,7 +372,7 @@ def build_judge_messages(record: DatasetAuditRecord, prediction: ReceiptDraft | 
                 {"type": "text", "text": json.dumps(payload, indent=2)},
                 {
                     "type": "image_url",
-                    "image_url": {"url": image_to_data_url(record.image_path or "")},
+                    "image_url": {"url": image_to_data_url(record.image_json_path or "")},
                 },
             ],
         },
@@ -448,7 +452,8 @@ def evaluate_audit_record(
             sample_id=record.sample_id,
             task_id=record.task_id,
             annotation_path=record.annotation_path,
-            image_path=record.image_path,
+            image_id=record.image_id,
+            image_json_path=record.image_json_path,
             dataset_status=record.dataset_status,
             status="skipped",
             skip_reason=record.skip_reason,
@@ -522,7 +527,8 @@ def evaluate_audit_record(
         sample_id=record.sample_id,
         task_id=record.task_id,
         annotation_path=record.annotation_path,
-        image_path=record.image_path,
+        image_id=record.image_id,
+        image_json_path=record.image_json_path,
         dataset_status=record.dataset_status,
         status=status,
         skip_reason=record.skip_reason,
@@ -593,9 +599,9 @@ def _task_from_labels(label_presence: dict[str, bool]) -> tuple[str | None, list
 def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRecord]:
     dataset = ReceiptDataset(dataset_root=dataset_root)
     ann_dir = dataset.dataset_root / "ann"
-    img_dir = dataset.dataset_root / "img"
-    if not ann_dir.exists() or not img_dir.exists():
-        raise FileNotFoundError(f"Dataset root does not contain ann/ and img/: {dataset.dataset_root}")
+    image_json_dir = dataset.dataset_root / IMAGE_JSON_DIR_NAME
+    if not ann_dir.exists() or not image_json_dir.exists():
+        raise FileNotFoundError(f"Dataset root does not contain ann/ and {IMAGE_JSON_DIR_NAME}/: {dataset.dataset_root}")
 
     records: list[DatasetAuditRecord] = []
     task_requirements = {
@@ -619,16 +625,19 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
                 label_presence[category] = True
 
         sample_id = annotation_path.stem
-        image_name = annotation_path.name[:-5]
-        image_path = img_dir / image_name
-        if not image_path.exists():
+        image_id = image_id_from_annotation_path(annotation_path)
+        image_json_path = image_json_path_for_id(dataset.dataset_root, image_id)
+        try:
+            load_image_json_asset(image_json_path)
+        except ImageStoreError as exc:
             records.append(
                 DatasetAuditRecord(
                     sample_id=sample_id,
                     annotation_path=str(annotation_path),
-                    image_path=str(image_path),
+                    image_id=image_id,
+                    image_json_path=str(image_json_path),
                     dataset_status="skipped_missing_image",
-                    skip_reason="missing_image",
+                    skip_reason="missing_image_json" if not image_json_path.exists() else f"invalid_image_json: {exc}",
                 )
             )
             continue
@@ -639,7 +648,8 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
                 DatasetAuditRecord(
                     sample_id=sample_id,
                     annotation_path=str(annotation_path),
-                    image_path=str(image_path),
+                    image_id=image_id,
+                    image_json_path=str(image_json_path),
                     dataset_status="skipped_missing_labels",
                     skip_reason="missing_required_labels",
                     missing_categories=missing_categories,
@@ -680,7 +690,8 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
                     sample_id=sample_id,
                     task_id=resolved_task_id,
                     annotation_path=str(annotation_path),
-                    image_path=str(image_path),
+                    image_id=image_id,
+                    image_json_path=str(image_json_path),
                     dataset_status="skipped_unparseable_gold",
                     skip_reason="unparseable_gold_fields",
                     unparseable_fields=sorted(set(unparseable_fields)),
@@ -695,7 +706,8 @@ def audit_dataset(dataset_root: str | Path | None = None) -> list[DatasetAuditRe
                 sample_id=sample_id,
                 task_id=resolved_task_id,
                 annotation_path=str(annotation_path),
-                image_path=str(image_path),
+                image_id=image_id,
+                image_json_path=str(image_json_path),
                 dataset_status="runnable",
                 gold_fields=gold_fields,
                 gold_line_items=gold_line_items,
@@ -1000,7 +1012,9 @@ class EvalArtifactStore:
                 {
                     "sample_id": audit.sample_id,
                     "task_id": audit.task_id,
-                    "image_path": audit.image_path,
+                    "image_id": audit.image_id,
+                    "image_json_path": audit.image_json_path,
+                    "has_image": bool(audit.image_json_path and audit.dataset_status != "skipped_missing_image"),
                     "dataset_status": audit.dataset_status,
                     "status": record.status if record is not None else "not_run",
                     "overall_score": record.overall_score if record is not None else None,
@@ -1015,7 +1029,9 @@ class EvalArtifactStore:
                 {
                     "sample_id": record.sample_id,
                     "task_id": record.task_id,
-                    "image_path": record.image_path,
+                    "image_id": record.image_id,
+                    "image_json_path": record.image_json_path,
+                    "has_image": bool(record.image_json_path and record.dataset_status != "skipped_missing_image"),
                     "dataset_status": record.dataset_status,
                     "status": record.status,
                     "overall_score": record.overall_score,

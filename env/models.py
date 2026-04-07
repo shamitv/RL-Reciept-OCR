@@ -95,6 +95,8 @@ class ReceiptObservation(BaseModel):
     difficulty: Difficulty
     instruction: str
     image_ref: str | None
+    image_id: str | None = None
+    image_json_path: str | None = None
     visible_regions: list[OCRRegion] = Field(default_factory=list)
     candidate_lists: dict[str, list[FieldCandidate]] = Field(default_factory=dict)
     line_item_candidates: list[ReceiptLineItemCandidate] = Field(default_factory=list)
@@ -169,6 +171,8 @@ class TaskConfig(BaseModel):
 class ReceiptSample(BaseModel):
     sample_id: str
     image_ref: str | None = None
+    image_id: str | None = None
+    image_json_path: str | None = None
     regions: list[OCRRegion]
     gold_fields: ReceiptDraft
     gold_line_items: list[ReceiptLineItem] = Field(default_factory=list)

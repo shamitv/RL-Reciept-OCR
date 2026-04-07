@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -25,9 +26,18 @@ def _write_annotation(root: Path, name: str, objects: list[dict], image_name: st
     path = ann_dir / name
     path.write_text(json.dumps({"objects": objects}), encoding="utf-8")
     if image_name is not None:
-        img_dir = root / "img"
-        img_dir.mkdir(parents=True, exist_ok=True)
-        (img_dir / image_name).write_bytes(b"image")
+        image_json_dir = root / "img_json"
+        image_json_dir.mkdir(parents=True, exist_ok=True)
+        (image_json_dir / f"{image_name}.json").write_text(
+            json.dumps(
+                {
+                    "image_id": image_name,
+                    "mime_type": "image/jpeg",
+                    "image_data": base64.b64encode(b"image").decode("ascii"),
+                }
+            ),
+            encoding="utf-8",
+        )
 
 
 class _FakeCompletions:

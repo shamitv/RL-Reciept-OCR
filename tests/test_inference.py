@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -48,6 +49,23 @@ class _FakeClient:
         self.completions = _FakeCompletions(responses)
         self.chat = SimpleNamespace(completions=self.completions)
         self.base_url = "https://fake.client/v1"
+
+
+def _write_image_json(root: Path, image_id: str, payload: bytes = b"image") -> Path:
+    image_json_dir = root / "img_json"
+    image_json_dir.mkdir(parents=True, exist_ok=True)
+    path = image_json_dir / f"{image_id}.json"
+    path.write_text(
+        json.dumps(
+            {
+                "image_id": image_id,
+                "mime_type": "image/jpeg",
+                "image_data": base64.b64encode(payload).decode("ascii"),
+            }
+        ),
+        encoding="utf-8",
+    )
+    return path
 
 
 def test_resolve_tasks_defaults_to_all_tasks() -> None:
@@ -146,11 +164,10 @@ def test_run_llm_episode_uses_existing_extraction_client(monkeypatch, tmp_path, 
 
 def test_load_selected_audit_records_prefers_copied_dataset_paths(tmp_path: Path) -> None:
     dataset_dir = tmp_path / "dataset"
-    image_path = dataset_dir / "img" / "sample-receipt.jpg"
+    image_json_path = dataset_dir / "img_json" / "sample-receipt.jpg.json"
     annotation_path = dataset_dir / "ann" / "sample-receipt.jpg.json"
-    image_path.parent.mkdir(parents=True)
     annotation_path.parent.mkdir(parents=True)
-    image_path.write_bytes(b"image")
+    image_json_path = _write_image_json(dataset_dir, "sample-receipt.jpg")
     annotation_path.write_text("{}", encoding="utf-8")
 
     manifest_path = tmp_path / "selected_manifest.json"
@@ -162,7 +179,8 @@ def test_load_selected_audit_records_prefers_copied_dataset_paths(tmp_path: Path
                         "sample_id": "sample-receipt.jpg",
                         "task_id": "easy",
                         "dataset_status": "runnable",
-                        "image_path": "D:/stale/img/sample-receipt.jpg",
+                        "image_id": "sample-receipt.jpg",
+                        "image_json_path": "D:/stale/img_json/sample-receipt.jpg.json",
                         "annotation_path": "D:/stale/ann/sample-receipt.jpg.json",
                         "gold_fields": {
                             "company": "Store",
@@ -182,5 +200,6 @@ def test_load_selected_audit_records_prefers_copied_dataset_paths(tmp_path: Path
 
     assert len(records) == 1
     assert records[0].sample_id == "sample-receipt.jpg"
-    assert records[0].image_path == str(image_path)
+    assert records[0].image_id == "sample-receipt.jpg"
+    assert records[0].image_json_path == str(image_json_path)
     assert records[0].annotation_path == str(annotation_path)

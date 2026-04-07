@@ -6,7 +6,7 @@ Source data:
 
 - Manifest: `artifacts/datasets/receipt-selection-50/selected_manifest.json`
 - Sample list: `artifacts/datasets/receipt-selection-50/selected_samples.csv`
-- Images: `artifacts/datasets/receipt-selection-50/dataset/img/`
+- Image JSON assets: `artifacts/datasets/receipt-selection-50/dataset/img_json/`
 
 Scoring terms:
 
@@ -21,13 +21,13 @@ Scoring terms:
 
 | Range | Image | Task | Score | Total score | Line items | Summary recon | Line-item recon | What it shows |
 | --- | --- | --- | ---: | ---: | --- | --- | --- | --- |
-| High | [1159-receipt.jpg](../../artifacts/datasets/receipt-selection-50/dataset/img/1159-receipt.jpg) | hard | 1.000 | 1.0 | 1 -> 1 | pass | pass | Simple receipt where fields, one line item, and totals all match. |
-| High | [1177-receipt.jpg](../../artifacts/datasets/receipt-selection-50/dataset/img/1177-receipt.jpg) | hard | 1.000 | 1.0 | 4 -> 4 | pass | pass | Multi-item receipt where item count and item totals reconcile cleanly. |
-| Medium | [1124-receipt.jpg](../../artifacts/datasets/receipt-selection-50/dataset/img/1124-receipt.jpg) | hard | 0.750 | 1.0 | 11 -> 11 | pass | fail | Count and summary totals match, but some line-item amounts are missing. |
-| Medium | [1183-receipt.jpg](../../artifacts/datasets/receipt-selection-50/dataset/img/1183-receipt.jpg) | hard | 0.750 | 1.0 | 2 -> 2 | fail | pass | Extracted fields match, but subtotal plus tax does not equal the printed total. |
-| Lower | [1019-receipt.jpg](../../artifacts/datasets/receipt-selection-50/dataset/img/1019-receipt.jpg) | hard | 0.500 | 1.0 | 9 -> 9 | fail | fail | Count matches, but amount alignment and summary fields are wrong. |
-| Low | [1058-receipt.jpg](../../artifacts/datasets/receipt-selection-50/dataset/img/1058-receipt.jpg) | hard | 0.317 | 0.0 | 5 -> 4 | pass | fail | Predicted values reconcile internally, but not against the receipt labels. |
-| Worst | [1022-receipt.jpg](../../artifacts/datasets/receipt-selection-50/dataset/img/1022-receipt.jpg) | easy | 0.000 | 0.0 | 1 -> 0 | n/a | n/a | Empty extraction for an easy-task receipt. |
+| High | [1159-receipt.jpg.json](../../artifacts/datasets/receipt-selection-50/dataset/img_json/1159-receipt.jpg.json) | hard | 1.000 | 1.0 | 1 -> 1 | pass | pass | Simple receipt where fields, one line item, and totals all match. |
+| High | [1177-receipt.jpg.json](../../artifacts/datasets/receipt-selection-50/dataset/img_json/1177-receipt.jpg.json) | hard | 1.000 | 1.0 | 4 -> 4 | pass | pass | Multi-item receipt where item count and item totals reconcile cleanly. |
+| Medium | [1124-receipt.jpg.json](../../artifacts/datasets/receipt-selection-50/dataset/img_json/1124-receipt.jpg.json) | hard | 0.750 | 1.0 | 11 -> 11 | pass | fail | Count and summary totals match, but some line-item amounts are missing. |
+| Medium | [1183-receipt.jpg.json](../../artifacts/datasets/receipt-selection-50/dataset/img_json/1183-receipt.jpg.json) | hard | 0.750 | 1.0 | 2 -> 2 | fail | pass | Extracted fields match, but subtotal plus tax does not equal the printed total. |
+| Lower | [1019-receipt.jpg.json](../../artifacts/datasets/receipt-selection-50/dataset/img_json/1019-receipt.jpg.json) | hard | 0.500 | 1.0 | 9 -> 9 | fail | fail | Count matches, but amount alignment and summary fields are wrong. |
+| Low | [1058-receipt.jpg.json](../../artifacts/datasets/receipt-selection-50/dataset/img_json/1058-receipt.jpg.json) | hard | 0.317 | 0.0 | 5 -> 4 | pass | fail | Predicted values reconcile internally, but not against the receipt labels. |
+| Worst | [1022-receipt.jpg.json](../../artifacts/datasets/receipt-selection-50/dataset/img_json/1022-receipt.jpg.json) | easy | 0.000 | 0.0 | 1 -> 0 | n/a | n/a | Empty extraction for an easy-task receipt. |
 
 ## High Score Examples
 

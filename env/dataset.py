@@ -6,6 +6,13 @@ import re
 from random import Random
 from pathlib import Path
 
+from env.image_store import (
+    IMAGE_JSON_DIR_NAME,
+    ImageStoreError,
+    image_id_from_annotation_path,
+    image_json_path_for_id,
+    load_image_json_asset,
+)
 from env.models import OCRRegion, ReceiptDraft, ReceiptLineItem, ReceiptSample
 from env.normalizers import normalize_amount, normalize_date, normalize_text
 
@@ -100,18 +107,18 @@ class ReceiptDataset:
 
     def _load_samples(self) -> list[ReceiptSample]:
         ann_dir = self.dataset_root / "ann"
-        img_dir = self.dataset_root / "img"
-        if not ann_dir.exists() or not img_dir.exists():
+        image_json_dir = self.dataset_root / IMAGE_JSON_DIR_NAME
+        if not ann_dir.exists() or not image_json_dir.exists():
             return MOCK_SAMPLES
 
         samples: list[ReceiptSample] = []
         for annotation_path in sorted(ann_dir.glob("*.json")):
-            sample = self._parse_annotation(annotation_path, img_dir)
+            sample = self._parse_annotation(annotation_path)
             if sample is not None:
                 samples.append(sample)
         return samples or MOCK_SAMPLES
 
-    def _parse_annotation(self, annotation_path: Path, image_dir: Path) -> ReceiptSample | None:
+    def _parse_annotation(self, annotation_path: Path) -> ReceiptSample | None:
         payload = json.loads(annotation_path.read_text(encoding="utf-8"))
         objects = payload.get("objects", [])
         grouped_regions: dict[str, list[OCRRegion]] = {}
@@ -126,9 +133,11 @@ class ReceiptDataset:
             if category:
                 grouped_regions.setdefault(category, []).append(region)
 
-        image_name = annotation_path.name[:-5]
-        image_path = image_dir / image_name
-        if not image_path.exists():
+        image_id = image_id_from_annotation_path(annotation_path)
+        image_json_path = image_json_path_for_id(self.dataset_root, image_id)
+        try:
+            load_image_json_asset(image_json_path)
+        except ImageStoreError:
             return None
 
         company = self._join_text(grouped_regions.get("Business name", []))
@@ -144,7 +153,9 @@ class ReceiptDataset:
 
         return ReceiptSample(
             sample_id=annotation_path.stem,
-            image_ref=str(image_path),
+            image_ref=str(image_json_path),
+            image_id=image_id,
+            image_json_path=str(image_json_path),
             regions=sorted(visible_regions, key=lambda region: (region.bbox[1], region.bbox[0], region.region_id)),
             gold_fields=ReceiptDraft(
                 company=company or None,
