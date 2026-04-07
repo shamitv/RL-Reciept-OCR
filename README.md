@@ -266,6 +266,16 @@ The validation command used was:
 openenv validate
 ```
 
+### Hackathon pre-submission validator
+
+The repository also includes the hackathon-style pre-submission validator:
+
+```bash
+bash scripts/validate-submission.sh https://your-space.hf.space .
+```
+
+It checks that the submitted Space responds to `POST /reset`, the Docker image builds, and `openenv validate` passes.
+
 ### Hugging Face Spaces
 
 The repository includes a container entrypoint suitable for a Space-style deployment, but final deployment verification is still pending.
