@@ -177,3 +177,23 @@ def test_eval_ui_includes_unprocessed_receipts_and_single_run_action(monkeypatch
     ui_run_response = client.post("/eval/receipts/sample-3/run", follow_redirects=False)
     assert ui_run_response.status_code == 303
     assert ui_run_response.headers["location"] == "/eval/receipts/sample-3"
+
+
+def test_eval_ui_falls_back_to_processed_records_when_dataset_missing(monkeypatch, tmp_path: Path) -> None:
+    output_dir = tmp_path / "eval-output"
+    _build_artifacts(output_dir)
+    monkeypatch.setenv("RECEIPT_EVAL_OUTPUT_DIR", str(output_dir))
+    monkeypatch.setattr(
+        "env.evaluation.audit_dataset",
+        lambda dataset_root=None: (_ for _ in ()).throw(FileNotFoundError("dataset missing")),
+    )
+
+    client = TestClient(app)
+
+    dashboard_response = client.get("/eval")
+    assert dashboard_response.status_code == 200
+    assert "sample-1" in dashboard_response.text
+
+    detail_response = client.get("/eval/receipts/sample-1")
+    assert detail_response.status_code == 200
+    assert "Perfect extraction" in detail_response.text

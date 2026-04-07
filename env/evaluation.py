@@ -984,7 +984,10 @@ class EvalArtifactStore:
         return None
 
     def audit_records(self) -> list[DatasetAuditRecord]:
-        return audit_dataset()
+        try:
+            return audit_dataset()
+        except FileNotFoundError:
+            return []
 
     def receipt_menu(self) -> list[dict[str, Any]]:
         records_by_sample_id = {record.sample_id: record for record in self.records()}

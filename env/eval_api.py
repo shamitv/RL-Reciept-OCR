@@ -51,7 +51,10 @@ def line_item_rows(record_payload: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str, Any] | None:
-    audit = get_audit_record(sample_id)
+    try:
+        audit = get_audit_record(sample_id)
+    except FileNotFoundError:
+        audit = None
     record = store.get_record(sample_id)
 
     if audit is None and record is None:
