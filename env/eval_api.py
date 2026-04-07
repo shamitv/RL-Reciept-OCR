@@ -215,6 +215,29 @@ def pagination_window(page: int, pages: int) -> list[int]:
     return list(range(start, end + 1))
 
 
+def optional_bool_query(value: str | None, parameter_name: str) -> bool | None:
+    if value is None:
+        return None
+    normalized = value.strip().lower()
+    if not normalized:
+        return None
+    if normalized in {"1", "true", "t", "yes", "y", "on"}:
+        return True
+    if normalized in {"0", "false", "f", "no", "n", "off"}:
+        return False
+    raise HTTPException(
+        status_code=422,
+        detail=[
+            {
+                "type": "bool_parsing",
+                "loc": ["query", parameter_name],
+                "msg": "Input should be a valid boolean, unable to interpret input",
+                "input": value,
+            }
+        ],
+    )
+
+
 @api_router.get("/summary")
 def eval_summary() -> dict[str, Any]:
     store = get_store()
@@ -228,14 +251,15 @@ def eval_summary() -> dict[str, Any]:
 def eval_receipts(
     status: str | None = None,
     sample_id: str | None = None,
-    has_errors: bool | None = None,
+    has_errors: str | None = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=25, ge=1, le=100),
 ) -> dict[str, Any]:
+    parsed_has_errors = optional_bool_query(has_errors, "has_errors")
     store = get_store()
     if not store.exists():
         raise HTTPException(status_code=404, detail="Evaluation results not found. Run scripts/evaluate_dataset_images.py first.")
-    return store.list_records(status=status, sample_id=sample_id, has_errors=has_errors, page=page, page_size=page_size)
+    return store.list_records(status=status, sample_id=sample_id, has_errors=parsed_has_errors, page=page, page_size=page_size)
 
 
 @api_router.get("/receipts/{sample_id}")
@@ -300,10 +324,11 @@ def eval_dashboard(
     request: Request,
     status: str | None = None,
     sample_id: str | None = None,
-    has_errors: bool | None = None,
+    has_errors: str | None = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=25, ge=1, le=100),
 ) -> HTMLResponse:
+    parsed_has_errors = optional_bool_query(has_errors, "has_errors")
     store = get_store()
     summary = store.summary()
     if summary is None or not store.exists():
@@ -318,7 +343,7 @@ def eval_dashboard(
             },
         )
 
-    listing = store.list_records(status=status, sample_id=sample_id, has_errors=has_errors, page=page, page_size=page_size)
+    listing = store.list_records(status=status, sample_id=sample_id, has_errors=parsed_has_errors, page=page, page_size=page_size)
     return TEMPLATES.TemplateResponse(
         request=request,
         name="eval_index.html",
@@ -330,7 +355,7 @@ def eval_dashboard(
             "eval_models": eval_model_config(),
             "status_filter": status or "",
             "sample_filter": sample_id or "",
-            "has_errors_filter": has_errors,
+            "has_errors_filter": parsed_has_errors,
             "page_numbers": pagination_window(listing["page"], listing["pages"]),
         },
     )

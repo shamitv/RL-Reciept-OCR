@@ -106,6 +106,10 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert listing_response.json()["total"] == 1
     assert listing_response.json()["items"][0]["sample_id"] == "sample-2"
 
+    empty_has_errors_response = client.get("/api/eval/receipts", params={"has_errors": ""})
+    assert empty_has_errors_response.status_code == 200
+    assert empty_has_errors_response.json()["total"] == 2
+
     detail_response = client.get("/api/eval/receipts/sample-1")
     assert detail_response.status_code == 200
     assert detail_response.json()["status"] == "worked"
@@ -129,6 +133,10 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert "score 1.000" in dashboard_response.text
     assert 'href="/static/eval.css?v=' in dashboard_response.text
     assert "http://testserver/static/eval.css" not in dashboard_response.text
+
+    empty_filter_dashboard_response = client.get("/eval", params={"status": "worked", "sample_id": "", "has_errors": ""})
+    assert empty_filter_dashboard_response.status_code == 200
+    assert "Receipt Eval Dashboard" in empty_filter_dashboard_response.text
 
     image_detail_page_response = client.get("/eval/receipts/sample-1")
     assert image_detail_page_response.status_code == 200
