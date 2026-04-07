@@ -2,34 +2,7 @@
 
 {% block content %}
 <section class="eval-layout">
-  <aside class="panel receipt-menu">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Dataset</p>
-        <h2>All Receipts</h2>
-      </div>
-      <p class="meta">{{ receipt_menu|length }} total</p>
-    </div>
-    <div class="receipt-menu-list">
-      {% for item in receipt_menu %}
-      <a class="receipt-menu-item {% if item.sample_id == record.sample_id %}active{% endif %}" href="/eval/receipts/{{ item.sample_id }}">
-        {% if item.has_image %}
-        <img src="/api/eval/receipts/{{ item.sample_id }}/image?v={{ item.image_id or item.sample_id }}" alt="{{ item.sample_id }}" loading="lazy" decoding="async" width="72" height="96">
-        {% else %}
-        <div class="receipt-thumb empty">No image</div>
-        {% endif %}
-        <div>
-          <strong>{{ item.sample_id }}</strong>
-          <div class="receipt-menu-meta">
-            <span class="pill {{ item.status }}">{{ item.status }}</span>
-            {% if item.overall_score is not none %}<span class="mono small">score {{ "%.3f"|format(item.overall_score) }}</span>{% endif %}
-            <span class="mono small">{{ item.dataset_status }}</span>
-          </div>
-        </div>
-      </a>
-      {% endfor %}
-    </div>
-  </aside>
+  {% include "eval_task_nav.html" %}
 
   <section class="detail-layout">
     <article class="panel image-panel">
@@ -105,7 +78,7 @@
       {% endif %}
       <div class="run-bar">
         {% if record.processable %}
-        <form method="post" action="/eval/receipts/{{ record.sample_id }}/run">
+        <form method="post" action="/eval/receipts/{{ record.sample_id }}/run{% if active_task_id %}?task_id={{ active_task_id }}{% endif %}">
           <button type="submit">{% if record.processed %}Re-run{% else %}Run{% endif %} extraction + judge</button>
         </form>
         {% else %}
@@ -113,9 +86,9 @@
         {% endif %}
       </div>
       <div class="detail-nav">
-        {% if previous_id %}<a href="/eval/receipts/{{ previous_id }}">Previous</a>{% endif %}
-        <a href="/eval">Back to Dashboard</a>
-        {% if next_id %}<a href="/eval/receipts/{{ next_id }}">Next</a>{% endif %}
+        {% if previous_id %}<a href="/eval/receipts/{{ previous_id }}{% if active_task_id %}?task_id={{ active_task_id }}{% endif %}">Previous</a>{% endif %}
+        <a href="/eval{% if active_task_id %}?task_id={{ active_task_id }}{% endif %}">Back to Dashboard</a>
+        {% if next_id %}<a href="/eval/receipts/{{ next_id }}{% if active_task_id %}?task_id={{ active_task_id }}{% endif %}">Next</a>{% endif %}
       </div>
     </article>
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote, urlencode
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, Response
@@ -18,6 +19,9 @@ TEMPLATES.env.globals["static_asset_version"] = str(int((BASE_DIR / "server" / "
 
 api_router = APIRouter(prefix="/api/eval", tags=["eval"])
 ui_router = APIRouter(tags=["eval-ui"])
+
+TASK_IDS = ("easy", "medium", "hard")
+TASK_LABELS = {"easy": "Easy", "medium": "Medium", "hard": "Hard"}
 
 
 def get_store() -> EvalArtifactStore:
@@ -248,6 +252,193 @@ def optional_bool_query(value: str | None, parameter_name: str) -> bool | None:
     )
 
 
+def optional_task_query(value: str | None) -> str | None:
+    if value is None:
+        return None
+    normalized = value.strip().lower()
+    if not normalized:
+        return None
+    if normalized in TASK_IDS:
+        return normalized
+    raise HTTPException(
+        status_code=422,
+        detail=[
+            {
+                "type": "literal_error",
+                "loc": ["query", "task_id"],
+                "msg": "Input should be 'easy', 'medium', or 'hard'",
+                "input": value,
+            }
+        ],
+    )
+
+
+def eval_href(path: str, **params: str | None) -> str:
+    clean_params = {key: value for key, value in params.items() if value}
+    query_string = urlencode(clean_params)
+    return f"{path}?{query_string}" if query_string else path
+
+
+def receipt_href(sample_id: str, task_id: str | None = None) -> str:
+    return eval_href(f"/eval/receipts/{quote(sample_id, safe='')}", task_id=task_id)
+
+
+def _audit_listing_payload(audit: Any) -> dict[str, Any]:
+    return {
+        "sample_id": audit.sample_id,
+        "task_id": audit.task_id,
+        "annotation_path": audit.annotation_path,
+        "image_id": audit.image_id,
+        "image_json_path": audit.image_json_path,
+        "has_image": bool(audit.image_json_path and audit.dataset_status != "skipped_missing_image"),
+        "dataset_status": audit.dataset_status,
+        "status": "not_run",
+        "skip_reason": audit.skip_reason,
+        "overall_score": None,
+        "header_score": None,
+        "summary_score": None,
+        "line_items_score": None,
+        "line_item_gold_available": bool(audit.gold_line_items),
+        "gold_line_item_count": len(audit.gold_line_items),
+        "line_item_count_score": None,
+        "reconciliation_score": None,
+        "reconciliation_status": None,
+        "deterministic_success": False,
+        "error": None,
+        "judge": None,
+        "created_at": None,
+        "processed": False,
+        "processable": audit.dataset_status == "runnable",
+    }
+
+
+def _record_listing_payload(record: Any, audit: Any | None = None) -> dict[str, Any]:
+    payload = record.model_dump(mode="json")
+    if audit is not None:
+        payload = merge_audit_metadata(payload, audit)
+        if not payload.get("gold_line_item_count") and audit.gold_line_items:
+            payload["gold_line_item_count"] = len(audit.gold_line_items)
+            payload["line_item_gold_available"] = True
+    payload["processed"] = True
+    payload["processable"] = payload.get("dataset_status") == "runnable"
+    payload["has_image"] = bool(payload.get("image_json_path") and payload.get("dataset_status") != "skipped_missing_image")
+    return payload
+
+
+def runnable_receipt_scope(store: EvalArtifactStore) -> list[dict[str, Any]]:
+    records_by_sample_id = {record.sample_id: record for record in store.records()}
+    items: list[dict[str, Any]] = []
+    seen_sample_ids: set[str] = set()
+
+    for audit in store.audit_records():
+        if audit.dataset_status != "runnable":
+            continue
+        seen_sample_ids.add(audit.sample_id)
+        record = records_by_sample_id.get(audit.sample_id)
+        if record is None:
+            items.append(_audit_listing_payload(audit))
+        else:
+            items.append(_record_listing_payload(record, audit))
+
+    for record in records_by_sample_id.values():
+        if record.sample_id in seen_sample_ids or record.dataset_status != "runnable":
+            continue
+        items.append(_record_listing_payload(record))
+
+    return sorted(items, key=lambda item: item["sample_id"])
+
+
+def filter_receipt_items(
+    items: list[dict[str, Any]],
+    task_id: str | None = None,
+    status: str | None = None,
+    sample_id: str | None = None,
+    has_errors: bool | None = None,
+) -> list[dict[str, Any]]:
+    filtered = list(items)
+    if task_id:
+        filtered = [item for item in filtered if str(item.get("task_id") or "").lower() == task_id]
+    if status:
+        filtered = [item for item in filtered if item.get("status") == status]
+    if sample_id:
+        needle = sample_id.lower()
+        filtered = [item for item in filtered if needle in item["sample_id"].lower()]
+    if has_errors is True:
+        filtered = [item for item in filtered if item.get("status") in {"partial", "failed"} or bool(item.get("error"))]
+    elif has_errors is False:
+        filtered = [item for item in filtered if item.get("status") == "worked" and not item.get("error")]
+    return filtered
+
+
+def paginate_receipt_items(items: list[dict[str, Any]], page: int, page_size: int) -> dict[str, Any]:
+    page = max(page, 1)
+    page_size = max(min(page_size, 100), 1)
+    start = (page - 1) * page_size
+    return {
+        "items": items[start : start + page_size],
+        "page": page,
+        "page_size": page_size,
+        "total": len(items),
+        "pages": max((len(items) + page_size - 1) // page_size, 1),
+    }
+
+
+def _mean_score(items: list[dict[str, Any]], key: str) -> float:
+    values = [_safe_float(item.get(key)) for item in items if item.get("processed") and item.get(key) is not None]
+    return sum(values) / len(values) if values else 0.0
+
+
+def runnable_scope_summary(items: list[dict[str, Any]]) -> dict[str, Any]:
+    counts: dict[str, int] = {}
+    for item in items:
+        status = item.get("status") or "not_run"
+        counts[status] = counts.get(status, 0) + 1
+
+    with_gold_line_items = sum(1 for item in items if item.get("line_item_gold_available") or (item.get("gold_line_item_count") or 0) > 0)
+    return {
+        "total": len(items),
+        "completed": sum(1 for item in items if item.get("processed")),
+        "counts": counts,
+        "mean_score": _mean_score(items, "overall_score"),
+        "component_mean_scores": {
+            "header_score": _mean_score(items, "header_score"),
+            "summary_score": _mean_score(items, "summary_score"),
+            "line_items_score": _mean_score(items, "line_items_score"),
+            "reconciliation_score": _mean_score(items, "reconciliation_score"),
+            "line_item_count_score": _mean_score(items, "line_item_count_score"),
+        },
+        "line_item_availability_counts": {
+            "with_gold_line_items": with_gold_line_items,
+            "without_gold_line_items": len(items) - with_gold_line_items,
+        },
+    }
+
+
+def task_nav_payload(items: list[dict[str, Any]], active_task_id: str | None, link_to_receipts: bool = False) -> dict[str, Any]:
+    nav_items: list[dict[str, Any]] = []
+    for task_id in TASK_IDS:
+        task_items = [item for item in items if str(item.get("task_id") or "").lower() == task_id]
+        first_sample_id = task_items[0]["sample_id"] if task_items else None
+        href = receipt_href(first_sample_id, task_id) if link_to_receipts and first_sample_id else eval_href("/eval", task_id=task_id)
+        nav_items.append(
+            {
+                "task_id": task_id,
+                "label": TASK_LABELS[task_id],
+                "count": len(task_items),
+                "href": href,
+                "active": active_task_id == task_id,
+                "disabled": first_sample_id is None,
+            }
+        )
+
+    return {
+        "items": nav_items,
+        "total": len(items),
+        "all_href": "/eval",
+        "active_task_id": active_task_id,
+    }
+
+
 @api_router.get("/summary")
 def eval_summary() -> dict[str, Any]:
     store = get_store()
@@ -332,6 +523,7 @@ def eval_report(format: str = Query(default="markdown", pattern="^(markdown|html
 @ui_router.get("/eval", response_class=HTMLResponse)
 def eval_dashboard(
     request: Request,
+    task_id: str | None = None,
     status: str | None = None,
     sample_id: str | None = None,
     has_errors: str | None = Query(default=None),
@@ -339,8 +531,10 @@ def eval_dashboard(
     page_size: int = Query(default=25, ge=1, le=100),
 ) -> HTMLResponse:
     parsed_has_errors = optional_bool_query(has_errors, "has_errors")
+    active_task_id = optional_task_query(task_id)
     store = get_store()
     summary = store.summary()
+    runnable_items = runnable_receipt_scope(store)
     if summary is None or not store.exists():
         return TEMPLATES.TemplateResponse(
             request=request,
@@ -348,21 +542,26 @@ def eval_dashboard(
             context={
                 "title": "Receipt Eval Dashboard",
                 "output_dir": str(store.output_dir),
-                "receipt_menu": store.receipt_menu(),
+                "task_nav": task_nav_payload(runnable_items, active_task_id),
+                "active_task_id": active_task_id,
                 "eval_models": eval_model_config(),
             },
         )
 
-    listing = store.list_records(status=status, sample_id=sample_id, has_errors=parsed_has_errors, page=page, page_size=page_size)
+    task_scope_items = filter_receipt_items(runnable_items, task_id=active_task_id)
+    listing_items = filter_receipt_items(task_scope_items, status=status, sample_id=sample_id, has_errors=parsed_has_errors)
+    listing = paginate_receipt_items(listing_items, page=page, page_size=page_size)
     return TEMPLATES.TemplateResponse(
         request=request,
         name="eval_index.html",
         context={
             "title": "Receipt Eval Dashboard",
             "summary": summary.model_dump(mode="json"),
+            "scope_summary": runnable_scope_summary(task_scope_items),
             "listing": listing,
-            "receipt_menu": store.receipt_menu(),
+            "task_nav": task_nav_payload(runnable_items, active_task_id),
             "eval_models": eval_model_config(),
+            "active_task_id": active_task_id,
             "status_filter": status or "",
             "sample_filter": sample_id or "",
             "has_errors_filter": parsed_has_errors,
@@ -372,17 +571,24 @@ def eval_dashboard(
 
 
 @ui_router.get("/eval/receipts/{sample_id}", response_class=HTMLResponse)
-def eval_detail(request: Request, sample_id: str) -> HTMLResponse:
+def eval_detail(request: Request, sample_id: str, task_id: str | None = None) -> HTMLResponse:
+    active_task_id = optional_task_query(task_id)
     store = get_store()
     record = detail_record_payload(store, sample_id)
     if record is None:
         raise HTTPException(status_code=404, detail=f"Evaluation record not found for sample_id={sample_id}")
+    if not record.get("processable"):
+        raise HTTPException(status_code=404, detail=f"Receipt {sample_id} is not runnable and is outside the eval UI scope.")
 
-    menu_items = store.receipt_menu()
-    sample_ids = [item["sample_id"] for item in menu_items]
-    index = sample_ids.index(sample_id)
+    record_task_id = str(record.get("task_id") or "").lower()
+    if active_task_id and record_task_id != active_task_id:
+        active_task_id = None
+    runnable_items = runnable_receipt_scope(store)
+    scope_items = filter_receipt_items(runnable_items, task_id=active_task_id)
+    sample_ids = [item["sample_id"] for item in scope_items]
+    index = sample_ids.index(sample_id) if sample_id in sample_ids else -1
     previous_id = sample_ids[index - 1] if index > 0 else None
-    next_id = sample_ids[index + 1] if index + 1 < len(sample_ids) else None
+    next_id = sample_ids[index + 1] if index >= 0 and index + 1 < len(sample_ids) else None
 
     return TEMPLATES.TemplateResponse(
         request=request,
@@ -390,8 +596,9 @@ def eval_detail(request: Request, sample_id: str) -> HTMLResponse:
         context={
             "title": f"Receipt Eval: {sample_id}",
             "record": record,
-            "receipt_menu": menu_items,
+            "task_nav": task_nav_payload(runnable_items, active_task_id, link_to_receipts=True),
             "eval_models": eval_model_config(),
+            "active_task_id": active_task_id,
             "previous_id": previous_id,
             "next_id": next_id,
         },
@@ -399,6 +606,7 @@ def eval_detail(request: Request, sample_id: str) -> HTMLResponse:
 
 
 @ui_router.post("/eval/receipts/{sample_id}/run")
-def eval_detail_run(sample_id: str) -> RedirectResponse:
+def eval_detail_run(sample_id: str, task_id: str | None = None) -> RedirectResponse:
+    active_task_id = optional_task_query(task_id)
     evaluate_single_receipt(sample_id)
-    return RedirectResponse(url=f"/eval/receipts/{sample_id}", status_code=303)
+    return RedirectResponse(url=receipt_href(sample_id, active_task_id), status_code=303)

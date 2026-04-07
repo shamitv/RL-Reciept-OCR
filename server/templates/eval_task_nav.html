@@ -1,0 +1,20 @@
+<aside class="panel task-nav">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Scope</p>
+      <h2>Runnable Receipts</h2>
+    </div>
+    <p class="meta">{{ task_nav.total }} total</p>
+  </div>
+  <nav class="task-nav-list" aria-label="Runnable receipt task navigation">
+    {% for item in task_nav["items"] %}
+    <a class="task-tag {% if item.active %}active{% endif %} {% if item.disabled %}disabled{% endif %}" href="{{ item.href }}" aria-disabled="{{ 'true' if item.disabled else 'false' }}"{% if item.disabled %} tabindex="-1"{% endif %}>
+      <span>{{ item.label }}</span>
+      <strong>{{ item.count }}</strong>
+    </a>
+    {% endfor %}
+  </nav>
+  {% if task_nav.active_task_id %}
+  <a class="task-clear-link" href="{{ task_nav.all_href }}">All runnable images</a>
+  {% endif %}
+</aside>

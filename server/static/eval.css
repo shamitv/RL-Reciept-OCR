@@ -318,6 +318,68 @@ tbody tr:hover {
   margin-top: 0.4rem;
 }
 
+.task-nav {
+  padding: 1rem;
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+}
+
+.task-nav-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.task-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4rem;
+  padding: 0.9rem 1rem;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 1rem;
+  border: 1px solid rgba(58, 45, 35, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.task-tag span {
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.task-tag strong {
+  display: inline-grid;
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  place-items: center;
+  color: white;
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.task-tag.active,
+.task-tag:hover {
+  border-color: rgba(29, 75, 116, 0.38);
+  background: rgba(29, 75, 116, 0.08);
+}
+
+.task-tag.disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.task-clear-link {
+  display: inline-flex;
+  margin-top: 1rem;
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
 .run-bar {
   margin-top: 1rem;
 }
@@ -542,6 +604,10 @@ tbody tr:hover {
   .receipt-menu {
     position: static;
     max-height: none;
+  }
+
+  .task-nav {
+    position: static;
   }
 
   .hero,

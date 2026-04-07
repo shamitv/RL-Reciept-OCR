@@ -33,6 +33,7 @@ def _build_artifacts(output_dir: Path) -> None:
     records = [
         ReceiptEvalRecord(
             sample_id="sample-1",
+            task_id="easy",
             annotation_path=str(output_dir / "sample-1.json"),
             image_id="sample-1",
             image_json_path=str(image_json_path),
@@ -53,6 +54,7 @@ def _build_artifacts(output_dir: Path) -> None:
         ),
         ReceiptEvalRecord(
             sample_id="sample-2",
+            task_id="easy",
             annotation_path=str(output_dir / "sample-2.json"),
             image_id="sample-2",
             image_json_path=None,
@@ -94,6 +96,10 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     output_dir = tmp_path / "eval-output"
     _build_artifacts(output_dir)
     monkeypatch.setenv("RECEIPT_EVAL_OUTPUT_DIR", str(output_dir))
+    monkeypatch.setattr(
+        "env.evaluation.audit_dataset",
+        lambda dataset_root=None: (_ for _ in ()).throw(FileNotFoundError("dataset missing")),
+    )
 
     client = TestClient(app)
 
@@ -130,9 +136,16 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert dashboard_response.status_code == 200
     assert "Receipt Eval Dashboard" in dashboard_response.text
     assert "sample-1" in dashboard_response.text
-    assert "score 1.000" in dashboard_response.text
+    assert "Runnable Receipts" in dashboard_response.text
+    assert "All Receipts" not in dashboard_response.text
+    assert 'href="/eval?task_id=easy"' in dashboard_response.text
     assert 'href="/static/eval.css?v=' in dashboard_response.text
     assert "http://testserver/static/eval.css" not in dashboard_response.text
+
+    task_dashboard_response = client.get("/eval", params={"task_id": "easy"})
+    assert task_dashboard_response.status_code == 200
+    assert 'task-tag active' in task_dashboard_response.text
+    assert "sample-1" in task_dashboard_response.text
 
     empty_filter_dashboard_response = client.get("/eval", params={"status": "worked", "sample_id": "", "has_errors": ""})
     assert empty_filter_dashboard_response.status_code == 200
@@ -142,6 +155,7 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert image_detail_page_response.status_code == 200
     assert "Click to enlarge" in image_detail_page_response.text
     assert "Score Formula" in image_detail_page_response.text
+    assert "All Receipts" not in image_detail_page_response.text
 
     detail_page_response = client.get("/eval/receipts/sample-2")
     assert detail_page_response.status_code == 200
@@ -162,9 +176,10 @@ def test_eval_ui_includes_unprocessed_receipts_and_single_run_action(monkeypatch
     extra_image_json = _write_image_json(output_dir, "sample-3", b"image-3")
 
     audits = [
-        DatasetAuditRecord(sample_id="sample-1", annotation_path=str(output_dir / "sample-1.json"), image_id="sample-1", image_json_path=str(sample_1_image_json), dataset_status="runnable", gold_fields=ReceiptDraft(company="Store", date="2019-03-25", address="12 Road", total="31.00")),
-        DatasetAuditRecord(sample_id="sample-2", annotation_path=str(output_dir / "sample-2.json"), image_id="sample-2", image_json_path=None, dataset_status="runnable", gold_fields=ReceiptDraft(company="Cafe", date="2019-03-26", address="9 Street", total="10.00")),
-        DatasetAuditRecord(sample_id="sample-3", annotation_path=str(output_dir / "sample-3.json"), image_id="sample-3", image_json_path=str(extra_image_json), dataset_status="runnable", gold_fields=ReceiptDraft(company="Bakery", date="2019-03-27", address="5 Lane", total="4.20")),
+        DatasetAuditRecord(sample_id="sample-1", task_id="easy", annotation_path=str(output_dir / "sample-1.json"), image_id="sample-1", image_json_path=str(sample_1_image_json), dataset_status="runnable", gold_fields=ReceiptDraft(company="Store", date="2019-03-25", address="12 Road", total="31.00")),
+        DatasetAuditRecord(sample_id="sample-2", task_id="easy", annotation_path=str(output_dir / "sample-2.json"), image_id="sample-2", image_json_path=None, dataset_status="runnable", gold_fields=ReceiptDraft(company="Cafe", date="2019-03-26", address="9 Street", total="10.00")),
+        DatasetAuditRecord(sample_id="sample-3", task_id="medium", annotation_path=str(output_dir / "sample-3.json"), image_id="sample-3", image_json_path=str(extra_image_json), dataset_status="runnable", gold_fields=ReceiptDraft(company="Bakery", date="2019-03-27", address="5 Lane", total="4.20")),
+        DatasetAuditRecord(sample_id="sample-skipped", task_id=None, annotation_path=str(output_dir / "sample-skipped.json"), image_id="sample-skipped", image_json_path=None, dataset_status="skipped_missing_labels", skip_reason="missing_required_labels"),
     ]
 
     monkeypatch.setattr("env.evaluation.audit_dataset", lambda dataset_root=None: audits)
@@ -172,6 +187,7 @@ def test_eval_ui_includes_unprocessed_receipts_and_single_run_action(monkeypatch
     def fake_run(sample_id: str):
         return ReceiptEvalRecord(
             sample_id=sample_id,
+            task_id="medium",
             annotation_path=str(output_dir / f"{sample_id}.json"),
             image_id=sample_id,
             image_json_path=str(extra_image_json),
@@ -198,21 +214,32 @@ def test_eval_ui_includes_unprocessed_receipts_and_single_run_action(monkeypatch
     dashboard_response = client.get("/eval")
     assert dashboard_response.status_code == 200
     assert "sample-3" in dashboard_response.text
+    assert "sample-skipped" not in dashboard_response.text
     assert "extractor-test" in dashboard_response.text
     assert "judge-test" in dashboard_response.text
+    assert 'href="/eval?task_id=medium"' in dashboard_response.text
 
-    detail_response = client.get("/eval/receipts/sample-3")
+    medium_dashboard_response = client.get("/eval", params={"task_id": "medium"})
+    assert medium_dashboard_response.status_code == 200
+    assert "sample-3" in medium_dashboard_response.text
+    assert "sample-1" not in medium_dashboard_response.text
+
+    detail_response = client.get("/eval/receipts/sample-3", params={"task_id": "medium"})
     assert detail_response.status_code == 200
     assert "has not been processed by the extraction and judge LLMs yet" in detail_response.text
     assert "Run extraction + judge" in detail_response.text
+    assert 'href="/eval/receipts/sample-3?task_id=medium"' in detail_response.text
+
+    skipped_detail_response = client.get("/eval/receipts/sample-skipped")
+    assert skipped_detail_response.status_code == 404
 
     api_run_response = client.post("/api/eval/receipts/sample-3/run")
     assert api_run_response.status_code == 200
     assert api_run_response.json()["sample_id"] == "sample-3"
 
-    ui_run_response = client.post("/eval/receipts/sample-3/run", follow_redirects=False)
+    ui_run_response = client.post("/eval/receipts/sample-3/run?task_id=medium", follow_redirects=False)
     assert ui_run_response.status_code == 303
-    assert ui_run_response.headers["location"] == "/eval/receipts/sample-3"
+    assert ui_run_response.headers["location"] == "/eval/receipts/sample-3?task_id=medium"
 
 
 def test_eval_detail_falls_back_to_audit_image_metadata(monkeypatch, tmp_path: Path) -> None:

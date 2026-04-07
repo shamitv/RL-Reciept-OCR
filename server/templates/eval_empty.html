@@ -2,39 +2,13 @@
 
 {% block content %}
 <section class="eval-layout">
-  <aside class="panel receipt-menu">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Dataset</p>
-        <h2>All Receipts</h2>
-      </div>
-      <p class="meta">{{ receipt_menu|length }} total</p>
-    </div>
-    <div class="receipt-menu-list">
-      {% for item in receipt_menu %}
-      <a class="receipt-menu-item" href="/eval/receipts/{{ item.sample_id }}">
-        {% if item.has_image %}
-        <img src="/api/eval/receipts/{{ item.sample_id }}/image?v={{ item.image_id or item.sample_id }}" alt="{{ item.sample_id }}" loading="lazy" decoding="async" width="72" height="96">
-        {% else %}
-        <div class="receipt-thumb empty">No image</div>
-        {% endif %}
-        <div>
-          <strong>{{ item.sample_id }}</strong>
-          <div class="receipt-menu-meta">
-            <span class="pill {{ item.status }}">{{ item.status }}</span>
-            <span class="mono small">{{ item.dataset_status }}</span>
-          </div>
-        </div>
-      </a>
-      {% endfor %}
-    </div>
-  </aside>
+  {% include "eval_task_nav.html" %}
 
   <section class="panel empty-state">
     <h2>No Eval Artifacts Yet</h2>
     <p>The dashboard is waiting for `results.jsonl`, `summary.json`, and `report.md`.</p>
     <p class="mono">{{ output_dir }}</p>
-    <p>Run <span class="mono">python scripts/evaluate_dataset_images.py</span> to generate the artifacts, or open a receipt from the left menu and run extraction + judge for a single sample.</p>
+    <p>Run <span class="mono">python scripts/evaluate_dataset_images.py</span> to generate the artifacts, or use the runnable task tags to open a sample and run extraction + judge for a single receipt.</p>
   </section>
 </section>
 {% endblock %}
