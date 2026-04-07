@@ -9,10 +9,12 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse,
 from fastapi.templating import Jinja2Templates
 
 from env.evaluation import EvalArtifactStore, build_field_results, evaluate_single_receipt, get_audit_record
+from env.graders import score_formula_definition, score_formula_numeric, score_formula_term_contributions
 from env.image_store import ImageStoreError, decode_image_json_bytes
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 TEMPLATES = Jinja2Templates(directory=str(BASE_DIR / "server" / "templates"))
+TEMPLATES.env.globals["static_asset_version"] = str(int((BASE_DIR / "server" / "static" / "eval.css").stat().st_mtime))
 
 api_router = APIRouter(prefix="/api/eval", tags=["eval"])
 ui_router = APIRouter(tags=["eval-ui"])
@@ -51,6 +53,94 @@ def line_item_rows(record_payload: dict[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
+def _safe_float(value: Any) -> float:
+    try:
+        return float(value or 0.0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _field_score(record_payload: dict[str, Any], field_name: str) -> float:
+    field_result = (record_payload.get("field_results") or {}).get(field_name) or {}
+    if hasattr(field_result, "score"):
+        return _safe_float(field_result.score)
+    if isinstance(field_result, dict):
+        return _safe_float(field_result.get("score"))
+    return 0.0
+
+
+def _formula_source_scores(record_payload: dict[str, Any], formula_terms: list[dict[str, Any]]) -> dict[str, float]:
+    source_scores: dict[str, float] = {}
+    field_results = record_payload.get("field_results") or {}
+    for term in formula_terms:
+        source_key = term["source_key"]
+        if source_key in field_results:
+            source_scores[source_key] = _field_score(record_payload, source_key)
+            continue
+
+        component_score = _safe_float(record_payload.get(term["component"]))
+        weight = _safe_float(term["weight"])
+        source_scores[source_key] = component_score / weight if weight > 0.0 else 0.0
+    return source_scores
+
+
+def score_explanation_payload(record_payload: dict[str, Any]) -> dict[str, Any]:
+    raw_task_id = record_payload.get("task_id")
+    task_id = str(raw_task_id or "").lower()
+    overall_score = _safe_float(record_payload.get("overall_score"))
+    notes: list[str] = []
+
+    if not record_payload.get("processed", True):
+        notes.append("This receipt has not been run yet, so displayed component scores are placeholders.")
+
+    dataset_status = record_payload.get("dataset_status")
+    if dataset_status and dataset_status != "runnable":
+        reason = record_payload.get("skip_reason") or dataset_status
+        return {
+            "title": "Scoring skipped",
+            "formula": "score = 0.000 because the dataset audit marked this receipt as non-runnable.",
+            "numeric_formula": f"dataset_status={dataset_status}; reason={reason}",
+            "terms": [],
+            "notes": [
+                "The deterministic grader only applies weighted scoring to runnable receipts.",
+            ],
+        }
+
+    formula_task_id = raw_task_id or "easy"
+    if not raw_task_id and dataset_status == "runnable":
+        notes.append("No task_id was recorded, so this explanation uses the grader default easy formula.")
+
+    if raw_task_id and task_id not in {"easy", "medium", "hard"}:
+        notes.append(f"Unrecognized task_id={task_id}; this explanation uses the grader's hard-task fallback.")
+
+    formula_definition = score_formula_definition(formula_task_id)
+    source_scores = _formula_source_scores(record_payload, formula_definition["terms"])
+    terms = score_formula_term_contributions(formula_task_id, source_scores)
+    notes.extend(formula_definition["notes"])
+
+    reconciliation_status = record_payload.get("reconciliation_status")
+    if reconciliation_status:
+        reconciliation_delta = record_payload.get("reconciliation_delta")
+        if reconciliation_delta is None:
+            notes.append(f"reconciliation status: {reconciliation_status}.")
+        else:
+            notes.append(f"reconciliation status: {reconciliation_status}; delta={_safe_float(reconciliation_delta):.2f}.")
+
+    return {
+        "title": formula_definition["title"],
+        "formula": formula_definition["formula"],
+        "numeric_formula": score_formula_numeric(terms, overall_score),
+        "terms": terms,
+        "notes": notes,
+    }
+
+
+def enrich_detail_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    payload["line_item_rows"] = line_item_rows(payload)
+    payload["score_explanation"] = score_explanation_payload(payload)
+    return payload
+
+
 def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str, Any] | None:
     try:
         audit = get_audit_record(sample_id)
@@ -66,16 +156,14 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         payload["processed"] = True
         payload["processable"] = record.dataset_status == "runnable"
         payload["has_image"] = bool(record.image_json_path and record.dataset_status != "skipped_missing_image")
-        payload["line_item_rows"] = line_item_rows(payload)
-        return payload
+        return enrich_detail_payload(payload)
 
     if record is not None:
         payload = record.model_dump(mode="json")
         payload["processed"] = True
         payload["processable"] = audit.dataset_status == "runnable"
         payload["has_image"] = bool(payload.get("image_json_path") and audit.dataset_status != "skipped_missing_image")
-        payload["line_item_rows"] = line_item_rows(payload)
-        return payload
+        return enrich_detail_payload(payload)
 
     payload = {
         "sample_id": audit.sample_id,
@@ -118,8 +206,7 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         "processed": False,
         "processable": audit.dataset_status == "runnable",
     }
-    payload["line_item_rows"] = line_item_rows(payload)
-    return payload
+    return enrich_detail_payload(payload)
 
 
 def pagination_window(page: int, pages: int) -> list[int]:
@@ -186,7 +273,14 @@ def eval_receipt_image(sample_id: str) -> Response:
         image_bytes, media_type = decode_image_json_bytes(image_json_path)
     except ImageStoreError as exc:
         raise HTTPException(status_code=404, detail=f"Receipt image JSON unavailable for sample_id={sample_id}: {exc}") from exc
-    return Response(content=image_bytes, media_type=media_type)
+    return Response(
+        content=image_bytes,
+        media_type=media_type,
+        headers={
+            "Cache-Control": "no-store, max-age=0",
+            "Pragma": "no-cache",
+        },
+    )
 
 
 @api_router.get("/report", response_model=None)

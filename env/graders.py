@@ -2,9 +2,148 @@ from __future__ import annotations
 
 from collections import Counter
 from decimal import Decimal, InvalidOperation
+from typing import Any
+
 from env.models import GradeResult, ReceiptDraft, ReceiptLineItem
 from env.normalizers import normalize_address, normalize_amount, normalize_date, normalize_text, tokenize
 from env.utils import clamp
+
+COMMON_SCORE_FORMULA_NOTES = (
+    "company and address use token F1 over normalized text.",
+    "date, subtotal, tax, and total use exact normalized date/amount matches.",
+    "Final scores are clamped to the 0.000-1.000 range.",
+)
+
+SCORE_FORMULAS: dict[str, dict[str, Any]] = {
+    "easy": {
+        "title": "Easy task",
+        "formula": "score = clamp(0.20*company + 0.20*date + 0.25*address + 0.35*total)",
+        "terms": (
+            {"label": "Company", "source_key": "company", "weight": 0.20, "component": "header_score", "source": "company field score"},
+            {"label": "Date", "source_key": "date", "weight": 0.20, "component": "header_score", "source": "date field score"},
+            {"label": "Address", "source_key": "address", "weight": 0.25, "component": "header_score", "source": "address field score"},
+            {"label": "Total", "source_key": "total", "weight": 0.35, "component": "header_score", "source": "total field score"},
+        ),
+        "notes": (),
+    },
+    "medium": {
+        "title": "Medium task",
+        "formula": (
+            "score = clamp(0.10*company + 0.10*date + 0.15*subtotal + "
+            "0.15*tax + 0.25*total + 0.25*summary_reconciliation)"
+        ),
+        "terms": (
+            {"label": "Company", "source_key": "company", "weight": 0.10, "component": "header_score", "source": "company field score"},
+            {"label": "Date", "source_key": "date", "weight": 0.10, "component": "header_score", "source": "date field score"},
+            {"label": "Subtotal", "source_key": "subtotal", "weight": 0.15, "component": "summary_score", "source": "subtotal field score"},
+            {"label": "Tax", "source_key": "tax", "weight": 0.15, "component": "summary_score", "source": "tax field score"},
+            {"label": "Total", "source_key": "total", "weight": 0.25, "component": "summary_score", "source": "total field score"},
+            {
+                "label": "Summary reconciliation",
+                "source_key": "summary_reconciliation",
+                "weight": 0.25,
+                "component": "reconciliation_score",
+                "source": "subtotal + tax vs total",
+            },
+        ),
+        "notes": (
+            "summary reconciliation gives 1.000 when subtotal + tax equals total within 0.01, 0.500 within 0.05, otherwise 0.000.",
+        ),
+    },
+    "hard": {
+        "title": "Hard task",
+        "formula": (
+            "score = clamp(0.05*company + 0.05*date + 0.05*subtotal + "
+            "0.05*tax + 0.10*total + 0.45*line_items + 0.25*reconciliation)"
+        ),
+        "terms": (
+            {"label": "Company", "source_key": "company", "weight": 0.05, "component": "header_score", "source": "company field score"},
+            {"label": "Date", "source_key": "date", "weight": 0.05, "component": "header_score", "source": "date field score"},
+            {"label": "Subtotal", "source_key": "subtotal", "weight": 0.05, "component": "summary_score", "source": "subtotal field score"},
+            {"label": "Tax", "source_key": "tax", "weight": 0.05, "component": "summary_score", "source": "tax field score"},
+            {"label": "Total", "source_key": "total", "weight": 0.10, "component": "summary_score", "source": "total field score"},
+            {
+                "label": "Line items",
+                "source_key": "line_items",
+                "weight": 0.45,
+                "component": "line_items_score",
+                "source": "best-match line item similarity",
+            },
+            {
+                "label": "Reconciliation",
+                "source_key": "reconciliation",
+                "weight": 0.25,
+                "component": "reconciliation_score",
+                "source": "summary and line-item reconciliation",
+            },
+        ),
+        "notes": (
+            "line items use best-match row similarity: 0.60*description token F1 + 0.40*amount exact match when both amounts exist.",
+            "line item count is diagnostic only and is not included in the final deterministic score.",
+        ),
+    },
+}
+
+
+def scoring_task_id(task_id: str | None) -> str:
+    normalized = str(task_id if task_id is not None else "easy").lower()
+    if normalized == "easy":
+        return "easy"
+    if normalized == "medium":
+        return "medium"
+    return "hard"
+
+
+def score_formula_definition(task_id: str | None) -> dict[str, Any]:
+    resolved_task_id = scoring_task_id(task_id)
+    definition = SCORE_FORMULAS[resolved_task_id]
+    return {
+        "task_id": resolved_task_id,
+        "title": definition["title"],
+        "formula": definition["formula"],
+        "terms": [dict(term) for term in definition["terms"]],
+        "notes": list(COMMON_SCORE_FORMULA_NOTES + definition["notes"]),
+    }
+
+
+def _safe_score_value(value: Any) -> float:
+    try:
+        return clamp(float(value or 0.0))
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def score_formula_term_contributions(task_id: str | None, source_scores: dict[str, Any]) -> list[dict[str, Any]]:
+    contributions: list[dict[str, Any]] = []
+    for term in score_formula_definition(task_id)["terms"]:
+        source_score = _safe_score_value(source_scores.get(term["source_key"]))
+        contributions.append(
+            {
+                "label": term["label"],
+                "weight": term["weight"],
+                "source_score": source_score,
+                "contribution": round(term["weight"] * source_score, 6),
+                "source": term["source"],
+            }
+        )
+    return contributions
+
+
+def score_formula_numeric(terms: list[dict[str, Any]], overall_score: float) -> str:
+    if not terms:
+        return f"score = {overall_score:.3f}"
+    contributions = " + ".join(f"{term['contribution']:.3f}" for term in terms)
+    return f"score = clamp({contributions}) = {overall_score:.3f}"
+
+
+def _score_formula_component(task_id: str, source_scores: dict[str, Any], component: str) -> float:
+    return clamp(
+        sum(
+            float(term["weight"]) * _safe_score_value(source_scores.get(term["source_key"]))
+            for term in SCORE_FORMULAS[task_id]["terms"]
+            if term["component"] == component
+        )
+    )
 
 
 def token_f1(predicted: str | None, gold: str | None) -> float:
@@ -203,32 +342,17 @@ def grade_receipt(
     gold_line_item_count = len(gold_line_items)
     predicted_line_item_count = len(prediction.line_items)
     line_item_count_score, line_item_count_delta = score_line_item_count(prediction.line_items, gold_line_items)
+    resolved_task_id = scoring_task_id(task_id)
+    formula_source_scores: dict[str, Any] = dict(field_scores)
 
-    if task_id == "easy":
-        header_score = clamp(
-            0.20 * field_scores["company"]
-            + 0.20 * field_scores["date"]
-            + 0.25 * field_scores["address"]
-            + 0.35 * field_scores["total"]
-        )
-        final_score = header_score
-    elif task_id == "medium":
-        header_score = clamp((0.10 * field_scores["company"]) + (0.10 * field_scores["date"]))
-        summary_score = clamp(
-            (0.15 * field_scores["subtotal"]) + (0.15 * field_scores["tax"]) + (0.25 * field_scores["total"])
-        )
+    if resolved_task_id == "medium":
         reconciliation_component_score, reconciliation_status, reconciliation_delta = summary_reconciliation_component(prediction)
         summary_reconciliation_status = reconciliation_status
         summary_reconciliation_delta = reconciliation_delta
         line_item_reconciliation_status = "not_evaluated"
-        reconciliation_score = clamp(0.25 * reconciliation_component_score)
-        final_score = clamp(header_score + summary_score + reconciliation_score)
-    else:
-        header_score = clamp((0.05 * field_scores["company"]) + (0.05 * field_scores["date"]))
-        summary_score = clamp(
-            (0.05 * field_scores["subtotal"]) + (0.05 * field_scores["tax"]) + (0.10 * field_scores["total"])
-        )
-        line_items_score = clamp(0.45 * score_line_items(prediction.line_items, gold_line_items))
+        formula_source_scores["summary_reconciliation"] = reconciliation_component_score
+    elif resolved_task_id == "hard":
+        formula_source_scores["line_items"] = score_line_items(prediction.line_items, gold_line_items)
         summary_result = summary_reconciliation_component(prediction)
         line_item_result = line_item_reconciliation_component(prediction, gold_line_items)
         summary_reconciliation_status = summary_result[1]
@@ -236,8 +360,13 @@ def grade_receipt(
         line_item_reconciliation_status = line_item_result[1]
         line_item_reconciliation_delta = line_item_result[2]
         reconciliation_component_score, reconciliation_status, reconciliation_delta = combine_reconciliation(summary_result, line_item_result)
-        reconciliation_score = clamp(0.25 * reconciliation_component_score)
-        final_score = clamp(header_score + summary_score + line_items_score + reconciliation_score)
+        formula_source_scores["reconciliation"] = reconciliation_component_score
+
+    header_score = _score_formula_component(resolved_task_id, formula_source_scores, "header_score")
+    summary_score = _score_formula_component(resolved_task_id, formula_source_scores, "summary_score")
+    line_items_score = _score_formula_component(resolved_task_id, formula_source_scores, "line_items_score")
+    reconciliation_score = _score_formula_component(resolved_task_id, formula_source_scores, "reconciliation_score")
+    final_score = clamp(header_score + summary_score + line_items_score + reconciliation_score)
 
     return GradeResult(
         score=final_score,

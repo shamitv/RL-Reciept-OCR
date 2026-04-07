@@ -14,7 +14,7 @@
       {% for item in receipt_menu %}
       <a class="receipt-menu-item {% if item.sample_id == record.sample_id %}active{% endif %}" href="/eval/receipts/{{ item.sample_id }}">
         {% if item.has_image %}
-        <img src="/api/eval/receipts/{{ item.sample_id }}/image" alt="{{ item.sample_id }}" loading="lazy">
+        <img src="/api/eval/receipts/{{ item.sample_id }}/image?v={{ item.image_id or item.sample_id }}" alt="{{ item.sample_id }}" loading="lazy" decoding="async" width="72" height="96">
         {% else %}
         <div class="receipt-thumb empty">No image</div>
         {% endif %}
@@ -22,6 +22,7 @@
           <strong>{{ item.sample_id }}</strong>
           <div class="receipt-menu-meta">
             <span class="pill {{ item.status }}">{{ item.status }}</span>
+            {% if item.overall_score is not none %}<span class="mono small">score {{ "%.3f"|format(item.overall_score) }}</span>{% endif %}
             <span class="mono small">{{ item.dataset_status }}</span>
           </div>
         </div>
@@ -43,7 +44,62 @@
         </div>
       </div>
       {% if record.has_image %}
-      <img class="receipt-image" src="/api/eval/receipts/{{ record.sample_id }}/image" alt="{{ record.sample_id }}">
+      <button class="receipt-image-button" type="button" data-lightbox-trigger aria-label="Open larger image for {{ record.sample_id }}">
+        <img class="receipt-image" src="/api/eval/receipts/{{ record.sample_id }}/image?v={{ record.image_id or record.sample_id }}" alt="{{ record.sample_id }}">
+        <span class="image-hint">Click to enlarge</span>
+      </button>
+      <div class="image-lightbox" id="receipt-image-dialog" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Large receipt image" hidden>
+        <div class="image-lightbox-panel" role="document">
+          <button class="lightbox-close" type="button" data-lightbox-close aria-label="Close larger image">Close</button>
+          <img class="receipt-image-large" src="/api/eval/receipts/{{ record.sample_id }}/image?v={{ record.image_id or record.sample_id }}" alt="Large view of {{ record.sample_id }}">
+        </div>
+      </div>
+      <script>
+        (function () {
+          const dialog = document.getElementById("receipt-image-dialog");
+          const trigger = document.querySelector("[data-lightbox-trigger]");
+          const closeButton = dialog ? dialog.querySelector("[data-lightbox-close]") : null;
+          if (!dialog || !trigger) {
+            return;
+          }
+
+          function openLightbox() {
+            dialog.hidden = false;
+            dialog.setAttribute("aria-hidden", "false");
+            document.body.classList.add("lightbox-open");
+            if (closeButton) {
+              closeButton.focus();
+            }
+          }
+
+          function closeLightbox() {
+            dialog.hidden = true;
+            dialog.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("lightbox-open");
+            trigger.focus();
+          }
+
+          trigger.addEventListener("click", function () {
+            openLightbox();
+          });
+
+          if (closeButton) {
+            closeButton.addEventListener("click", closeLightbox);
+          }
+
+          dialog.addEventListener("click", function (event) {
+            if (event.target === dialog) {
+              closeLightbox();
+            }
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && !dialog.hidden) {
+              closeLightbox();
+            }
+          });
+        }());
+      </script>
       {% else %}
       <p class="empty-copy">No image JSON asset recorded for this sample.</p>
       {% endif %}
@@ -110,6 +166,55 @@
           <strong>{{ "%.3f"|format(record.reconciliation_score or 0.0) }}</strong>
         </section>
       </div>
+
+      {% if record.score_explanation %}
+      <section class="score-formula panel-lite">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Score Formula</p>
+            <h2>{{ record.score_explanation.title }}</h2>
+          </div>
+          <p class="meta mono">{{ "%.3f"|format(record.overall_score) }}</p>
+        </div>
+        <p class="formula-line mono">{{ record.score_explanation.formula }}</p>
+        <p class="formula-line mono">{{ record.score_explanation.numeric_formula }}</p>
+
+        {% if record.score_explanation.terms %}
+        <div class="table-wrap formula-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Weight</th>
+                <th>Source Score</th>
+                <th>Contribution</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for term in record.score_explanation.terms %}
+              <tr>
+                <td>{{ term.label }}</td>
+                <td>{{ "%.2f"|format(term.weight) }}</td>
+                <td>{{ "%.3f"|format(term.source_score) }}</td>
+                <td>{{ "%.3f"|format(term.contribution) }}</td>
+                <td>{{ term.source }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+
+        {% if record.score_explanation.notes %}
+        <ul class="formula-notes">
+          {% for note in record.score_explanation.notes %}
+          <li>{{ note }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </section>
+      {% endif %}
 
       <section class="panel-lite">
         <div class="section-heading">

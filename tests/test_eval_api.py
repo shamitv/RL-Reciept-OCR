@@ -110,10 +110,13 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert detail_response.status_code == 200
     assert detail_response.json()["status"] == "worked"
     assert "line_item_gold_available" in detail_response.json()
+    assert "score_explanation" in detail_response.json()
+    assert "formula" in detail_response.json()["score_explanation"]
 
     image_response = client.get("/api/eval/receipts/sample-1/image")
     assert image_response.status_code == 200
     assert image_response.content == b"image"
+    assert image_response.headers["cache-control"] == "no-store, max-age=0"
 
     report_response = client.get("/api/eval/report")
     assert report_response.status_code == 200
@@ -123,8 +126,14 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert dashboard_response.status_code == 200
     assert "Receipt Eval Dashboard" in dashboard_response.text
     assert "sample-1" in dashboard_response.text
-    assert 'href="/static/eval.css"' in dashboard_response.text
+    assert "score 1.000" in dashboard_response.text
+    assert 'href="/static/eval.css?v=' in dashboard_response.text
     assert "http://testserver/static/eval.css" not in dashboard_response.text
+
+    image_detail_page_response = client.get("/eval/receipts/sample-1")
+    assert image_detail_page_response.status_code == 200
+    assert "Click to enlarge" in image_detail_page_response.text
+    assert "Score Formula" in image_detail_page_response.text
 
     detail_page_response = client.get("/eval/receipts/sample-2")
     assert detail_page_response.status_code == 200

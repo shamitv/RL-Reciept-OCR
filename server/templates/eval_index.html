@@ -14,7 +14,7 @@
       {% for item in receipt_menu %}
       <a class="receipt-menu-item" href="/eval/receipts/{{ item.sample_id }}">
         {% if item.has_image %}
-        <img src="/api/eval/receipts/{{ item.sample_id }}/image" alt="{{ item.sample_id }}" loading="lazy">
+        <img src="/api/eval/receipts/{{ item.sample_id }}/image?v={{ item.image_id or item.sample_id }}" alt="{{ item.sample_id }}" loading="lazy" decoding="async" width="72" height="96">
         {% else %}
         <div class="receipt-thumb empty">No image</div>
         {% endif %}
@@ -23,6 +23,7 @@
           <div class="receipt-menu-meta">
             <span class="pill {{ item.status }}">{{ item.status }}</span>
             {% if item.task_id %}<span class="pill">{{ item.task_id }}</span>{% endif %}
+            {% if item.overall_score is not none %}<span class="mono small">score {{ "%.3f"|format(item.overall_score) }}</span>{% endif %}
             <span class="mono small">{{ item.dataset_status }}</span>
           </div>
         </div>
