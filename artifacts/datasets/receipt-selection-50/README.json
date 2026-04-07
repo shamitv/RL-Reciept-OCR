@@ -1,0 +1,13 @@
+{
+  "purpose": "LLM-processed receipt subset selected for score and receipt-structure diversity.",
+  "processed_results": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\processed_results.jsonl",
+  "processed_summary": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\processed_summary.json",
+  "selected_manifest": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\selected_manifest.json",
+  "selected_records": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\selected_records.jsonl",
+  "selected_csv": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\selected_samples.csv",
+  "copied_dataset": {
+    "dataset_dir": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\dataset",
+    "ann_dir": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\dataset\\ann",
+    "img_dir": "D:\\work\\RL-Reciept-OCR\\artifacts\\datasets\\receipt-selection-50\\dataset\\img"
+  }
+}

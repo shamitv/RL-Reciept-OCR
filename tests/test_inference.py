@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -14,6 +16,7 @@ from inference import (
     build_agent,
     episode_seed,
     evaluate_tasks,
+    load_selected_audit_records,
     resolve_tasks,
     run_episode,
     run_llm_episode,
@@ -139,3 +142,45 @@ def test_run_llm_episode_uses_existing_extraction_client(monkeypatch, tmp_path, 
     assert all(line.startswith(("[START]", "[STEP]", "[END]")) for line in output_lines)
     assert output_lines[-1].startswith("[END] success=")
     assert result["steps"] >= 1
+
+
+def test_load_selected_audit_records_prefers_copied_dataset_paths(tmp_path: Path) -> None:
+    dataset_dir = tmp_path / "dataset"
+    image_path = dataset_dir / "img" / "sample-receipt.jpg"
+    annotation_path = dataset_dir / "ann" / "sample-receipt.jpg.json"
+    image_path.parent.mkdir(parents=True)
+    annotation_path.parent.mkdir(parents=True)
+    image_path.write_bytes(b"image")
+    annotation_path.write_text("{}", encoding="utf-8")
+
+    manifest_path = tmp_path / "selected_manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "records": [
+                    {
+                        "sample_id": "sample-receipt.jpg",
+                        "task_id": "easy",
+                        "dataset_status": "runnable",
+                        "image_path": "D:/stale/img/sample-receipt.jpg",
+                        "annotation_path": "D:/stale/ann/sample-receipt.jpg.json",
+                        "gold_fields": {
+                            "company": "Store",
+                            "date": "2019-03-25",
+                            "address": "1 Road",
+                            "total": "10.00",
+                        },
+                        "gold_line_items": [],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    records = load_selected_audit_records(manifest_path)
+
+    assert len(records) == 1
+    assert records[0].sample_id == "sample-receipt.jpg"
+    assert records[0].image_path == str(image_path)
+    assert records[0].annotation_path == str(annotation_path)

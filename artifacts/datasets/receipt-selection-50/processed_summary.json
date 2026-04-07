@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-04-07T06:09:02.144425Z",
+  "model": "google/gemma-3n-E4B-it",
+  "elapsed_seconds": 1905.892,
+  "elapsed_minutes": 31.765,
+  "record_count": 192,
+  "runnable_count": 101,
+  "scored_count": 100,
+  "status_counts": {
+    "partial": 65,
+    "skipped": 91,
+    "worked": 34,
+    "failed": 2
+  },
+  "dataset_status_counts": {
+    "runnable": 101,
+    "skipped_missing_labels": 38,
+    "skipped_unparseable_gold": 53
+  },
+  "task_counts": {
+    "hard": 74,
+    "easy": 25,
+    "medium": 1
+  },
+  "score_bin_counts": {
+    "medium": 46,
+    "high": 28,
+    "low": 26
+  },
+  "line_item_bucket_counts": {
+    "four_plus": 67,
+    "two_to_three": 23,
+    "one": 8,
+    "none": 2
+  },
+  "reconciliation_status_counts": {
+    "pass": 40,
+    "fail": 35,
+    "not_evaluated": 25
+  },
+  "mean_score": 0.729158,
+  "min_score": 0.0,
+  "max_score": 1.0,
+  "records_with_errors": 1
+}

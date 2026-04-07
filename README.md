@@ -181,7 +181,9 @@ Submitted LLM baseline:
 
 - command: `python inference.py`
 - required environment variables: `API_BASE_URL`, `MODEL_NAME`, `HF_TOKEN`
+- default sample set: the selected 50-image manifest at `artifacts/datasets/receipt-selection-50/selected_manifest.json`, when present
 - LLM client: the root inference script builds an OpenAI-compatible client from those variables and uses the existing receipt-image extraction pipeline before submitting the extracted draft through the environment.
+- fallback all-task smoke run: `python inference.py --no-manifest`
 
 Offline reproducible heuristic baseline:
 
@@ -224,6 +226,7 @@ Detailed runbooks:
 Evaluator-facing shortcuts:
 
 - submitted LLM baseline entrypoint: `python inference.py`
+- selected 50-image manifest: [artifacts/datasets/receipt-selection-50/selected_manifest.json](D:/work/RL-Reciept-OCR/artifacts/datasets/receipt-selection-50/selected_manifest.json)
 - offline heuristic baseline entrypoint: `python inference.py --agent heuristic --format text`
 - environment API entrypoint: `uvicorn env.server:app --host 0.0.0.0 --port 7860`
 - eval dashboard: `GET /eval`

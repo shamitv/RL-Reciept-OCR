@@ -13,6 +13,7 @@ from env.models import (
     ReceiptLineItem,
     ReceiptLineItemCandidate,
     ReceiptObservation,
+    ReceiptSample,
     ReceiptState,
     StepResult,
     TaskConfig,
@@ -70,6 +71,14 @@ class ReceiptExtractionEnv:
         self.rng = make_rng(seed)
         self.task = get_task(task_name)
         sample = self.dataset.sample(self.task.task_id, self.rng)
+        return self._reset_from_sample(sample)
+
+    def reset_with_sample(self, sample: ReceiptSample, task_name: str | None = None, seed: int | None = None) -> StepResult:
+        self.rng = make_rng(seed)
+        self.task = get_task(task_name)
+        return self._reset_from_sample(sample)
+
+    def _reset_from_sample(self, sample: ReceiptSample) -> StepResult:
         self.reward_tracker = RewardTracker()
         self.hidden_state = HiddenState(
             sample_id=sample.sample_id,

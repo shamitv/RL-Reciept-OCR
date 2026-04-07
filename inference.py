@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 from statistics import mean
 from typing import Any
 
@@ -10,13 +11,14 @@ from agents.heuristic import HeuristicAgent
 from env.config import load_environment
 from env.environment import ReceiptExtractionEnv
 from env.evaluation import DatasetAuditRecord, build_model_client, require_env, run_extraction_model
-from env.models import ReceiptAction, ReceiptDraft
+from env.models import ReceiptAction, ReceiptDraft, ReceiptLineItem, ReceiptSample
 from env.tasks import TASKS
 
 load_environment()
 
 TASK_ORDER = tuple(TASKS.keys())
 ENV_NAME = "rl-receipt-ocr"
+DEFAULT_SELECTION_MANIFEST = Path(__file__).resolve().parent / "artifacts" / "datasets" / "receipt-selection-50" / "selected_manifest.json"
 
 
 def clamp01(value: float) -> float:
@@ -129,6 +131,54 @@ def audit_record_from_env(env: ReceiptExtractionEnv) -> DatasetAuditRecord:
     )
 
 
+def audit_record_from_selected_record(record: dict[str, Any], manifest_path: Path) -> DatasetAuditRecord:
+    sample_id = str(record["sample_id"])
+    selected_dataset_dir = manifest_path.parent / "dataset"
+    selected_image_path = selected_dataset_dir / "img" / sample_id
+    selected_annotation_path = selected_dataset_dir / "ann" / f"{sample_id}.json"
+
+    image_path = selected_image_path if selected_image_path.exists() else Path(str(record.get("image_path", "")))
+    annotation_path = (
+        selected_annotation_path
+        if selected_annotation_path.exists()
+        else Path(str(record.get("annotation_path", f"{sample_id}.json")))
+    )
+
+    gold_fields_payload = record.get("gold_fields") or {}
+    gold_line_items_payload = record.get("gold_line_items") or []
+    return DatasetAuditRecord(
+        sample_id=sample_id,
+        task_id=record.get("task_id"),
+        annotation_path=str(annotation_path),
+        image_path=str(image_path),
+        dataset_status=record.get("dataset_status", "runnable"),
+        skip_reason=record.get("skip_reason"),
+        missing_categories=list(record.get("missing_categories") or []),
+        unparseable_fields=list(record.get("unparseable_fields") or []),
+        gold_fields=ReceiptDraft.model_validate(gold_fields_payload) if gold_fields_payload else None,
+        gold_line_items=[ReceiptLineItem.model_validate(item) for item in gold_line_items_payload],
+    )
+
+
+def load_selected_audit_records(manifest_path: str | Path, task_filter: str = "all") -> list[DatasetAuditRecord]:
+    resolved_manifest_path = Path(manifest_path)
+    payload = json.loads(resolved_manifest_path.read_text(encoding="utf-8"))
+    records = payload.get("records", [])
+    if not isinstance(records, list):
+        raise ValueError(f"Selected manifest does not contain a records list: {resolved_manifest_path}")
+
+    audit_records = [
+        audit_record_from_selected_record(record, resolved_manifest_path)
+        for record in records
+        if isinstance(record, dict)
+    ]
+    if task_filter != "all":
+        audit_records = [record for record in audit_records if record.task_id == task_filter]
+    if not audit_records:
+        raise ValueError(f"No selected records found for task={task_filter} in {resolved_manifest_path}")
+    return audit_records
+
+
 def format_action(action: ReceiptAction) -> str:
     return action.model_dump_json(exclude_none=True)
 
@@ -236,6 +286,92 @@ def run_llm_episode(task: str, seed: int, client: Any, model_name: str, emit_log
     }
 
 
+def sample_from_audit_record(record: DatasetAuditRecord) -> ReceiptSample:
+    return ReceiptSample(
+        sample_id=record.sample_id,
+        image_ref=record.image_path,
+        regions=[],
+        gold_fields=record.gold_fields or ReceiptDraft(),
+        gold_line_items=record.gold_line_items,
+    )
+
+
+def run_llm_audit_record(record: DatasetAuditRecord, client: Any, model_name: str, emit_logs: bool = False) -> dict[str, Any]:
+    task = record.task_id or "easy"
+    env = ReceiptExtractionEnv()
+    result = None
+    rewards: list[float] = []
+    steps = 0
+    score = 0.0
+    success = False
+    field_scores: dict[str, float] = {}
+    error: str | None = None
+
+    if record.dataset_status != "runnable":
+        raise ValueError(f"Selected inference records must be runnable: {record.sample_id}")
+
+    if emit_logs:
+        log_start(task=f"{task}:{record.sample_id}", env_name=ENV_NAME, model=model_name)
+
+    try:
+        result = env.reset_with_sample(sample_from_audit_record(record), task_name=task)
+        prediction = run_extraction_model(record, client, model_name)
+        actions = actions_from_llm_prediction(
+            prediction=prediction,
+            field_order=env.task.target_fields,
+            requires_line_items=env.task.requires_line_items,
+            max_actions=max(env.task.max_steps - 1, 0),
+        )
+
+        for action in actions:
+            if result.done:
+                break
+            steps += 1
+            result = env.step(action)
+            rewards.append(result.reward)
+            if emit_logs:
+                log_step(steps, format_action(action), result.reward, result.done, env.state().last_error)
+
+        if not result.done:
+            action = ReceiptAction(action_type="submit")
+            steps += 1
+            result = env.step(action)
+            rewards.append(result.reward)
+            if emit_logs:
+                log_step(steps, format_action(action), result.reward, result.done, env.state().last_error)
+    except Exception as exc:  # pragma: no cover - exact model/client failures vary
+        error = str(exc)
+        if result is not None and not result.done and steps < env.task.max_steps:
+            action = ReceiptAction(action_type="submit")
+            steps += 1
+            result = env.step(action)
+            rewards.append(result.reward)
+            if emit_logs:
+                log_step(steps, format_action(action), result.reward, result.done, error)
+    finally:
+        if result is not None and result.done:
+            score = float(result.info.get("final_score", 0.0))
+            success = bool(result.info.get("success", False))
+            field_scores = result.info.get("field_scores", {})
+        if emit_logs:
+            log_end(success=success, steps=steps, score=score, rewards=rewards)
+
+    return {
+        "task": task,
+        "seed": None,
+        "sample_id": record.sample_id,
+        "success": success,
+        "score": clamp01(score),
+        "steps": steps,
+        "max_steps": env.task.max_steps,
+        "cumulative_reward": round(sum(rewards), 6),
+        "reward_trace": [round(reward, 6) for reward in rewards],
+        "budget_exhausted": bool(result.info.get("budget_exhausted", False)) if result is not None else False,
+        "field_scores": field_scores,
+        "error": error,
+    }
+
+
 def summarize_task_runs(task: str, runs: list[dict[str, Any]]) -> dict[str, Any]:
     return {
         "task": task,
@@ -248,18 +384,15 @@ def summarize_task_runs(task: str, runs: list[dict[str, Any]]) -> dict[str, Any]
     }
 
 
-def evaluate_tasks(tasks: list[str], seed: int = 7, episodes: int = 1, agent: Agent | None = None, verbose: bool = False) -> dict[str, Any]:
-    selected_agent = agent or default_agent()
-    task_summaries: list[dict[str, Any]] = []
-    for task in tasks:
-        runs = [
-            run_episode(task=task, seed=episode_seed(seed, task, episode_index), agent=selected_agent, verbose=verbose)
-            for episode_index in range(episodes)
-        ]
-        task_summaries.append(summarize_task_runs(task, runs))
-
-    return {
-        "agent": selected_agent.name,
+def aggregate_task_summaries(
+    task_summaries: list[dict[str, Any]],
+    agent_name: str,
+    seed: int | None,
+    episodes: int,
+    model_name: str | None = None,
+) -> dict[str, Any]:
+    summary: dict[str, Any] = {
+        "agent": agent_name,
         "base_seed": seed,
         "episodes_per_task": episodes,
         "tasks": task_summaries,
@@ -271,6 +404,22 @@ def evaluate_tasks(tasks: list[str], seed: int = 7, episodes: int = 1, agent: Ag
             "mean_cumulative_reward": round(mean(task_summary["mean_cumulative_reward"] for task_summary in task_summaries), 6),
         },
     }
+    if model_name is not None:
+        summary["model"] = model_name
+    return summary
+
+
+def evaluate_tasks(tasks: list[str], seed: int = 7, episodes: int = 1, agent: Agent | None = None, verbose: bool = False) -> dict[str, Any]:
+    selected_agent = agent or default_agent()
+    task_summaries: list[dict[str, Any]] = []
+    for task in tasks:
+        runs = [
+            run_episode(task=task, seed=episode_seed(seed, task, episode_index), agent=selected_agent, verbose=verbose)
+            for episode_index in range(episodes)
+        ]
+        task_summaries.append(summarize_task_runs(task, runs))
+
+    return aggregate_task_summaries(task_summaries, selected_agent.name, seed, episodes)
 
 
 def evaluate_tasks_with_llm(
@@ -295,20 +444,27 @@ def evaluate_tasks_with_llm(
         ]
         task_summaries.append(summarize_task_runs(task, runs))
 
-    return {
-        "agent": "llm",
-        "model": model_name,
-        "base_seed": seed,
-        "episodes_per_task": episodes,
-        "tasks": task_summaries,
-        "aggregate": {
-            "task_count": len(task_summaries),
-            "mean_score": round(mean(task_summary["mean_score"] for task_summary in task_summaries), 6),
-            "mean_success_rate": round(mean(task_summary["success_rate"] for task_summary in task_summaries), 6),
-            "mean_steps": round(mean(task_summary["mean_steps"] for task_summary in task_summaries), 6),
-            "mean_cumulative_reward": round(mean(task_summary["mean_cumulative_reward"] for task_summary in task_summaries), 6),
-        },
-    }
+    return aggregate_task_summaries(task_summaries, "llm", seed, episodes, model_name)
+
+
+def evaluate_selected_records_with_llm(
+    records: list[DatasetAuditRecord],
+    client: Any,
+    model_name: str,
+    emit_logs: bool = False,
+) -> dict[str, Any]:
+    runs = [
+        run_llm_audit_record(record=record, client=client, model_name=model_name, emit_logs=emit_logs)
+        for record in records
+    ]
+    task_summaries = [
+        summarize_task_runs(task, [run for run in runs if run["task"] == task])
+        for task in TASK_ORDER
+        if any(run["task"] == task for run in runs)
+    ]
+    summary = aggregate_task_summaries(task_summaries, "llm", None, 1, model_name)
+    summary["sample_count"] = len(runs)
+    return summary
 
 
 def resolve_tasks(task_arg: str) -> list[str]:
@@ -350,6 +506,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--episodes", type=int, default=1)
     parser.add_argument("--format", choices=["text", "json"], default="text")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--manifest", default=str(DEFAULT_SELECTION_MANIFEST))
+    parser.add_argument("--no-manifest", action="store_true")
     return parser
 
 
@@ -361,14 +519,24 @@ def main(argv: list[str] | None = None) -> int:
         tasks = resolve_tasks(args.task)
         if args.agent == "llm":
             client, model_name = build_llm_client_from_env()
-            summary = evaluate_tasks_with_llm(
-                tasks=tasks,
-                seed=args.seed,
-                episodes=args.episodes,
-                client=client,
-                model_name=model_name,
-                emit_logs=args.format == "text",
-            )
+            manifest_path = Path(args.manifest)
+            if not args.no_manifest and manifest_path.exists():
+                selected_records = load_selected_audit_records(manifest_path, task_filter=args.task)
+                summary = evaluate_selected_records_with_llm(
+                    records=selected_records,
+                    client=client,
+                    model_name=model_name,
+                    emit_logs=args.format == "text",
+                )
+            else:
+                summary = evaluate_tasks_with_llm(
+                    tasks=tasks,
+                    seed=args.seed,
+                    episodes=args.episodes,
+                    client=client,
+                    model_name=model_name,
+                    emit_logs=args.format == "text",
+                )
         else:
             agent = build_agent(agent_name=args.agent, checkpoint=args.checkpoint, device=args.device)
             summary = evaluate_tasks(tasks=tasks, seed=args.seed, episodes=args.episodes, agent=agent, verbose=args.verbose)
