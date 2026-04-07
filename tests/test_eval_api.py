@@ -105,6 +105,8 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert dashboard_response.status_code == 200
     assert "Receipt Eval Dashboard" in dashboard_response.text
     assert "sample-1" in dashboard_response.text
+    assert 'href="/static/eval.css"' in dashboard_response.text
+    assert "http://testserver/static/eval.css" not in dashboard_response.text
 
     detail_page_response = client.get("/eval/receipts/sample-2")
     assert detail_page_response.status_code == 200
