@@ -871,6 +871,10 @@ def existing_result_sample_ids(output_dir: str | Path | None = None) -> set[str]
     return {record.sample_id for record in load_results_jsonl(output_dir)}
 
 
+def existing_result_records(output_dir: str | Path | None = None) -> dict[str, ReceiptEvalRecord]:
+    return {record.sample_id: record for record in load_results_jsonl(output_dir)}
+
+
 def get_audit_record(sample_id: str, dataset_root: str | Path | None = None) -> DatasetAuditRecord | None:
     for record in audit_dataset(dataset_root):
         if record.sample_id == sample_id:
@@ -889,7 +893,7 @@ def evaluate_dataset_images(
     resolved_output_dir = resolve_eval_output_dir(output_dir)
     audits = audit_dataset(dataset_root)
     dataset = ReceiptDataset(dataset_root=dataset_root)
-    completed_ids = existing_result_sample_ids(resolved_output_dir) if resume else set()
+    existing_records = existing_result_records(resolved_output_dir) if resume else {}
 
     extractor_model = require_env("MODEL_NAME")
     extractor_base_url = require_env("API_BASE_URL")
@@ -901,7 +905,8 @@ def evaluate_dataset_images(
 
     processed = 0
     for audit in audits:
-        if audit.sample_id in completed_ids:
+        existing_record = existing_records.get(audit.sample_id)
+        if existing_record is not None and existing_record.dataset_status == audit.dataset_status:
             continue
         if limit is not None and processed >= limit:
             break

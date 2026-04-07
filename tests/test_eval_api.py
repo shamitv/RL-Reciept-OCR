@@ -274,6 +274,63 @@ def test_eval_detail_falls_back_to_audit_image_metadata(monkeypatch, tmp_path: P
     assert "Click to enlarge" in page_response.text
 
 
+def test_eval_ui_marks_stale_skipped_records_as_not_run_when_audit_recovers(monkeypatch, tmp_path: Path) -> None:
+    output_dir = tmp_path / "eval-output"
+    image_json = _write_image_json(output_dir, "sample-recovered", b"recovered-image")
+    records = [
+        ReceiptEvalRecord(
+            sample_id="sample-recovered",
+            task_id="easy",
+            annotation_path=str(output_dir / "sample-recovered.json"),
+            image_id="sample-recovered",
+            image_json_path=str(image_json),
+            dataset_status="skipped_unparseable_gold",
+            status="skipped",
+            skip_reason="unparseable_gold_fields",
+            created_at="2026-04-06T00:00:00Z",
+        )
+    ]
+    summary = EvalSummary(
+        generated_at="2026-04-06T00:00:00Z",
+        dataset_root="D:/tmp/dataset",
+        output_dir=str(output_dir),
+        expected_total_records=1,
+        completed_records=1,
+        counts={"skipped": 1},
+        dataset_status_counts={"skipped_unparseable_gold": 1},
+    )
+    write_eval_artifacts(output_dir, records, summary, render_markdown_report(summary, records))
+    monkeypatch.setenv("RECEIPT_EVAL_OUTPUT_DIR", str(output_dir))
+    monkeypatch.setattr(
+        "env.evaluation.audit_dataset",
+        lambda dataset_root=None: [
+            DatasetAuditRecord(
+                sample_id="sample-recovered",
+                task_id="easy",
+                annotation_path=str(output_dir / "sample-recovered.json"),
+                image_id="sample-recovered",
+                image_json_path=str(image_json),
+                dataset_status="runnable",
+                gold_fields=ReceiptDraft(company="Cafe", date="2019-04-01", address="1 Example Road", total="8.50"),
+            )
+        ],
+    )
+
+    client = TestClient(app)
+
+    detail_response = client.get("/api/eval/receipts/sample-recovered")
+    assert detail_response.status_code == 200
+    assert detail_response.json()["dataset_status"] == "runnable"
+    assert detail_response.json()["status"] == "not_run"
+    assert detail_response.json()["processed"] is False
+
+    dashboard_response = client.get("/eval")
+    assert dashboard_response.status_code == 200
+    assert "sample-recovered" in dashboard_response.text
+    assert "not_run" in dashboard_response.text
+    assert "unparseable_gold_fields" not in dashboard_response.text
+
+
 def test_eval_ui_falls_back_to_processed_records_when_dataset_missing(monkeypatch, tmp_path: Path) -> None:
     output_dir = tmp_path / "eval-output"
     _build_artifacts(output_dir)

@@ -111,7 +111,7 @@ def test_audit_dataset_accounts_for_all_annotation_files_and_skip_reasons(tmp_pa
     statuses = {record.sample_id: record.dataset_status for record in records}
     assert statuses["good-receipt.jpg"] == "runnable"
     assert statuses["missing-label-receipt.jpg"] == "skipped_missing_labels"
-    assert statuses["odd-receipt.jpg.png"] == "skipped_unparseable_gold"
+    assert statuses["odd-receipt.jpg.png"] == "runnable"
     assert statuses["missing-image-receipt.jpg"] == "skipped_missing_image"
 
 
@@ -176,3 +176,64 @@ def test_evaluate_dataset_images_writes_artifacts_and_respects_resume(monkeypatc
     )
 
     assert resume_result.processed_records == 0
+
+
+def test_evaluate_dataset_images_resume_reprocesses_recovered_audit_records(monkeypatch, tmp_path: Path) -> None:
+    _write_annotation(
+        tmp_path,
+        "recovered-receipt.jpg.json",
+        [
+            _annotation_object(1, "Cafe", "Business name", (10, 10, 120, 30)),
+            _annotation_object(2, "1 Example Road", "Business address", (10, 40, 160, 60)),
+            _annotation_object(3, "Order Started: 11:01 AM", "Time and date", (10, 90, 180, 110)),
+            _annotation_object(4, "TOTAL 8.50", "Total", (10, 200, 120, 220)),
+        ],
+        image_name="recovered-receipt.jpg",
+    )
+    output_dir = tmp_path / "artifacts"
+
+    monkeypatch.setenv("MODEL_NAME", "extractor-model")
+    monkeypatch.setenv("API_BASE_URL", "https://extractor.example/v1")
+    monkeypatch.setenv("EVAL_MODEL", "judge-model")
+    monkeypatch.setenv("EVAL_API_BASE_URL", "https://judge.example/v1")
+    monkeypatch.setenv("LLM_CACHE_DIR", str(tmp_path / "llm-cache"))
+
+    extractor_client = _FakeClient(['{"company":"Cafe","date":"2019-04-01","address":"1 Example Road","total":"8.50"}'])
+    judge_client = _FakeClient(['{"summary":"Perfect extraction","failure_reasons":[],"field_notes":{}}'])
+
+    first_result = evaluate_dataset_images(
+        dataset_root=tmp_path,
+        output_dir=output_dir,
+        extractor_client=extractor_client,
+        judge_client=judge_client,
+    )
+    first_records = load_results_jsonl(output_dir)
+    assert first_result.processed_records == 1
+    assert first_records[0].dataset_status == "skipped_unparseable_gold"
+    assert first_records[0].status == "skipped"
+    assert not extractor_client.completions.calls
+
+    _write_annotation(
+        tmp_path,
+        "recovered-receipt.jpg.json",
+        [
+            _annotation_object(1, "Cafe", "Business name", (10, 10, 120, 30)),
+            _annotation_object(2, "1 Example Road", "Business address", (10, 40, 160, 60)),
+            _annotation_object(3, "Apr 01, 2019", "Time and date", (10, 90, 180, 110)),
+            _annotation_object(4, "TOTAL 8.50", "Total", (10, 200, 120, 220)),
+        ],
+        image_name="recovered-receipt.jpg",
+    )
+
+    second_result = evaluate_dataset_images(
+        dataset_root=tmp_path,
+        output_dir=output_dir,
+        resume=True,
+        extractor_client=extractor_client,
+        judge_client=judge_client,
+    )
+    second_records = load_results_jsonl(output_dir)
+    assert second_result.processed_records == 1
+    assert len(second_records) == 1
+    assert second_records[0].dataset_status == "runnable"
+    assert second_records[0].status == "worked"

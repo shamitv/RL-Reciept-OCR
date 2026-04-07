@@ -154,32 +154,8 @@ def merge_audit_metadata(payload: dict[str, Any], audit: Any) -> dict[str, Any]:
     return payload
 
 
-def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str, Any] | None:
-    try:
-        audit = get_audit_record(sample_id)
-    except FileNotFoundError:
-        audit = None
-    record = store.get_record(sample_id)
-
-    if audit is None and record is None:
-        return None
-
-    if audit is None and record is not None:
-        payload = record.model_dump(mode="json")
-        payload["processed"] = True
-        payload["processable"] = record.dataset_status == "runnable"
-        payload["has_image"] = bool(record.image_json_path and record.dataset_status != "skipped_missing_image")
-        return enrich_detail_payload(payload)
-
-    if record is not None:
-        payload = record.model_dump(mode="json")
-        payload = merge_audit_metadata(payload, audit)
-        payload["processed"] = True
-        payload["processable"] = audit.dataset_status == "runnable"
-        payload["has_image"] = bool(payload.get("image_json_path") and audit.dataset_status != "skipped_missing_image")
-        return enrich_detail_payload(payload)
-
-    payload = {
+def audit_detail_payload(audit: Any) -> dict[str, Any]:
+    return {
         "sample_id": audit.sample_id,
         "task_id": audit.task_id,
         "annotation_path": audit.annotation_path,
@@ -187,7 +163,7 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         "image_json_path": audit.image_json_path,
         "has_image": bool(audit.image_json_path and audit.dataset_status != "skipped_missing_image"),
         "dataset_status": audit.dataset_status,
-        "status": "not_run",
+        "status": "not_run" if audit.dataset_status == "runnable" else "skipped",
         "skip_reason": audit.skip_reason,
         "gold_fields": audit.gold_fields.model_dump(mode="json") if audit.gold_fields else None,
         "gold_line_items": [item.model_dump(mode="json") for item in audit.gold_line_items],
@@ -220,7 +196,36 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
         "processed": False,
         "processable": audit.dataset_status == "runnable",
     }
-    return enrich_detail_payload(payload)
+
+
+def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str, Any] | None:
+    try:
+        audit = get_audit_record(sample_id)
+    except FileNotFoundError:
+        audit = None
+    record = store.get_record(sample_id)
+
+    if audit is None and record is None:
+        return None
+
+    if audit is None and record is not None:
+        payload = record.model_dump(mode="json")
+        payload["processed"] = True
+        payload["processable"] = record.dataset_status == "runnable"
+        payload["has_image"] = bool(record.image_json_path and record.dataset_status != "skipped_missing_image")
+        return enrich_detail_payload(payload)
+
+    if record is not None:
+        if record.dataset_status != audit.dataset_status:
+            return enrich_detail_payload(audit_detail_payload(audit))
+        payload = record.model_dump(mode="json")
+        payload = merge_audit_metadata(payload, audit)
+        payload["processed"] = True
+        payload["processable"] = audit.dataset_status == "runnable"
+        payload["has_image"] = bool(payload.get("image_json_path") and audit.dataset_status != "skipped_missing_image")
+        return enrich_detail_payload(payload)
+
+    return enrich_detail_payload(audit_detail_payload(audit))
 
 
 def pagination_window(page: int, pages: int) -> list[int]:
@@ -313,6 +318,8 @@ def _audit_listing_payload(audit: Any) -> dict[str, Any]:
 
 
 def _record_listing_payload(record: Any, audit: Any | None = None) -> dict[str, Any]:
+    if audit is not None and record.dataset_status != audit.dataset_status:
+        return _audit_listing_payload(audit)
     payload = record.model_dump(mode="json")
     if audit is not None:
         payload = merge_audit_metadata(payload, audit)
