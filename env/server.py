@@ -22,6 +22,36 @@ app.include_router(eval_api_router)
 app.include_router(eval_ui_router)
 
 
+@app.get("/")
+def root() -> dict[str, object]:
+    return {
+        "name": "rl-receipt-ocr",
+        "status": "ok",
+        "openenv": {
+            "reset": "/reset",
+            "step": "/step",
+            "state": "/state",
+        },
+        "health": {
+            "live": "/healthz",
+            "ready": "/readyz",
+        },
+        "ui": "/eval",
+    }
+
+
+@app.get("/healthz")
+def healthz() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+@app.get("/readyz")
+def readyz() -> dict[str, object]:
+    task_counts = ENV.dataset.eligible_task_counts()
+    task_ids = sorted(task_name for task_name, count in task_counts.items() if count > 0)
+    return {"status": "ready", "tasks": task_ids, "counts": task_counts}
+
+
 @app.post("/reset", response_model=StepResult)
 def reset(task_name: str | None = None, seed: int | None = None) -> StepResult:
     return ENV.reset(task_name=task_name, seed=seed)
