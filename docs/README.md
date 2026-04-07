@@ -29,9 +29,14 @@ This directory is the documentation home for OpenEnv Receipt Understanding.
 - [Hackathon Brief Notes](hackathon/hackathon.md)
 - [OpenEnv Option A Receipt Plan](hackathon/openenv_option_a_receipt_plan.md)
 
+## Walkthroughs
+
+- [Receipt Score Examples](walkthrough/receipt-score-examples.md)
+
 ## Conventions
 
 - `architecture/` explains the shape of the system and the intended runtime design.
 - `howto/` contains task-oriented runbooks.
 - `plans/` contains implementation plans and roadmap documents.
 - `hackathon/` contains source material and longer-form design notes from the project context.
+- `walkthrough/` contains example-driven explanations of model behavior and scoring.
