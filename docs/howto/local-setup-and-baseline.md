@@ -14,12 +14,16 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-`requirements.txt` includes the PPO runtime dependency (`torch`) for local checkpoint-backed inference.
-
-If you prefer a package install with an explicit PPO extra:
+`requirements.txt` installs the lighter default runtime. If you need checkpoint-backed PPO inference, install the optional extra:
 
 ```powershell
 pip install -e ".[ppo]"
+```
+
+If you prefer a package install even for the default runtime:
+
+```powershell
+pip install -e .
 ```
 
 ## 2. Optional `.env` Configuration
@@ -79,7 +83,7 @@ Useful variants:
 .\.venv\Scripts\python inference.py --agent ppo --checkpoint checkpoints\policy.pt --device cpu
 ```
 
-`--agent ppo` requires both a checkpoint and `torch`.
+`--agent ppo` requires both a checkpoint and the optional `torch` dependency from `pip install -e ".[ppo]"`.
 
 ## 5. Run Local Checks
 

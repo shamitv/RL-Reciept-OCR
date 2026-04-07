@@ -224,7 +224,7 @@ $env:HF_TOKEN="<your-token>"
 python inference.py
 ```
 
-This quickstart is enough to install the project and run the submitted LLM baseline. `requirements.txt` includes the local PPO inference runtime dependency (`torch`) so a standard repo setup can also run heuristic and checkpoint-backed PPO inference.
+This quickstart is enough to install the project and run the submitted LLM baseline. PPO inference remains available as an optional extra via `pip install -e ".[ppo]"` when you need checkpoint-backed runs.
 
 Detailed runbooks:
 
