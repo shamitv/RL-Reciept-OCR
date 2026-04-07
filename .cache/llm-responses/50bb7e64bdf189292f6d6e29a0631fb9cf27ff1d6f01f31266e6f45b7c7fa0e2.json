@@ -1,0 +1,14 @@
+{
+  "key": "50bb7e64bdf189292f6d6e29a0631fb9cf27ff1d6f01f31266e6f45b7c7fa0e2",
+  "created_at": "2026-04-07T06:03:15.272138+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"IKEA MILTON KEYNES 185\",\n  \"date\": \"01/04/2016\",\n  \"address\": \"GB 52773320 Addressa\",\n  \"subtotal\": 12.37,\n  \"tax\": 2.48,\n  \"total\": 14.85,\n  \"line_items\": [\n    {\n      \"description\": \"Meatballs 10\",\n      \"line_total\": 3.90\n    },\n    {\n      \"description\": \"Fish Chips Adult\",\n      \"line_total\": 4.95\n    },\n    {\n      \"description\": \"Petr Pain White\",\n      \"line_total\": 0.50\n    },\n    {\n      \"description\": \"Wine rose\",\n      \"line_total\": 2.80\n    },\n    {\n      \"description\": \"Wine red\",\n      \"line_total\": 2.80\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

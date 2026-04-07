@@ -1,0 +1,14 @@
+{
+  "key": "3946cc0469f8a7cba0a7969ce99733f366506f5f3d6b7c5a000259f7c221f7ed",
+  "created_at": "2026-04-07T05:55:11.434338+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"MOOYAH Burgers Fries & Shakes #199\",\n  \"date\": \"3/22/2014 11:44 AM\",\n  \"address\": \"6121 NW Cache Rd Lawton, OK 73505\",\n  \"subtotal\": \"8.98\",\n  \"tax\": \"1.06\",\n  \"total\": \"13.03\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Little MOO Shake\",\n      \"line_total\": \"2.99\"\n    },\n    {\n      \"description\": \"1 MOOYAH Burger\",\n      \"line_total\": \"4.99\"\n    },\n    {\n      \"description\": \"1 MOOYAH American Cheese\",\n      \"line_total\": \"0.70\"\n    },\n    {\n      \"description\": \"3 MOOYAH Sauce\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"1 Lettuce\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"1 Pickles\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"1 Fried Onion Strings\",\n      \"line_total\": \"3.29\"\n    },\n    {\n      \"description\": \"1 Regular Fries\",\n      \"line_total\": null\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "36e1abd4455e64de1a45d6491a7e58a785489071728d46f22ef489666cfca137",
+  "created_at": "2026-04-07T06:08:14.007724+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Amici Conyers\",\n  \"date\": \"06/10/2018\",\n  \"address\": \"1805 Parker RD Suite G110\\n1865 Parker RD\",\n  \"subtotal\": 31.54,\n  \"tax\": 4.36,\n  \"total\": 35.90,\n  \"line_items\": [\n    {\n      \"description\": \"Coke\",\n      \"line_total\": 2.29\n    },\n    {\n      \"description\": \"Margherita Calzone\",\n      \"line_total\": 11.99\n    },\n    {\n      \"description\": \"Side Caesar\",\n      \"line_total\": 4.99\n    },\n    {\n      \"description\": \"Coke\",\n      \"line_total\": 2.29\n    },\n    {\n      \"description\": \"Dbl Stack Cheeseburger\",\n      \"line_total\": 8.99\n    },\n    {\n      \"description\": \"Bacon\",\n      \"line_total\": 0.99\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "78d1d3831c05e6433c0a72c7ee16309c68b154504232c40223a77f814157a5fa",
+  "created_at": "2026-04-07T05:39:11.766644+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Grotto Pizzeria & Tavern\",\n  \"date\": \"5/12/2017\",\n  \"address\": \"2441 Van Horn Trenton, MI 48183\",\n  \"subtotal\": \"25.00\",\n  \"tax\": \"43.00\",\n  \"total\": \"45.58\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Ultra\",\n      \"line_total\": \"2.50\"\n    },\n    {\n      \"description\": \"1 Bells Draft\",\n      \"line_total\": \"5.00\"\n    },\n    {\n      \"description\": \"1 Cheese Bread\",\n      \"line_total\": \"5.00\"\n    },\n    {\n      \"description\": \"1 APPS OUT FIRST\",\n      \"line_total\": \"6.00\"\n    },\n    {\n      \"description\": \"1 Caprese\",\n      \"line_total\": \"0.00\"\n    },\n    {\n      \"description\": \"1 SALAD OUT FIRST\",\n      \"line_total\": \"7.00\"\n    },\n    {\n      \"description\": \"1 Reg Carnivore (s)\",\n      \"line_total\": \"0.00\"\n    },\n    {\n      \"description\": \"Pepper Rings (s)\",\n      \"line_total\": \"12.50\"\n    },\n    {\n      \"description\": \"1 Reg Margherita (s)\",\n      \"line_total\": \"10.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

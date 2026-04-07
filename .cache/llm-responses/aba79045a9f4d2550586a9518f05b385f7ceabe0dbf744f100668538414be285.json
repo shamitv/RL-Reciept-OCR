@@ -1,0 +1,14 @@
+{
+  "key": "aba79045a9f4d2550586a9518f05b385f7ceabe0dbf744f100668538414be285",
+  "created_at": "2026-04-07T05:41:24.899851+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Laurel Tavern Hermosa Beach\",\n  \"date\": \"01/12/19\",\n  \"address\": \"1220 Hermosa Beach, Hermosa Beach, CA 90254\",\n  \"subtotal\": 40.50,\n  \"tax\": 3.85,\n  \"total\": 44.35,\n  \"line_items\": [\n    {\n      \"description\": \"1 BTL BEER\",\n      \"line_total\": 5.00\n    },\n    {\n      \"description\": \"1 BRUSSELS SPROUTS\",\n      \"line_total\": 8.00\n    },\n    {\n      \"description\": \"1 CANTONESE TENDERS\",\n      \"line_total\": 11.00\n    },\n    {\n      \"description\": \"1 GRILLED CHEESE\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"1 $ ADD GARLIC FRIES\",\n      \"line_total\": 4.50\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

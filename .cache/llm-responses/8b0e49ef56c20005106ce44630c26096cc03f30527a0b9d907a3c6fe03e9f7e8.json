@@ -1,0 +1,14 @@
+{
+  "key": "8b0e49ef56c20005106ce44630c26096cc03f30527a0b9d907a3c6fe03e9f7e8",
+  "created_at": "2026-04-07T06:04:15.705239+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"BEN'S BAYSIDE\",\n  \"date\": \"03/05/17\",\n  \"address\": \"211-37 26th Avenue Bayside, NY 11360\",\n  \"subtotal\": 37.95,\n  \"tax\": 3.37,\n  \"total\": 41.32,\n  \"line_items\": [\n    {\n      \"description\": \"2 DOUBLE DIP, 1 tky, bowl barley\",\n      \"line_total\": 27.98\n    },\n    {\n      \"description\": \"1 past, bowl barley\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"1 KNISH\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"1 ROUND\",\n      \"line_total\": 3.99\n    },\n    {\n      \"description\": \"1 KASHE SIDE\",\n      \"line_total\": 3.99\n    },\n    {\n      \"description\": \"1 COFFEE\",\n      \"line_total\": 1.99\n    },\n    {\n      \"description\": \"2 WATER\",\n      \"line_total\": 0.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

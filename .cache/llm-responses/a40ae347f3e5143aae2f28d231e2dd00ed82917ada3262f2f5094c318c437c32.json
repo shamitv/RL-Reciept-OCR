@@ -1,0 +1,14 @@
+{
+  "key": "a40ae347f3e5143aae2f28d231e2dd00ed82917ada3262f2f5094c318c437c32",
+  "created_at": "2026-04-07T05:53:15.666556+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Falmouth Raw Bar\",\n  \"date\": \"07/02/18\",\n  \"address\": \"56 Scranton Ave. Falmouth, MA 02540\",\n  \"subtotal\": \"219.81\",\n  \"tax\": \"15.38\",\n  \"total\": \"235.19\",\n  \"line_items\": [\n    {\n      \"description\": \"1.6 Oysters\",\n      \"line_total\": \"19.00\"\n    },\n    {\n      \"description\": \"2..Fish and Chips\",\n      \"line_total\": \"22.00\"\n    },\n    {\n      \"description\": \"3..MONSTAH roll\",\n      \"line_total\": \"114.00\"\n    },\n    {\n      \"description\": \"3..Chicken Wings\",\n      \"line_total\": \"12.00\"\n    },\n    {\n      \"description\": \"3..*Patron\",\n      \"line_total\": \"28.50\"\n    },\n    {\n      \"description\": \"2..*Sparkling Wine\",\n      \"line_total\": \"22.00\"\n    },\n    {\n      \"description\": \"1..*Open Liquor\",\n      \"line_total\": \"6.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

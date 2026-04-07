@@ -1,0 +1,14 @@
+{
+  "key": "8377fa54eda48bb0f09f0d5d9ee532ad6afe8d8eef4d4409c8250f7e3f9d28d6",
+  "created_at": "2026-04-07T06:04:58.543382+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Buca di Beppo\",\n  \"date\": \"07/15/2016\",\n  \"address\": \"Universal City, CA 91608\",\n  \"subtotal\": 100.26,\n  \"tax\": 9.02,\n  \"total\": 109.28,\n  \"line_items\": [\n    {\n      \"description\": \"Iced Tea\",\n      \"line_total\": 3.29\n    },\n    {\n      \"description\": \"Sm Garlic Bread\",\n      \"line_total\": 9.02\n    },\n    {\n      \"description\": \"9oz Buca Chianti (2 @ $14.00)\",\n      \"line_total\": 28.00\n    },\n    {\n      \"description\": \"Sm Chop Antipasto Salad\",\n      \"line_total\": 10.00\n    },\n    {\n      \"description\": \"Lg Supremo Pizza\",\n      \"line_total\": 18.99\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

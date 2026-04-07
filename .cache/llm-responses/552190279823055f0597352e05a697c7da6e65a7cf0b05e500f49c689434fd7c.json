@@ -1,0 +1,14 @@
+{
+  "key": "552190279823055f0597352e05a697c7da6e65a7cf0b05e500f49c689434fd7c",
+  "created_at": "2026-04-07T05:39:44.267117+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Thai GUSTO\",\n  \"date\": \"6/16/2017 12:36 PM\",\n  \"address\": \"2011 Hewitt Ave Everett WA 98201\",\n  \"subtotal\": \"$27.48\",\n  \"tax\": \"$2.67\",\n  \"total\": \"$30.15\",\n  \"line_items\": [\n    {\n      \"description\": \"Chang (28$3.50)\",\n      \"line_total\": \"$7.00\"\n    },\n    {\n      \"description\": \"#L14 Garlic Delight [Chicken][5*****][Small Brown Rice]\",\n      \"line_total\": \"$10.24\"\n    },\n    {\n      \"description\": \"#L28 Red Curry [Chicken][5*****][Small Brown Rice]\",\n      \"line_total\": \"$10.24\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

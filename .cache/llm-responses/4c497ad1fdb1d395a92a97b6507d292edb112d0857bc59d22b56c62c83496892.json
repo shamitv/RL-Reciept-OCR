@@ -1,0 +1,14 @@
+{
+  "key": "4c497ad1fdb1d395a92a97b6507d292edb112d0857bc59d22b56c62c83496892",
+  "created_at": "2026-04-07T06:01:23.299919+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"FIREFLY American Bistro\",\n  \"date\": \"12/28/18\",\n  \"address\": \"5525 New Albany Road West, New Albany, OH 43054\",\n  \"subtotal\": \"$77.80\",\n  \"tax\": \"$5.84\",\n  \"total\": \"$83.64\",\n  \"line_items\": [\n    {\n      \"description\": \"Malbec Trivento\",\n      \"line_total\": \"$8.00\"\n    },\n    {\n      \"description\": \"Blood Orange Marg\",\n      \"line_total\": \"$9.00\"\n    },\n    {\n      \"description\": \"Cup Italian Wedding Soup\",\n      \"line_total\": \"$2.95\"\n    },\n    {\n      \"description\": \"Spaghetti Marinara\",\n      \"line_total\": \"$17.95\"\n    },\n    {\n      \"description\": \"Add One Meatball\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"Add Two Meatball\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"Fettuccine Alfredo\",\n      \"line_total\": \"$23.95\"\n    },\n    {\n      \"description\": \"Add Steak\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"Small Wedge Salad (Dinner)\",\n      \"line_total\": \"$4.95\"\n    },\n    {\n      \"description\": \"Creme Brulee\",\n      \"line_total\": \"$4.00\"\n    },\n    {\n      \"description\": \"Baileys\",\n      \"line_total\": \"$7.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

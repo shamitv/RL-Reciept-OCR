@@ -1,0 +1,14 @@
+{
+  "key": "b3799fee3ecc5e3afba24f947de9090ec0d3cdabd597ccf85a79d5002821b4ec",
+  "created_at": "2026-04-07T05:54:21.276518+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Pita Pita - Lombard\",\n  \"date\": \"5/4/2017\",\n  \"address\": \"211 E Roosevelt Rd, Lombard, IL 60148\",\n  \"subtotal\": 213.00,\n  \"tax\": 15.92,\n  \"total\": 228.92,\n  \"line_items\": [\n    {\n      \"description\": \"20 Mixed Meat Lunch\",\n      \"line_total\": 180.00\n    },\n    {\n      \"description\": \"1 Reg 12pc Falafel\",\n      \"line_total\": 6.50\n    },\n    {\n      \"description\": \"1 Reg 12pc Falafel\",\n      \"line_total\": 6.50\n    },\n    {\n      \"description\": \"1 Miscellaneous\",\n      \"line_total\": 20.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

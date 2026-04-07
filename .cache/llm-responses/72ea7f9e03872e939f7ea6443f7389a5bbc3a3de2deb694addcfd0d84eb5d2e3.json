@@ -1,0 +1,14 @@
+{
+  "key": "72ea7f9e03872e939f7ea6443f7389a5bbc3a3de2deb694addcfd0d84eb5d2e3",
+  "created_at": "2026-04-07T06:07:28.450459+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"MIGUELS MEXICAN\",\n  \"date\": \"7-5-17\",\n  \"address\": \"3035 W. KENNEDY BLVD TAMPA, FL.\",\n  \"subtotal\": 25.30,\n  \"tax\": 1.78,\n  \"total\": 27.08,\n  \"line_items\": [\n    {\n      \"description\": \"2 WATER\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"1 ENCH VERDE\",\n      \"line_total\": 12.50\n    },\n    {\n      \"description\": \"1 ENCH MANUEL\",\n      \"line_total\": 12.80\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

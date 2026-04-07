@@ -1,0 +1,14 @@
+{
+  "key": "037976dbf1e833b239b07ad029eb9d86809ce896d3f002bc25fe5b5f033c28f8",
+  "created_at": "2026-04-07T05:57:36.987647+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"OM INDIAN FOOD\",\n  \"date\": \"4/15/16 12:03:14 PM\",\n  \"address\": \"204 Spring St\\nNew York, NY 10012\",\n  \"subtotal\": \"$29.85\",\n  \"tax\": \"$1.32\",\n  \"total\": \"$16.24\",\n  \"line_items\": [\n    {\n      \"description\": \"Vegetable Biryani\",\n      \"line_total\": \"$12.95\"\n    },\n    {\n      \"description\": \"Malai Kofta\",\n      \"line_total\": \"$12.95\"\n    },\n    {\n      \"description\": \"Onion Naan\",\n      \"line_total\": \"$3.95\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

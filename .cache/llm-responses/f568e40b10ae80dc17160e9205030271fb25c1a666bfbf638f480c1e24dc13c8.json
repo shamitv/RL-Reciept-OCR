@@ -1,0 +1,14 @@
+{
+  "key": "f568e40b10ae80dc17160e9205030271fb25c1a666bfbf638f480c1e24dc13c8",
+  "created_at": "2026-04-07T05:55:31.963310+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"company\": \"Firepoint Grill\", \"date\": \"12/07/2016\", \"address\": \"3739 West Chester Pike Newtown Square, PA 19013\", \"subtotal\": 137.50, \"tax\": 5.43, \"total\": 142.93, \"line_items\": [{\"description\": \"Makers Mark (2 @ $11.50)\", \"line_total\": 23.00}, {\"description\": \"As Old Fashioned\", \"line_total\": 6.00}, {\"description\": \"Side Caesar\", \"line_total\": 6.00}, {\"description\": \"Chicken & Rib Combo\", \"line_total\": 29.00}, {\"description\": \"Woodford Reserve (2 @ $12.00)\", \"line_total\": 24.00}, {\"description\": \"On the Rocks\", \"line_total\": 10.00}, {\"description\": \"Frisee Salad\", \"line_total\": 10.00}, {\"description\": \"Poached Shrimp Cocktail\", \"line_total\": 17.50}, {\"description\": \"NY Stiph 8oz\", \"line_total\": 28.00}]}"
+        }
+      }
+    ]
+  }
+}

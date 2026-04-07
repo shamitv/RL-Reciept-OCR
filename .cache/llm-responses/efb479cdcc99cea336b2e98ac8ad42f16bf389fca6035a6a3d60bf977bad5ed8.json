@@ -1,0 +1,14 @@
+{
+  "key": "efb479cdcc99cea336b2e98ac8ad42f16bf389fca6035a6a3d60bf977bad5ed8",
+  "created_at": "2026-04-07T05:27:43.806768+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Taco Maria\",\n  \"date\": \"1/23/18, 12:16 PM\",\n  \"address\": \"3313 Hyland Ave. Ste C21 Costa Mesa, CA 92626\",\n  \"subtotal\": \"$42.50\",\n  \"tax\": \"$3.29\",\n  \"total\": \"$45.79\",\n  \"line_items\": [\n    {\n      \"description\": \"Chicken Pescado\",\n      \"line_total\": \"$15.00\"\n    },\n    {\n      \"description\": \"Arrachera solo\",\n      \"line_total\": \"$9.50\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

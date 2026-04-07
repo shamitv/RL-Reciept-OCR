@@ -1,0 +1,14 @@
+{
+  "key": "dc98295f85ee6bd1fbc2152ba0d6a377362499fb0518fed88cf6e3b67bd05dfd",
+  "created_at": "2026-04-07T05:50:18.875701+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Nancy's\",\n  \"date\": \"09/24/2016\",\n  \"address\": \"255-41 Jericho Turnpike Floral Park, NY 11001\",\n  \"subtotal\": 86.50,\n  \"tax\": 7.68,\n  \"total\": 94.18,\n  \"line_items\": [\n    {\n      \"description\": \"gl Imp White\",\n      \"line_total\": 7.75\n    },\n    {\n      \"description\": \"Blue Moon Tap\",\n      \"line_total\": 6.00\n    },\n    {\n      \"description\": \"Mozzarella&Tomato\",\n      \"line_total\": 9.95\n    },\n    {\n      \"description\": \"Pork Quesadilla\",\n      \"line_total\": 9.95\n    },\n    {\n      \"description\": \"Fren Onion Soup\",\n      \"line_total\": 5.95\n    },\n    {\n      \"description\": \"Pork Chop\",\n      \"line_total\": 21.95\n    },\n    {\n      \"description\": \"Hanger Sizzle\",\n      \"line_total\": 24.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

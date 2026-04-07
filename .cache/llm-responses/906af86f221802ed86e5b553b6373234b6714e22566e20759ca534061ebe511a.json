@@ -1,0 +1,14 @@
+{
+  "key": "906af86f221802ed86e5b553b6373234b6714e22566e20759ca534061ebe511a",
+  "created_at": "2026-04-07T06:06:41.475122+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"JT's Diner\",\n  \"date\": \"02/12/2016\",\n  \"address\": \"37011 Cook Street\",\n  \"subtotal\": 26.30,\n  \"tax\": 2.10,\n  \"total\": 28.40,\n  \"line_items\": [\n    {\n      \"description\": \"Coffee (2 @$2.95)\",\n      \"line_total\": 5.90\n    },\n    {\n      \"description\": \"Two Eggs Any Style\",\n      \"line_total\": 6.95\n    },\n    {\n      \"description\": \"Whole-Wheat Pancakes\",\n      \"line_total\": 8.95\n    },\n    {\n      \"description\": \"Hawaiian Sausage\",\n      \"line_total\": 4.50\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

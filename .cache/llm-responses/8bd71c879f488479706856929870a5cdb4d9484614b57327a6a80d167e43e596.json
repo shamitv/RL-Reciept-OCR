@@ -1,0 +1,14 @@
+{
+  "key": "8bd71c879f488479706856929870a5cdb4d9484614b57327a6a80d167e43e596",
+  "created_at": "2026-04-07T06:01:54.711397+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Maui Teriyaki\",\n  \"date\": \"10/25/2017\",\n  \"address\": \"27000 Marine Ave #103, Redondo Beach, CA 90278\",\n  \"subtotal\": 12.94,\n  \"tax\": 1.23,\n  \"total\": 14.17,\n  \"line_items\": [\n    {\n      \"description\": \"1 Salmon Plate\",\n      \"line_total\": 11.49\n    },\n    {\n      \"description\": \"1 Extra Shrimp\",\n      \"line_total\": 1.45\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

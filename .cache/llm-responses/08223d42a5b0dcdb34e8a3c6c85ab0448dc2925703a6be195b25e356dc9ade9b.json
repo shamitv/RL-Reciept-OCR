@@ -1,0 +1,14 @@
+{
+  "key": "08223d42a5b0dcdb34e8a3c6c85ab0448dc2925703a6be195b25e356dc9ade9b",
+  "created_at": "2026-04-07T05:56:46.782388+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Mexican Restaurant & Bar\",\n  \"date\": \"12/29/2017\",\n  \"address\": \"25 West San Fernando St. San Jose, CA 95113\",\n  \"subtotal\": 50.05,\n  \"tax\": 5.46,\n  \"total\": 55.51,\n  \"line_items\": [\n    {\n      \"description\": \"Coffee\",\n      \"line_total\": 3.25\n    },\n    {\n      \"description\": \"Enmoladas with Meat pollo\",\n      \"line_total\": 14.95\n    },\n    {\n      \"description\": \"Chicken Tenders\",\n      \"line_total\": 5.95\n    },\n    {\n      \"description\": \"Flautas Chicken Coloradito\",\n      \"line_total\": 9.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

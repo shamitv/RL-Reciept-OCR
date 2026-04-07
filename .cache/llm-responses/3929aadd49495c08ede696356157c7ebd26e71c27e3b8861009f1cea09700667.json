@@ -1,0 +1,14 @@
+{
+  "key": "3929aadd49495c08ede696356157c7ebd26e71c27e3b8861009f1cea09700667",
+  "created_at": "2026-04-07T05:39:29.588345+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Deccan Spice\",\n  \"date\": \"7/26/2019\",\n  \"address\": \"771 Newark Avenue\\nJersey City Local, NJ 07306\",\n  \"subtotal\": 35.95,\n  \"tax\": 2.98,\n  \"total\": 47.02,\n  \"line_items\": [\n    {\n      \"description\": \"1 Dal Fry\",\n      \"line_total\": 10.99\n    },\n    {\n      \"description\": \"1 Paneer Butter Masala\",\n      \"line_total\": 12.99\n    },\n    {\n      \"description\": \"2 rice\",\n      \"line_total\": 3.98\n    },\n    {\n      \"description\": \"1 Deccan Special Biryani\",\n      \"line_total\": 14.99\n    },\n    {\n      \"description\": \"1 rice\",\n      \"line_total\": 1.99\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

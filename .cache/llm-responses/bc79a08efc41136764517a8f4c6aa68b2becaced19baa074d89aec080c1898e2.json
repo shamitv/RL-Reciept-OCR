@@ -1,0 +1,14 @@
+{
+  "key": "bc79a08efc41136764517a8f4c6aa68b2becaced19baa074d89aec080c1898e2",
+  "created_at": "2026-04-07T06:02:19.330651+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Blue Bear Tavern\",\n  \"date\": \"01/13/2012 10:16 PM\",\n  \"address\": \"216 S 11th Street\",\n  \"subtotal\": \"81.00\",\n  \"tax\": \"1.84\",\n  \"total\": \"83.44\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Crimini\",\n      \"line_total\": \"3.00\"\n    },\n    {\n      \"description\": \"1 Salami\",\n      \"line_total\": \"3.00\"\n    },\n    {\n      \"description\": \"1 Olives\",\n      \"line_total\": \"3.00\"\n    },\n    {\n      \"description\": \"1 Lrg Clams\\\\mussels\",\n      \"line_total\": \"14.00\"\n    },\n    {\n      \"description\": \"4 Reg Ketel One\",\n      \"line_total\": \"52.00\"\n    },\n    {\n      \"description\": \"1 House Cab\",\n      \"line_total\": \"6.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

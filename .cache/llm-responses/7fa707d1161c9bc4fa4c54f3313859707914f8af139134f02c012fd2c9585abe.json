@@ -1,0 +1,14 @@
+{
+  "key": "7fa707d1161c9bc4fa4c54f3313859707914f8af139134f02c012fd2c9585abe",
+  "created_at": "2026-04-07T05:58:27.485606+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Lan Sheng\",\n  \"date\": \"06/13/17\",\n  \"address\": \"209 Paterson Ave. Wallington N. J. 07057\",\n  \"subtotal\": \"$70.25\",\n  \"tax\": \"$4.90\",\n  \"total\": \"$75.15\",\n  \"line_items\": [\n    {\n      \"description\": \"Spicy Chicken w. Spicy Garlic Soy V.\",\n      \"line_total\": \"$18.95\"\n    },\n    {\n      \"description\": \"Hf- Peking Duck\",\n      \"line_total\": \"$15.95\"\n    },\n    {\n      \"description\": \"Stir Beef Fillet w. Tofu\",\n      \"line_total\": \"$12.95\"\n    },\n    {\n      \"description\": \"Pork w. Spicy Capsicum\",\n      \"line_total\": \"$1.50\"\n    },\n    {\n      \"description\": \"White rice (S)\",\n      \"line_total\": \"$12.95\"\n    },\n    {\n      \"description\": \"Pork w. Spicy Tofu & Cayenne Chili\",\n      \"line_total\": null\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

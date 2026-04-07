@@ -1,0 +1,14 @@
+{
+  "key": "31c2c11491d95ea92a2955c8bac1412adb720459f62c96d57d0746230fd2b254",
+  "created_at": "2026-04-07T06:06:09.793206+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"El Charro Cafe Ventana\",\n  \"date\": \"06/24/2018\",\n  \"address\": \"6910 E SUNRISE DR\",\n  \"subtotal\": 45.15,\n  \"tax\": 2.75,\n  \"total\": 47.90,\n  \"line_items\": [\n    {\n      \"description\": \"Coors Light\",\n      \"line_total\": 5.00\n    },\n    {\n      \"description\": \"Ice Tea\",\n      \"line_total\": 3.25\n    },\n    {\n      \"description\": \"Shrimp Fajita\",\n      \"line_total\": 18.95\n    },\n    {\n      \"description\": \"Stuffed Chicken\",\n      \"line_total\": 17.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

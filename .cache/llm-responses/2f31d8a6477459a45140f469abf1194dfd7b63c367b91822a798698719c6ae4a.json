@@ -1,0 +1,14 @@
+{
+  "key": "2f31d8a6477459a45140f469abf1194dfd7b63c367b91822a798698719c6ae4a",
+  "created_at": "2026-04-07T05:40:25.801795+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CHRIS'S HAMBURGERS\",\n  \"date\": \"07/22/2018\",\n  \"address\": \"7701 ATLANTIC AVE. CUDAHY CA. 9201\",\n  \"subtotal\": null,\n  \"tax\": \"$21.49\",\n  \"total\": \"$51.82\",\n  \"line_items\": [\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$0.50\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$0.50\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$0.50\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$0.50\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$7.89\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$3.09\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$5.49\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$5.49\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$0.99\"\n    },\n    {\n      \"description\": \"TAXABLE T1\",\n      \"line_total\": \"$0.99\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "593f8dbf509eb0f7b1d881ed4b6127d6241182807a3ecbb978b0c69154a15e27",
+  "created_at": "2026-04-07T05:27:32.375352+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"UMIX\",\n  \"date\": \"4/24/2016 6:30:31 PM\",\n  \"address\": \"4327 N. Expressway 77/83\\n956-350-8686\\nBrownsville, TX 78521\",\n  \"subtotal\": 10.20,\n  \"tax\": 0.84,\n  \"total\": 11.04,\n  \"line_items\": [\n    {\n      \"description\": \"PARIS\",\n      \"line_total\": 5.25\n    },\n    {\n      \"description\": \"LE CLASSIQUE\",\n      \"line_total\": 4.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

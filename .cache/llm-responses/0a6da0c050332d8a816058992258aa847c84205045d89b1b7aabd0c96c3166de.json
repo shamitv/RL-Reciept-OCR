@@ -1,0 +1,14 @@
+{
+  "key": "0a6da0c050332d8a816058992258aa847c84205045d89b1b7aabd0c96c3166de",
+  "created_at": "2026-04-07T05:51:15.240628+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"company\": \"Primo Family Restaurant\", \"date\": \"5/3/19 8:14 PM\", \"address\": null, \"subtotal\": 49.50, \"tax\": 2.97, \"total\": 52.47, \"line_items\": [{\"description\": \"3 Prem Glass\", \"line_total\": 7.50}, {\"description\": \"1 MED Veggie\", \"line_total\": 27.00}]}"
+        }
+      }
+    ]
+  }
+}

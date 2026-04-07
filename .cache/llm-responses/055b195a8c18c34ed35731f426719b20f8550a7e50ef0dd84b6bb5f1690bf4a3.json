@@ -1,0 +1,14 @@
+{
+  "key": "055b195a8c18c34ed35731f426719b20f8550a7e50ef0dd84b6bb5f1690bf4a3",
+  "created_at": "2026-04-07T05:52:49.990325+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Tay Ho Oakland\",\n  \"date\": \"2/19/19\",\n  \"address\": null,\n  \"subtotal\": 12.95,\n  \"tax\": 1.23,\n  \"total\": 14.18,\n  \"line_items\": [\n    {\n      \"description\": \"#19-D.B.B.V. - Special Combo Pho\",\n      \"line_total\": 12.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

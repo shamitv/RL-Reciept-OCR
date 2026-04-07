@@ -1,0 +1,14 @@
+{
+  "key": "b46b1802895c784badfa9163948da94e4047b0d13e551e03ab00cbb7de573913",
+  "created_at": "2026-04-07T06:04:00.025876+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Dominican Restaurant\",\n  \"date\": \"11/10/18\",\n  \"address\": \"1019 Front St.\",\n  \"subtotal\": \"35.50\",\n  \"tax\": \"5.00\",\n  \"total\": \"40.50\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Bistec Palomilla Enc w Moro Gandules\",\n      \"line_total\": \"15.95\"\n    },\n    {\n      \"description\": \"Spaghetti Con Pollo W/ Moro Gandules\",\n      \"line_total\": \"14.95\"\n    },\n    {\n      \"description\": \"Copa Vino\",\n      \"line_total\": \"5.50\"\n    },\n    {\n      \"description\": \"White Glass Pinot Gr dine in\",\n      \"line_total\": \"3.50\"\n    },\n    {\n      \"description\": \"Jugo de Chinola Dine in 16oz\",\n      \"line_total\": \"4.00\"\n    },\n    {\n      \"description\": \"Gratuity.\",\n      \"line_total\": \"6.59\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "2ac6020384b12fe5e160afe94909079e9e3976e91cf0175c7973810af01e69cc",
+  "created_at": "2026-04-07T06:06:17.979028+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Finnegan's Way\",\n  \"date\": \"08/21/17\",\n  \"address\": \"1344 Ocean Drive Miami Beach Florida 33139\",\n  \"subtotal\": 40.00,\n  \"tax\": 2.80,\n  \"total\": 50.80,\n  \"line_items\": [\n    {\n      \"description\": \"4 SDBE MOJITO'S BACARDI LIGHT\",\n      \"line_total\": 40.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

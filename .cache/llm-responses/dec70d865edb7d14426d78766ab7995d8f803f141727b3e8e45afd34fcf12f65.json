@@ -1,0 +1,14 @@
+{
+  "key": "dec70d865edb7d14426d78766ab7995d8f803f141727b3e8e45afd34fcf12f65",
+  "created_at": "2026-04-07T06:01:36.816532+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"HIRO JAPANESE RESTAURANT\",\n  \"date\": \"2/13/2018\",\n  \"address\": \"3007 NE 163RD STREET\\nNorth Miami Beach, FL 33160\",\n  \"subtotal\": 15.90,\n  \"tax\": 1.28,\n  \"total\": 17.18,\n  \"line_items\": [\n    {\n      \"description\": \"1 (L)Ton Katsu\",\n      \"line_total\": 8.95\n    },\n    {\n      \"description\": \"1 (L) Makimono\",\n      \"line_total\": 6.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "42efda44efd434f8d05aafdbc1aae5e16140c7810d08d806fda4b423616ef336",
+  "created_at": "2026-04-07T05:49:10.528790+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"DAILY GRILL\",\n  \"date\": \"11/01/2018\",\n  \"address\": \"2501 Colorado Ave Santa Monica, CA 90404\",\n  \"subtotal\": 82.95,\n  \"tax\": 8.50,\n  \"total\": 91.45,\n  \"line_items\": [\n    {\n      \"description\": \"Coke\",\n      \"line_total\": 3.65\n    },\n    {\n      \"description\": \"Short Rib\",\n      \"line_total\": 27.95\n    },\n    {\n      \"description\": \"Diet Coke\",\n      \"line_total\": 3.65\n    },\n    {\n      \"description\": \"Crispy Naked Wings\",\n      \"line_total\": 11.95\n    },\n    {\n      \"description\": \"Rib Eye Steak\",\n      \"line_total\": 35.75\n    },\n    {\n      \"description\": \"Broccoli\",\n      \"line_total\": null\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

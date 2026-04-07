@@ -1,0 +1,14 @@
+{
+  "key": "7393dc2eb1f9c4cd4cd182e7303fc6894c1314ecce2c234f42deea107fc10b15",
+  "created_at": "2026-04-07T06:05:57.549376+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Bar Louie Huntsville\",\n  \"date\": \"07/03/2015\",\n  \"address\": \"365 The Bridge St.,Suite1 Huntsville, AL, 35806\",\n  \"subtotal\": 6.25,\n  \"tax\": 1.31,\n  \"total\": 7.56,\n  \"line_items\": [\n    {\n      \"description\": \"Whiskey\",\n      \"line_total\": 6.25\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

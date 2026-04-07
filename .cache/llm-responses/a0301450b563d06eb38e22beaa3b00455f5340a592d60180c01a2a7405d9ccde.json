@@ -1,0 +1,14 @@
+{
+  "key": "a0301450b563d06eb38e22beaa3b00455f5340a592d60180c01a2a7405d9ccde",
+  "created_at": "2026-04-07T06:03:46.261103+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Angelo's Pizza Restaurant\",\n  \"date\": \"7/10/2017\",\n  \"address\": \"12247 Sheridan St\\nCooper Cityb, FL 33026\",\n  \"subtotal\": \"31.45\",\n  \"tax\": \"1.89\",\n  \"total\": \"33.34\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Sprite\",\n      \"line_total\": \"2.55\"\n    },\n    {\n      \"description\": \"1 Chicken Caesar Salad\",\n      \"line_total\": \"8.95\"\n    },\n    {\n      \"description\": \"1 Chefs Special\",\n      \"line_total\": \"19.95\"\n    },\n    {\n      \"description\": \"> Chefs Special\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"Soup of Day\",\n      \"line_total\": null\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

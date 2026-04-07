@@ -1,0 +1,14 @@
+{
+  "key": "a59dd563cc28f7d5867f85d3d84418e79195738256681906c1930d6f478cb174",
+  "created_at": "2026-04-07T06:04:44.504614+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CARL'S JR\",\n  \"date\": \"9/27/2017\",\n  \"address\": \"Restaurant 1100580\\n11961 Beach Blvd.\\nStanton, CA 90680\",\n  \"subtotal\": 7.00,\n  \"tax\": 0.61,\n  \"total\": 7.61,\n  \"line_items\": [\n    {\n      \"description\": \"1 Box #1\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"1 All Star Meal #1\",\n      \"line_total\": 1.00\n    },\n    {\n      \"description\": \"Dbl Chbgr\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"Hot Dog\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"Baked Cookie\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"Lg Fries\",\n      \"line_total\": 3.00\n    },\n    {\n      \"description\": \"Lg Bev Bar\",\n      \"line_total\": 3.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

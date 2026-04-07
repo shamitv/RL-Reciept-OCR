@@ -1,0 +1,14 @@
+{
+  "key": "d3b8a4ce958633072176e96bbb0b15e82b202477a4a440670910443740b6f46d",
+  "created_at": "2026-04-07T05:41:55.497836+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Pappadeaux Seafood Kitchen\",\n  \"date\": \"11/18/17\",\n  \"address\": \"1304 Copeland Rd, Arlington, TX 76011\",\n  \"subtotal\": 48.85,\n  \"tax\": 3.91,\n  \"total\": 52.76,\n  \"line_items\": [\n    {\n      \"description\": \"1 Lump Crab & Spinach Dip\",\n      \"line_total\": 15.95\n    },\n    {\n      \"description\": \"1 Cajun Combo\",\n      \"line_total\": 18.95\n    },\n    {\n      \"description\": \"1 Lunch Shrimp & Andouille\",\n      \"line_total\": 13.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

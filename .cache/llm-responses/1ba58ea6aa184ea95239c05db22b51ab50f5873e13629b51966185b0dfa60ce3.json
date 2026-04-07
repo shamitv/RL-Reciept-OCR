@@ -1,0 +1,14 @@
+{
+  "key": "1ba58ea6aa184ea95239c05db22b51ab50f5873e13629b51966185b0dfa60ce3",
+  "created_at": "2026-04-07T06:07:04.604939+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Spiral Diner & Bakery\",\n  \"date\": \"6/16/19, 10:04 AM\",\n  \"address\": \"608 E Hickory St Denton, TX 76205\",\n  \"subtotal\": \"$46.54\",\n  \"tax\": \"$3.84\",\n  \"total\": \"$50.38\",\n  \"line_items\": [\n    {\n      \"description\": \"Real Smooth Short Stack\",\n      \"line_total\": \"$7.99\"\n    },\n    {\n      \"description\": \"Coffee\",\n      \"line_total\": \"$8.59\"\n    },\n    {\n      \"description\": \"Breakfast Quesadilla NO Sausage\",\n      \"line_total\": \"$2.99\"\n    },\n    {\n      \"description\": \"Grilled Spinach Southern Comfort\",\n      \"line_total\": \"$13.99\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "0321ac851bc17950c995d4d84350bc503dd60defe3a76c7dd8a7f9a2c90d9b9f",
+  "created_at": "2026-04-07T06:00:12.434055+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Wendy's Restaurant #00003675\",\n  \"date\": \"03/18/2017\",\n  \"address\": \"401 Bergan St\\nHarrison, NJ 07029\",\n  \"subtotal\": \"4.97\",\n  \"tax\": \"0.52\",\n  \"total\": \"5.49\",\n  \"line_items\": [\n    {\n      \"description\": \"Veggie Sandwich\",\n      \"line_total\": \"1.89\"\n    },\n    {\n      \"description\": \"Small Fries\",\n      \"line_total\": \"1.89\"\n    },\n    {\n      \"description\": \"Plain Potato\",\n      \"line_total\": \"1.79\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

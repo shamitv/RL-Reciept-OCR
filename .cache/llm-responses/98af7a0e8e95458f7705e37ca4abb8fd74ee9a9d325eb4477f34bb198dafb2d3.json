@@ -1,0 +1,14 @@
+{
+  "key": "98af7a0e8e95458f7705e37ca4abb8fd74ee9a9d325eb4477f34bb198dafb2d3",
+  "created_at": "2026-04-07T05:42:15.116071+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Panda Express\",\n  \"date\": \"3/16/2013\",\n  \"address\": \"Everett, WA\",\n  \"subtotal\": 151.00,\n  \"tax\": 13.89,\n  \"total\": 164.89,\n  \"line_items\": [\n    {\n      \"description\": \"CHOW MEIN\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"FRIED RICE\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"FRIED/C MEIN\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"ORANGE CKN\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"GRILL TERIYAKI CKN\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"PEPPERCORN SHRIMP\",\n      \"line_total\": 12.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

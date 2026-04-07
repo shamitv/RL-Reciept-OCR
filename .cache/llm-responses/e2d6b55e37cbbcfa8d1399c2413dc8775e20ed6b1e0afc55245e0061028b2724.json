@@ -1,0 +1,14 @@
+{
+  "key": "e2d6b55e37cbbcfa8d1399c2413dc8775e20ed6b1e0afc55245e0061028b2724",
+  "created_at": "2026-04-07T06:07:17.400212+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"New China\",\n  \"date\": \"03-12-2016\",\n  \"address\": \"1130 North Higley Rd, Suite#7-102 Mesa, AZ 85205\",\n  \"subtotal\": \"24.95\",\n  \"tax\": \"2.01\",\n  \"total\": \"26.96\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Beef w. Broccoli w. Chicken Fried Rice\",\n      \"line_total\": \"8.25\"\n    },\n    {\n      \"description\": \"1 Sweet / Sour Chicken\",\n      \"line_total\": \"7.95\"\n    },\n    {\n      \"description\": \"1 Chicken Chow Mein\",\n      \"line_total\": \"6.75\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

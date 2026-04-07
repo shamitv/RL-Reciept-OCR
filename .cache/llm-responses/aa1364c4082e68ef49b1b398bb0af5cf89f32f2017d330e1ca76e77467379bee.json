@@ -1,0 +1,14 @@
+{
+  "key": "aa1364c4082e68ef49b1b398bb0af5cf89f32f2017d330e1ca76e77467379bee",
+  "created_at": "2026-04-07T06:05:31.075243+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"El Valle Mexican Restaurant\",\n  \"date\": \"12/2/2017\",\n  \"address\": \"305 W. John St.\\nMatthews, NC 28105\",\n  \"subtotal\": 16.39,\n  \"tax\": 1.36,\n  \"total\": 17.75,\n  \"line_items\": [\n    {\n      \"description\": \"1 GUACAMOLE DIP\",\n      \"line_total\": 3.99\n    },\n    {\n      \"description\": \"1 DIE COKE\",\n      \"line_total\": 2.15\n    },\n    {\n      \"description\": \"1 LUNCH FAJITAS\",\n      \"line_total\": 7.75\n    },\n    {\n      \"description\": \"1 TORTILLAS (3)\",\n      \"line_total\": 1.25\n    },\n    {\n      \"description\": \"1 SOUR CREAM\",\n      \"line_total\": 1.25\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

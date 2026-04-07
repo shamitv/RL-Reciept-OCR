@@ -1,0 +1,14 @@
+{
+  "key": "ea717c5b8260e2605bf662031b9c1030da393445f824ff6f7f1a73362d1267e0",
+  "created_at": "2026-04-07T05:56:27.172447+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Kaiseki Japanese Cuisine\",\n  \"date\": \"07/28/18\",\n  \"address\": \"7 West Merrick Rd, Valley Stream, NY 11580\",\n  \"subtotal\": 39.85,\n  \"tax\": 3.45,\n  \"total\": 43.30,\n  \"line_items\": [\n    {\n      \"description\": \"Sushi Dinner w.Miso Soup\",\n      \"line_total\": 18.95\n    },\n    {\n      \"description\": \"Lady Gaga\",\n      \"line_total\": 13.95\n    },\n    {\n      \"description\": \"Ginger Ale\",\n      \"line_total\": 2.00\n    },\n    {\n      \"description\": \"Fried Cheese Cake\",\n      \"line_total\": 4.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "72ea4af811ea67f483073bdb12b70bd916d23118a06fe520939e5d5c606030e2",
+  "created_at": "2026-04-07T06:09:02.142108+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Nonna\",\n  \"date\": \"05/21/12\",\n  \"address\": \"9255 West Sunset Blvd West Hollywood, CA 90069\",\n  \"subtotal\": 118.00,\n  \"tax\": 10.33,\n  \"total\": 128.33,\n  \"line_items\": [\n    {\n      \"description\": \"Tartare di Tonno\",\n      \"line_total\": 17.00\n    },\n    {\n      \"description\": \"Linguine Scampi\",\n      \"line_total\": 20.00\n    },\n    {\n      \"description\": \"Branzino\",\n      \"line_total\": 28.00\n    },\n    {\n      \"description\": \"Pizza Americana\",\n      \"line_total\": 14.00\n    },\n    {\n      \"description\": \"Carrot Cake\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"GI Sangiovese\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"GI Merlot\",\n      \"line_total\": 13.00\n    },\n    {\n      \"description\": \"Misc Food\",\n      \"line_total\": 2.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

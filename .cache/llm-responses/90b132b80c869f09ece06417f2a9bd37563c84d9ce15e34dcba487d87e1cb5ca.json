@@ -1,0 +1,14 @@
+{
+  "key": "90b132b80c869f09ece06417f2a9bd37563c84d9ce15e34dcba487d87e1cb5ca",
+  "created_at": "2026-04-07T05:41:03.324300+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"VILLA D'ESTE RESTAURANT\",\n  \"date\": \"12/8/2017\",\n  \"address\": \"186 Jericho Tpke floral park, NY 11001\",\n  \"subtotal\": 87.25,\n  \"tax\": 7.53,\n  \"total\": 94.78,\n  \"line_items\": [\n    {\n      \"description\": \"1 Coffee\",\n      \"line_total\": 3.50\n    },\n    {\n      \"description\": \"1 Glass House Wine\",\n      \"line_total\": 9.95\n    },\n    {\n      \"description\": \"1 Jumbo Coctail Shrimp\",\n      \"line_total\": 12.95\n    },\n    {\n      \"description\": \"1 Escargot Bourguignone\",\n      \"line_total\": 10.95\n    },\n    {\n      \"description\": \"1 Veal Zingaria\",\n      \"line_total\": 23.95\n    },\n    {\n      \"description\": \"1 Duckling ala Arancio\",\n      \"line_total\": 25.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

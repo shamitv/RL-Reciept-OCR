@@ -1,0 +1,14 @@
+{
+  "key": "af504e243c3d89cb41004313ef074a974e02655fefe40ab99e50518b0be14112",
+  "created_at": "2026-04-07T05:48:50.619274+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Araxi Burger Aventura\",\n  \"date\": \"03/17/19\",\n  \"address\": \"17861 BISCAYNE BLVD Aventura, FL 33160\",\n  \"subtotal\": \"$30.60\",\n  \"tax\": \"$2.14\",\n  \"total\": \"$38.86\",\n  \"line_items\": [\n    {\n      \"description\": \"2 Vanilla Bean\",\n      \"line_total\": \"$12.00\"\n    },\n    {\n      \"description\": \"Classic Burger 4oz\",\n      \"line_total\": \"$8.00\"\n    },\n    {\n      \"description\": \"Route 66 Burger 8oz\",\n      \"line_total\": \"$14.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

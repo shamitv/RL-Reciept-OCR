@@ -1,0 +1,14 @@
+{
+  "key": "8f896f34f4c2b42a6692169fdf3d59822485e22d24d6f8502d38734de30b15df",
+  "created_at": "2026-04-07T05:38:11.399554+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Friendly Red's of Windham\",\n  \"date\": \"07/21/2018\",\n  \"address\": \"22 Haverhill Rd Windham NH 603-437-7251\",\n  \"subtotal\": 71.40,\n  \"tax\": 6.43,\n  \"total\": 77.83,\n  \"line_items\": [\n    {\n      \"description\": \"Cadillac Margarita (2 @14.00)\",\n      \"line_total\": 28.00\n    },\n    {\n      \"description\": \"Patron Silver\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"Maryland Crab Cakes\",\n      \"line_total\": 14.00\n    },\n    {\n      \"description\": \"Chicken Caprese\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"Chix Parm Sandwich\",\n      \"line_total\": 10.00\n    },\n    {\n      \"description\": \"Bud Light (2 @ 3.70)\",\n      \"line_total\": 7.40\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

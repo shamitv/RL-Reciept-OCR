@@ -1,0 +1,14 @@
+{
+  "key": "82571199f4edd4d0b9f50136b9e75cd07427e0979bf1228f77633324a267e071",
+  "created_at": "2026-04-07T05:51:07.242385+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Chilli's Grill & Bar\",\n  \"date\": \"09/15/2018\",\n  \"address\": \"Puente Hills #25 17588 Castleton St City of Industry,CA 91748\",\n  \"subtotal\": 24.08,\n  \"tax\": 2.29,\n  \"total\": 26.37,\n  \"line_items\": [\n    {\n      \"description\": \"TRIPLE DIPPER CHICKEN WAFFLES4\",\n      \"line_total\": 12.19\n    },\n    {\n      \"description\": null,\n      \"line_total\": 11.89\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

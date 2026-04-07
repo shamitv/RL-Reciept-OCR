@@ -1,0 +1,14 @@
+{
+  "key": "c1a7649b2788840a42314656df364776833e9af3cd1613c03f7e504329e2b9c5",
+  "created_at": "2026-04-07T05:38:46.035772+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Chef Wang\",\n  \"date\": \"02/02/19\",\n  \"address\": \"1902 Jericho Turnpike New Hyde Park NY 11040\",\n  \"subtotal\": \"$32.70\",\n  \"tax\": \"$2.82\",\n  \"total\": \"$35.52\",\n  \"line_items\": [\n    {\n      \"description\": \"Scallion Pancake\",\n      \"line_total\": \"$5.25\"\n    },\n    {\n      \"description\": \"Little Juicy Pork Buns\",\n      \"line_total\": \"$9.95\"\n    },\n    {\n      \"description\": \"Beef w Bak Choy (L)\",\n      \"line_total\": \"$8.75\"\n    },\n    {\n      \"description\": \"Hunan Beef (L)\",\n      \"line_total\": \"$8.75\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

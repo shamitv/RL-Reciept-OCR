@@ -1,0 +1,14 @@
+{
+  "key": "3c1b659a56f6340b61962d219943e29d80f0cdf8b3121070aca68329845c4cff",
+  "created_at": "2026-04-07T05:51:32.852805+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Cafe Eugene\",\n  \"date\": \"4/10/16, 9:08 AM\",\n  \"address\": \"1175 Solano Avenue Albany CA 94706\",\n  \"subtotal\": \"$39.00\",\n  \"tax\": \"$3.90\",\n  \"total\": \"$42.90\",\n  \"line_items\": [\n    {\n      \"description\": \"Pork Pancakes\",\n      \"line_total\": \"$17.00\"\n    },\n    {\n      \"description\": \"Side Bacon\",\n      \"line_total\": \"$12.00\"\n    },\n    {\n      \"description\": \"2 Regular\",\n      \"line_total\": \"$4.00\"\n    },\n    {\n      \"description\": \"2 Regular\",\n      \"line_total\": \"$6.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

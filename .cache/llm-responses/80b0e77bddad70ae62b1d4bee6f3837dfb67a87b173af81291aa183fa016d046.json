@@ -1,0 +1,14 @@
+{
+  "key": "80b0e77bddad70ae62b1d4bee6f3837dfb67a87b173af81291aa183fa016d046",
+  "created_at": "2026-04-07T05:54:03.993110+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Trattoria Saporito\",\n  \"date\": \"7/1/2018\",\n  \"address\": \"328 WashingtonStreet Hoboken, NJ 07030\",\n  \"subtotal\": \"$117.75\",\n  \"tax\": \"$8.24\",\n  \"total\": \"$125.99\",\n  \"line_items\": [\n    {\n      \"description\": \"1 STUFFED ARTICHOKE*\",\n      \"line_total\": \"$18.00\"\n    },\n    {\n      \"description\": \"1 BK FETT AL PORCINI *\",\n      \"line_total\": \"$36.00\"\n    },\n    {\n      \"description\": \"1 COSTOLETTE/ALLA/PAP*\",\n      \"line_total\": \"$42.00\"\n    },\n    {\n      \"description\": \"1 BROCCOLI RABE W/ GA*\",\n      \"line_total\": \"$10.50\"\n    },\n    {\n      \"description\": \"1 ESPRESSO*\",\n      \"line_total\": \"$3.75\"\n    },\n    {\n      \"description\": \"1 DBLD ESPRESSO*\",\n      \"line_total\": \"$7.50\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "81489eea28f74e7027726a77149ec96a1088ca4c469f725c0a2bd5814840654b",
+  "created_at": "2026-04-07T05:38:32.163484+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"HAMMOCKS TRADING COMPANY\",\n  \"date\": \"3/10/2017\",\n  \"address\": \"7285 Roswell Road\\nSandy Springs, Georgia\\n30328\",\n  \"subtotal\": 47.00,\n  \"tax\": 3.29,\n  \"total\": 50.29,\n  \"line_items\": [\n    {\n      \"description\": \"Coke\",\n      \"line_total\": 2.50\n    },\n    {\n      \"description\": \"Shrimp Entree\",\n      \"line_total\": 21.00\n    },\n    {\n      \"description\": \"Mac n Cheese\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"French Fries\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"BBQ & Blue Chz chips\",\n      \"line_total\": 6.00\n    },\n    {\n      \"description\": \"Discount:BBQ & Blue Chz\",\n      \"line_total\": -6.00\n    },\n    {\n      \"description\": \"Sprite\",\n      \"line_total\": 2.50\n    },\n    {\n      \"description\": \"Lobster Roll\",\n      \"line_total\": 21.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

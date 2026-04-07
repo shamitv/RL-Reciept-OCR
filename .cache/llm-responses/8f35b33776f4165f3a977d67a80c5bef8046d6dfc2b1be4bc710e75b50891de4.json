@@ -1,0 +1,14 @@
+{
+  "key": "8f35b33776f4165f3a977d67a80c5bef8046d6dfc2b1be4bc710e75b50891de4",
+  "created_at": "2026-04-07T05:27:19.021159+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CITY TASTE\",\n  \"date\": \"05-11-2018\",\n  \"address\": \"930 WAYNE AVE. #100 SILVER SPRING, MD 20910\",\n  \"subtotal\": \"18.95\",\n  \"tax\": \"1.63\",\n  \"total\": \"20.58\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Philadelphia Roll\",\n      \"line_total\": \"4.85\"\n    },\n    {\n      \"description\": \"1 13. Shrimp Tempura Roll [Roll]\",\n      \"line_total\": \"4.25\"\n    },\n    {\n      \"description\": \"1 Rich / Famous Roll\",\n      \"line_total\": \"4.85\"\n    },\n    {\n      \"description\": \"1 16. Spicy Salmon Roll [Roll]\",\n      \"line_total\": \"4.25\"\n    },\n    {\n      \"description\": \"1 Veg / Tofu Pad Thai Spicy\",\n      \"line_total\": \"8.95\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

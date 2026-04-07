@@ -1,0 +1,14 @@
+{
+  "key": "20834c0b83b8fdfd22f8a7d1129def79b53c8a80f567e6a1cc82b4313fdab8ea",
+  "created_at": "2026-04-07T05:49:46.371390+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"HOLLYWOOD CAFE & SPORTS, BAR\",\n  \"date\": \"09/08/2017\",\n  \"address\": null,\n  \"subtotal\": 25.22,\n  \"tax\": 1.74,\n  \"total\": 26.96,\n  \"line_items\": [\n    {\n      \"description\": \"SODA\",\n      \"line_total\": 2.49\n    },\n    {\n      \"description\": \"CHEESE STEAK +AMERICAN CHS +FRD ONION\",\n      \"line_total\": 10.49\n    },\n    {\n      \"description\": \"Chix Cheesesteak\",\n      \"line_total\": 1.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

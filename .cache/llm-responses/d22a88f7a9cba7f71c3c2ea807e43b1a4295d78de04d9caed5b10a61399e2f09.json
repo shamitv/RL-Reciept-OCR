@@ -1,0 +1,14 @@
+{
+  "key": "d22a88f7a9cba7f71c3c2ea807e43b1a4295d78de04d9caed5b10a61399e2f09",
+  "created_at": "2026-04-07T06:02:05.821117+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"SHAKE SHACK\",\n  \"date\": \"03/03/2015\",\n  \"address\": \"1450 S. Dixie Highway\",\n  \"subtotal\": 23.58,\n  \"tax\": 1.89,\n  \"total\": 25.47,\n  \"line_items\": [\n    {\n      \"description\": \"ShackBurger\",\n      \"line_total\": 5.19\n    },\n    {\n      \"description\": \"Smoke Shack\",\n      \"line_total\": 6.59\n    },\n    {\n      \"description\": \"cheese fries\",\n      \"line_total\": 3.95\n    },\n    {\n      \"description\": \"REG Soda (2 @2.75)\",\n      \"line_total\": 5.50\n    },\n    {\n      \"description\": \"(2)REG Rootbeer\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"REG Iced Tea\",\n      \"line_total\": 2.25\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

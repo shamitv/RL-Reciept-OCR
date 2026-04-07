@@ -1,0 +1,14 @@
+{
+  "key": "b9bfc8c0b33bd2afe58bc1547a516d6b5dab4d1a4df8e558ecf38c5729a69509",
+  "created_at": "2026-04-07T06:04:26.453949+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Pappadeaux Seafood Kitchen\",\n  \"date\": \"01/07/17\",\n  \"address\": \"7800 Airport Blvd (HOU)\\nHouston, TX 77061\",\n  \"subtotal\": 38.95,\n  \"tax\": 3.21,\n  \"total\": 42.16,\n  \"line_items\": [\n    {\n      \"description\": \"1 Side Craw Etouffee 4oz\",\n      \"line_total\": 10.98\n    },\n    {\n      \"description\": \"1 Pan Seared Tilapia\",\n      \"line_total\": 21.99\n    },\n    {\n      \"description\": \"2 Tea\",\n      \"line_total\": 5.98\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

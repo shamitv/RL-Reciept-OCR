@@ -1,0 +1,14 @@
+{
+  "key": "f7eb8c6e28000d272d54c2579ab7251436003dcde881ef2d8ad412fbb5a5d6f8",
+  "created_at": "2026-04-07T05:59:47.766462+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Villaggio GRILLE\",\n  \"date\": \"06/08/19\",\n  \"address\": \"4780 Wharf Parkway\\nOrange Beach, AL 36561\",\n  \"subtotal\": 31.01,\n  \"tax\": 3.11,\n  \"total\": 34.12,\n  \"line_items\": [\n    {\n      \"description\": \"1 P-VILLAGGIO BREEZE\",\n      \"line_total\": 0.01\n    },\n    {\n      \"description\": \"1 ADD SALAD\",\n      \"line_total\": 3.00\n    },\n    {\n      \"description\": \"1 LUNCH SEAFOOD PASTA\",\n      \"line_total\": 14.00\n    },\n    {\n      \"description\": \"1 KID PEPERONI PIZZA\",\n      \"line_total\": 7.00\n    },\n    {\n      \"description\": \"1 KID ALFREDO\",\n      \"line_total\": 7.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

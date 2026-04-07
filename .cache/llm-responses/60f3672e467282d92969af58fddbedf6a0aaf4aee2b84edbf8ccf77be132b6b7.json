@@ -1,0 +1,14 @@
+{
+  "key": "60f3672e467282d92969af58fddbedf6a0aaf4aee2b84edbf8ccf77be132b6b7",
+  "created_at": "2026-04-07T05:51:55.783957+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"company\": \"Mr. M's Hot Wings & Things Inc\", \"date\": \"6/28/2019 2:16:34 PM\", \"address\": \"886 N. Garfield Ave, Montebello, CA 90640\", \"subtotal\": 10.00, \"tax\": 0.95, \"total\": 10.95, \"line_items\": [{\"description\": \"1 Ribeye Steak Lunch 10 > med-rare\", \"line_total\": 10.00}]}"
+        }
+      }
+    ]
+  }
+}

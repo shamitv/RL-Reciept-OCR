@@ -1,0 +1,14 @@
+{
+  "key": "598628506dd89b51cce0032f666eaed1762d2221b3088396305bbaf9a00ddc6f",
+  "created_at": "2026-04-07T05:57:48.630227+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Crisfield Seafood Restaurant\",\n  \"date\": \"12/29/2017\",\n  \"address\": \"8012 Georgia Ave. Silver Spring, MD20910\",\n  \"subtotal\": 38.50,\n  \"tax\": 2.31,\n  \"total\": 42.74,\n  \"line_items\": [\n    {\n      \"description\": \"1 Crisfield Special Platter COOK MEDIUM\",\n      \"line_total\": 27.00\n    },\n    {\n      \"description\": \"1 Pint Bisque\",\n      \"line_total\": 11.50\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

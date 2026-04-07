@@ -1,0 +1,14 @@
+{
+  "key": "3622d72f1653465e17068a7953e6396265c2a95610cb228dec11b2eb5adfaaf0",
+  "created_at": "2026-04-07T05:52:16.871745+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Trinity Restaurant\",\n  \"date\": \"02/18/17\",\n  \"address\": \"190 Jericho Tpke Floral Park NY 11001\",\n  \"subtotal\": 69.50,\n  \"tax\": 6.00,\n  \"total\": 75.50,\n  \"line_items\": [\n    {\n      \"description\": \"1 Quesadilla\",\n      \"line_total\": 11.00\n    },\n    {\n      \"description\": \"1 Pot Roast\",\n      \"line_total\": 18.00\n    },\n    {\n      \"description\": \"1 Fish An Chips\",\n      \"line_total\": 16.00\n    },\n    {\n      \"description\": \"1 Side Salad\",\n      \"line_total\": 4.00\n    },\n    {\n      \"description\": \"1 Dft Shock top\",\n      \"line_total\": 5.50\n    },\n    {\n      \"description\": \"2 Dft Guiness\",\n      \"line_total\": 15.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "ce2c3c69580bba0758d54aead9e19067b70bc6d207c3049c99bdbdb4adc6b194",
+  "created_at": "2026-04-07T05:50:54.353122+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"LANDFALL RESTAURANT\",\n  \"date\": \"06/10\",\n  \"address\": null,\n  \"subtotal\": 6.00,\n  \"tax\": 0.40,\n  \"total\": 7.55,\n  \"line_items\": [\n    {\n      \"description\": \"1 CUP CHOWDER\",\n      \"line_total\": 6.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

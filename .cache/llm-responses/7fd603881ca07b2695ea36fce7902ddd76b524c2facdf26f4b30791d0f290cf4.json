@@ -1,0 +1,14 @@
+{
+  "key": "7fd603881ca07b2695ea36fce7902ddd76b524c2facdf26f4b30791d0f290cf4",
+  "created_at": "2026-04-07T06:03:33.873620+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Taco Time - Kenmore\",\n  \"date\": \"04/24/2018\",\n  \"address\": \"6733 NE 181TH ST KENMORE WA 98028\",\n  \"subtotal\": 5.99,\n  \"tax\": 0.60,\n  \"total\": 6.59,\n  \"line_items\": [\n    {\n      \"description\": \"SFT TACO BF\",\n      \"line_total\": 5.99\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

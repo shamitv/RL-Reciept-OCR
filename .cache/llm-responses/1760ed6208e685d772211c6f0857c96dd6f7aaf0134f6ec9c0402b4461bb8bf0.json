@@ -1,0 +1,14 @@
+{
+  "key": "1760ed6208e685d772211c6f0857c96dd6f7aaf0134f6ec9c0402b4461bb8bf0",
+  "created_at": "2026-04-07T05:54:48.028372+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Calagero's\",\n  \"date\": \"4/20/2018\",\n  \"address\": \"919 Franklin Ave. Garden City, NY 11530\",\n  \"subtotal\": \"145.00\",\n  \"tax\": \"12.51\",\n  \"total\": \"157.51\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Shrimp Scampi\",\n      \"line_total\": \"27.00\"\n    },\n    {\n      \"description\": \"2 Chicken Milanese\",\n      \"line_total\": \"46.00\"\n    },\n    {\n      \"description\": \"1 Veal Milanese\",\n      \"line_total\": \"27.00\"\n    },\n    {\n      \"description\": \"3 Grey Goose\",\n      \"line_total\": \"30.00\"\n    },\n    {\n      \"description\": \"1 Pineapple Juice\",\n      \"line_total\": \"3.00\"\n    },\n    {\n      \"description\": \"1 Belvedere\",\n      \"line_total\": \"12.00\"\n    },\n    {\n      \"description\": \"1 Becks Non Alcoholic\",\n      \"line_total\": \"6.00\"\n    },\n    {\n      \"description\": \"1 Corona\",\n      \"line_total\": \"6.00\"\n    },\n    {\n      \"description\": \"1 Comp Item\",\n      \"line_total\": \"0.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

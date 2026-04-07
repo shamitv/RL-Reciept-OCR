@@ -1,0 +1,14 @@
+{
+  "key": "1fee63de64d1db01e857617c5d6776d78b9a48ec88bed9ffc4b7bb5398a8f4fb",
+  "created_at": "2026-04-07T06:08:39.098222+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"BAR RISTORANTE STABILIMENTO MARINO E TERMALE SAN MONTANO S.R.L.\",\n  \"date\": \"28-08-2018\",\n  \"address\": \"VIA S.MONTANO - LACCO AMENO (NA)\",\n  \"subtotal\": \"12.00\",\n  \"tax\": \"0.00\",\n  \"total\": \"34.00\",\n  \"line_items\": [\n    {\n      \"description\": \"2 x 0.50\",\n      \"line_total\": \"1.00\"\n    },\n    {\n      \"description\": \"Vassoi e Stoviglie\",\n      \"line_total\": \"1.00\"\n    },\n    {\n      \"description\": \"2 x 5.00\",\n      \"line_total\": \"10.00\"\n    },\n    {\n      \"description\": \"Macedonia\",\n      \"line_total\": \"10.00\"\n    },\n    {\n      \"description\": \"Insalata Negombo\",\n      \"line_total\": \"8.00\"\n    },\n    {\n      \"description\": \"Buffala\",\n      \"line_total\": \"4.00\"\n    },\n    {\n      \"description\": \"Pomodorini\",\n      \"line_total\": \"1.00\"\n    },\n    {\n      \"description\": \"Nat 1/2 lt\",\n      \"line_total\": \"1.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

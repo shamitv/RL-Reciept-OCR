@@ -1,0 +1,14 @@
+{
+  "key": "8e71c1d282e2812b72b10aa42685c32958772c7cfc3e21d35ee3c36639b9b850",
+  "created_at": "2026-04-07T05:53:38.627312+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Newark Buffet\",\n  \"date\": \"06/29/2019\",\n  \"address\": \"35201 Newark Blvd. #W Newark CA 94560\",\n  \"subtotal\": \"84.02\",\n  \"tax\": \"8.20\",\n  \"total\": \"92.22\",\n  \"line_items\": [\n    {\n      \"description\": \"WEEKEND DINNER BUFFET\",\n      \"line_total\": \"39.98\"\n    },\n    {\n      \"description\": \"WEEKEND DINNER KIDS (3-5y)\",\n      \"line_total\": \"7.99\"\n    },\n    {\n      \"description\": \"WEEKEND DINNER KIDS (6-10y)\",\n      \"line_total\": \"10.00\"\n    },\n    {\n      \"description\": \"SODA DRINK\",\n      \"line_total\": \"7.96\"\n    },\n    {\n      \"description\": \"WEEKEND SENIOR DINNER\",\n      \"line_total\": \"18.09\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

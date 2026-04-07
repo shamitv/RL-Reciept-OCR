@@ -1,0 +1,14 @@
+{
+  "key": "71ef18fe5f458714c74faa116e6076e62ea1c2fcaa442a73a78c406f9fada138",
+  "created_at": "2026-04-07T05:59:14.928821+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"COLUMBUS RESTAURANT\",\n  \"date\": \"SATURDAY 01-27-2018 03:59PM\",\n  \"address\": \"736 OCEAN DRIVE MIAMI BEACH, FL 33139\",\n  \"subtotal\": \"55.00\",\n  \"tax\": \"10.01\",\n  \"total\": \"184.47\",\n  \"line_items\": [\n    {\n      \"description\": \"2 FBD BLUE MARGARI\",\n      \"line_total\": \"55.00\"\n    },\n    {\n      \"description\": \"1 CHEESE BURGER\",\n      \"line_total\": \"14.50\"\n    },\n    {\n      \"description\": \"1 CHICKEN MARSALA\",\n      \"line_total\": \"18.50\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

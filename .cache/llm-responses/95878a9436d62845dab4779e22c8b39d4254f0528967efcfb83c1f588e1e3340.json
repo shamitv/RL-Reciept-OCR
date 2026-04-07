@@ -1,0 +1,14 @@
+{
+  "key": "95878a9436d62845dab4779e22c8b39d4254f0528967efcfb83c1f588e1e3340",
+  "created_at": "2026-04-07T05:37:42.249828+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Katana Sushi\",\n  \"date\": \"05/11/18\",\n  \"address\": \"2818 Hewitt Ave Everett, WA 98201\",\n  \"subtotal\": 131.00,\n  \"tax\": 12.71,\n  \"total\": 143.71,\n  \"line_items\": [\n    {\n      \"description\": \"Hamachi Collar\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"Mega Poke Bowl\",\n      \"line_total\": 17.00\n    },\n    {\n      \"description\": \"Hamachi - Sashimi\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"Maguro - Sashimi\",\n      \"line_total\": 11.00\n    },\n    {\n      \"description\": \"Salmon - Sashimi\",\n      \"line_total\": 10.00\n    },\n    {\n      \"description\": \"3 Sockeye Salmon - Sashimi\",\n      \"line_total\": 36.00\n    },\n    {\n      \"description\": \"Hamachi Japenno\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"Salmon Collar\",\n      \"line_total\": 10.00\n    },\n    {\n      \"description\": \"Escolar - Sashimi\",\n      \"line_total\": 11.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

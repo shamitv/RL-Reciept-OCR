@@ -1,0 +1,14 @@
+{
+  "key": "311d996351759e0c18a9c1b0ada5a60bce580e68d2d7a90908358ec12c639415",
+  "created_at": "2026-04-07T05:40:43.661648+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CARU, HAWAII Longboards\",\n  \"date\": \"01/11/2019\",\n  \"address\": \"92-161 Waipae Place Kapolei, HI 96707\",\n  \"subtotal\": 42.75,\n  \"tax\": 4.00,\n  \"total\": 44.31,\n  \"line_items\": [\n    {\n      \"description\": \"Green Salad\",\n      \"line_total\": 8.00\n    },\n    {\n      \"description\": \"Wagyu Cheeseburger Medium Well\",\n      \"line_total\": 19.00\n    },\n    {\n      \"description\": \"Garlic Fries ADD RAW ONIONS& BACON PLZ\",\n      \"line_total\": 2.00\n    },\n    {\n      \"description\": \"Drink of the Day Tea\",\n      \"line_total\": 9.75\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "212166a88b7da20d3ac0c41e1de416944be065aceda54ff22dad83d3a05dc2eb",
+  "created_at": "2026-04-07T05:39:30.876129+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{}"
+        }
+      }
+    ]
+  }
+}

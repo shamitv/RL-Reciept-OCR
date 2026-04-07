@@ -1,0 +1,14 @@
+{
+  "key": "a70661698bf16278ae4ad25e55950e19c6174e3d715ab8f183935f1b6c386883",
+  "created_at": "2026-04-07T06:01:49.737216+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CHRIS'S HAMBURGERS\",\n  \"date\": \"11-24-2017\",\n  \"address\": \"3950 E SLAUSON MAYWOOD, CA 90270\",\n  \"subtotal\": \"8.80\",\n  \"tax\": \"2.46\",\n  \"total\": \"28.31\",\n  \"line_items\": [\n    {\n      \"description\": \"B CHZ B SPC no pickles\",\n      \"line_total\": 0.01\n    },\n    {\n      \"description\": \"F FRIES - LRG CRISPY\",\n      \"line_total\": 3.66\n    },\n    {\n      \"description\": \"F FRIES - LRG CRISPY\",\n      \"line_total\": 3.66\n    },\n    {\n      \"description\": \"PREM MED DRINK horchata\",\n      \"line_total\": 2.15\n    },\n    {\n      \"description\": \"CHZ BURGER SPEC no onions\",\n      \"line_total\": 7.57\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

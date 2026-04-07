@@ -1,0 +1,14 @@
+{
+  "key": "c37d57ad0c21ab059ff68208d3ccb0f74c3c3f57313c4c37c85f7be0dcf2e284",
+  "created_at": "2026-04-07T06:01:04.485929+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Heart of Portugal Restaurant\",\n  \"date\": \"09/10/17\",\n  \"address\": \"241 Mineola Blvd, Mineola, NY 11501\",\n  \"subtotal\": \"$65.90\",\n  \"tax\": \"$5.68\",\n  \"total\": \"$71.58\",\n  \"line_items\": [\n    {\n      \"description\": \"Traditional Pork & Clams\",\n      \"line_total\": \"$20.95\"\n    },\n    {\n      \"description\": \"1 Osso Buco Sp\",\n      \"line_total\": \"$28.95\"\n    },\n    {\n      \"description\": \"House Wines Half Pitcher\",\n      \"line_total\": \"$16.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

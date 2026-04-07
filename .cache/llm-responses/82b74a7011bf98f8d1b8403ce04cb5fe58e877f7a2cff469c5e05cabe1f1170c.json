@@ -1,0 +1,14 @@
+{
+  "key": "82b74a7011bf98f8d1b8403ce04cb5fe58e877f7a2cff469c5e05cabe1f1170c",
+  "created_at": "2026-04-07T06:05:16.286077+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"POP TATES KORUM HALL\",\n  \"date\": \"09/12/2012\",\n  \"address\": \"KORUM HALL, ANDHERI WEST\\nMANGAL PANDEY RD, OFF EASTERN EXPRESS\\nTHANE (W) 400066\",\n  \"subtotal\": \"190.00\",\n  \"tax\": \"24.60\",\n  \"total\": \"523.00\",\n  \"line_items\": [\n    {\n      \"description\": \"2 FRENCH FRIES\",\n      \"line_total\": \"190.00\"\n    },\n    {\n      \"description\": \"1 OPEN FOOD\",\n      \"line_total\": \"60.00\"\n    },\n    {\n      \"description\": \"1.00 MANESH SAUS\",\n      \"line_total\": \"60.00\"\n    },\n    {\n      \"description\": \"1 PAWEER TIKKA\",\n      \"line_total\": \"248.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

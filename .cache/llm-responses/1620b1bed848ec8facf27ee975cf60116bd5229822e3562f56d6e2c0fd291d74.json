@@ -1,0 +1,14 @@
+{
+  "key": "1620b1bed848ec8facf27ee975cf60116bd5229822e3562f56d6e2c0fd291d74",
+  "created_at": "2026-04-07T05:49:57.746767+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"GENERAL POOR'S TAVERN\",\n  \"date\": \"04/10/16\",\n  \"address\": \"45 MAIN STREET HACKENSACK, NJ 07601\",\n  \"subtotal\": 10.00,\n  \"tax\": 0.70,\n  \"total\": 10.70,\n  \"line_items\": [\n    {\n      \"description\": \"40 BONELESS WINGS SPEC\",\n      \"line_total\": 10.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

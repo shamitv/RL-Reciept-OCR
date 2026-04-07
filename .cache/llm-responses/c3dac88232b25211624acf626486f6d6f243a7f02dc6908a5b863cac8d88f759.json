@@ -1,0 +1,14 @@
+{
+  "key": "c3dac88232b25211624acf626486f6d6f243a7f02dc6908a5b863cac8d88f759",
+  "created_at": "2026-04-07T05:52:38.811853+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\"company\": \"Paradise Restaurant\", \"date\": \"7/21/2018\", \"address\": \"889 W. 190th Street Los Angeles, CA 90248\", \"subtotal\": \"$20.00\", \"tax\": \"$2.18\", \"total\": \"$25.78\", \"line_items\": []}"
+        }
+      }
+    ]
+  }
+}

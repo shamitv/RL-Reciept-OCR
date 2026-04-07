@@ -1,0 +1,14 @@
+{
+  "key": "82e1c9bf83076c8d56410c9ce58331167d4be82e3107ebcb933953c6290481a0",
+  "created_at": "2026-04-07T06:07:41.956478+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"MOD Pizza\",\n  \"date\": \"5/19/2019\",\n  \"address\": \"26902 92nd Ave NW\\nSuite A\\nStanwood, WA 98292\",\n  \"subtotal\": 27.45,\n  \"tax\": 2.53,\n  \"total\": 29.98,\n  \"line_items\": [\n    {\n      \"description\": \"Draft Beer (2 @ 4.97)\",\n      \"line_total\": 9.94\n    },\n    {\n      \"description\": \"Fountain Drink (16oz)\",\n      \"line_total\": 2.17\n    },\n    {\n      \"description\": \"MOD Pizza\",\n      \"line_total\": 8.67\n    },\n    {\n      \"description\": \"Mini MOD\",\n      \"line_total\": 6.67\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

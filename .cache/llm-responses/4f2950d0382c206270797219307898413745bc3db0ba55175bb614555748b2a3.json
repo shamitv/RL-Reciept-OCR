@@ -1,0 +1,14 @@
+{
+  "key": "4f2950d0382c206270797219307898413745bc3db0ba55175bb614555748b2a3",
+  "created_at": "2026-04-07T05:39:59.713922+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"McDonald's Restaurant #3100\",\n  \"date\": \"02/7/2013\",\n  \"address\": \"1617 N EASTERN AVE LOS ANGELES, CA 90033-1053\",\n  \"subtotal\": 6.64,\n  \"tax\": 0.63,\n  \"total\": 7.27,\n  \"line_items\": [\n    {\n      \"description\": \"1 Dbl Qtr Cheese Special Request ADD Leaf Lettuc ADD Mac Sauce\",\n      \"line_total\": 5.99\n    },\n    {\n      \"description\": \"ADD Leaf Lettuc\",\n      \"line_total\": 0.25\n    },\n    {\n      \"description\": \"ADD Mac Sauce\",\n      \"line_total\": 0.40\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}
