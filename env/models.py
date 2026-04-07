@@ -21,6 +21,7 @@ ActionType = Literal[
     "check_date_format",
     "query_line_item_candidates",
     "add_line_item_from_candidate",
+    "add_line_item_manual",
     "remove_line_item",
     "check_receipt_consistency",
     "clear_field",
@@ -84,6 +85,8 @@ class ReceiptAction(BaseModel):
     join_mode: str | None = None
     mode: str | None = None
     value: str | None = None
+    line_total: str | None = None
+    quantity: str | None = None
     evidence_ids: list[str] | None = None
 
 

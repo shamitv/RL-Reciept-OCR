@@ -1,13 +1,23 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from types import SimpleNamespace
 
 import pytest
 
 from agents.heuristic import HeuristicAgent
 from env.environment import ReceiptExtractionEnv
-from env.models import ReceiptAction
-from inference import TASK_ORDER, build_agent, episode_seed, evaluate_tasks, resolve_tasks, run_episode
+from env.models import ReceiptAction, ReceiptDraft, ReceiptLineItem
+from inference import (
+    TASK_ORDER,
+    actions_from_llm_prediction,
+    build_agent,
+    episode_seed,
+    evaluate_tasks,
+    resolve_tasks,
+    run_episode,
+    run_llm_episode,
+)
 
 
 @dataclass(frozen=True)
@@ -16,6 +26,25 @@ class WrappedHeuristicAgent:
 
     def select_action(self, env: ReceiptExtractionEnv) -> ReceiptAction:
         return HeuristicAgent().select_action(env)
+
+
+class _FakeCompletions:
+    def __init__(self, responses: list[str]) -> None:
+        self.responses = responses
+        self.calls: list[dict] = []
+
+    def create(self, **kwargs):
+        self.calls.append(kwargs)
+        index = len(self.calls) - 1
+        content = self.responses[index]
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=content))])
+
+
+class _FakeClient:
+    def __init__(self, responses: list[str]) -> None:
+        self.completions = _FakeCompletions(responses)
+        self.chat = SimpleNamespace(completions=self.completions)
+        self.base_url = "https://fake.client/v1"
 
 
 def test_resolve_tasks_defaults_to_all_tasks() -> None:
@@ -67,3 +96,46 @@ def test_custom_agent_keeps_summary_schema() -> None:
 
     assert set(heuristic_summary) == set(wrapped_summary)
     assert set(heuristic_summary["aggregate"]) == set(wrapped_summary["aggregate"])
+
+
+def test_actions_from_llm_prediction_include_manual_line_items() -> None:
+    prediction = ReceiptDraft(
+        company="City Cafe",
+        date="2019-03-27",
+        subtotal="8.00",
+        tax="0.48",
+        total="8.48",
+        line_items=[ReceiptLineItem(description="Latte", line_total="4.50")],
+    )
+
+    actions = actions_from_llm_prediction(
+        prediction=prediction,
+        field_order=["company", "date", "subtotal", "tax", "total"],
+        requires_line_items=True,
+        max_actions=10,
+    )
+
+    assert actions[-1].action_type == "add_line_item_manual"
+    assert actions[-1].value == "Latte"
+    assert actions[-1].line_total == "4.50"
+
+
+def test_run_llm_episode_uses_existing_extraction_client(monkeypatch, tmp_path, capsys) -> None:
+    monkeypatch.setenv("LLM_CACHE_DIR", str(tmp_path / "llm-cache"))
+    client = _FakeClient(
+        [
+            (
+                '{"company":"Example Store","date":"2019-03-25",'
+                '"address":"123 Main St","subtotal":null,"tax":null,"total":"31.00","line_items":[]}'
+            )
+        ]
+    )
+
+    result = run_llm_episode(task="easy", seed=7, client=client, model_name="llm-model", emit_logs=True)
+    output_lines = capsys.readouterr().out.strip().splitlines()
+
+    assert client.completions.calls
+    assert output_lines[0] == "[START] task=easy env=rl-receipt-ocr model=llm-model"
+    assert all(line.startswith(("[START]", "[STEP]", "[END]")) for line in output_lines)
+    assert output_lines[-1].startswith("[END] success=")
+    assert result["steps"] >= 1

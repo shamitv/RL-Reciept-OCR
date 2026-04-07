@@ -112,6 +112,7 @@ The environment accepts typed structured actions, including:
 - `check_date_format`
 - `query_line_item_candidates`
 - `add_line_item_from_candidate`
+- `add_line_item_manual`
 - `remove_line_item`
 - `check_receipt_consistency`
 - `clear_field`
@@ -176,9 +177,15 @@ You can override the dataset location through `RECEIPT_DATASET_ROOT`.
 
 ## Baseline Results
 
-Current reproducible heuristic baseline:
+Submitted LLM baseline:
 
-- command: `python inference.py --format text`
+- command: `python inference.py`
+- required environment variables: `API_BASE_URL`, `MODEL_NAME`, `HF_TOKEN`
+- LLM client: the root inference script builds an OpenAI-compatible client from those variables and uses the existing receipt-image extraction pipeline before submitting the extracted draft through the environment.
+
+Offline reproducible heuristic baseline:
+
+- command: `python inference.py --agent heuristic --format text`
 - base seed: `7`
 - episodes per task: `1`
 
@@ -195,14 +202,17 @@ The full checked-in baseline report is in [docs/hackathon/baseline-scores.md](D:
 
 ## Quickstart And Detailed Docs
 
-```bash
+```powershell
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-python inference.py --format text
+$env:API_BASE_URL="https://router.huggingface.co/v1"
+$env:MODEL_NAME="<your-model-id>"
+$env:HF_TOKEN="<your-token>"
+python inference.py
 ```
 
-This quickstart is enough to install the project and run the reproducible heuristic baseline. `requirements.txt` includes the local PPO inference runtime dependency (`torch`) so a standard repo setup can run both heuristic and checkpoint-backed PPO inference.
+This quickstart is enough to install the project and run the submitted LLM baseline. `requirements.txt` includes the local PPO inference runtime dependency (`torch`) so a standard repo setup can also run heuristic and checkpoint-backed PPO inference.
 
 Detailed runbooks:
 
@@ -213,7 +223,8 @@ Detailed runbooks:
 
 Evaluator-facing shortcuts:
 
-- baseline entrypoint: `python inference.py --format text`
+- submitted LLM baseline entrypoint: `python inference.py`
+- offline heuristic baseline entrypoint: `python inference.py --agent heuristic --format text`
 - environment API entrypoint: `uvicorn env.server:app --host 0.0.0.0 --port 7860`
 - eval dashboard: `GET /eval`
 - full baseline report: [docs/hackathon/baseline-scores.md](D:/work/RL-Reciept-OCR/docs/hackathon/baseline-scores.md)
@@ -270,7 +281,8 @@ docker run -p 7860:7860 rl-receipt-ocr
 - real annotated receipt data is the default runtime source
 - the environment implements typed models and `reset()` / `step()` / `state()`
 - task difficulty now affects runtime behavior, not only step budget
-- the heuristic baseline evaluates all three tasks deterministically by default
+- the submitted inference path uses the configured LLM through an OpenAI-compatible client and evaluates all three tasks by default
+- the heuristic baseline remains available with `python inference.py --agent heuristic --format text`
 - checkpoint-backed PPO inference is implemented behind `python inference.py --agent ppo --checkpoint ...`
 - the intended learning architecture is an external PPO-trained policy over environment observations, while any helper LLM remains frozen
 - local pytest currently passes

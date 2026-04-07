@@ -311,6 +311,28 @@ class ReceiptExtractionEnv:
             )
             return "Added line item from candidate"
 
+        if action.action_type == "add_line_item_manual":
+            if not self.task.requires_line_items:
+                self.hidden_state.last_error = "line items unsupported"
+                return "Line items are unavailable for this task"
+            description = normalize_text(action.value) or action.value
+            line_total = normalize_amount(action.line_total) or action.line_total
+            if not description and not line_total:
+                self.hidden_state.last_error = "missing line item payload"
+                return "Missing line item payload"
+            item_index = len(self.hidden_state.current_draft.line_items)
+            self.hidden_state.current_draft.line_items.append(
+                ReceiptLineItem(
+                    item_id=f"manual:{item_index}",
+                    description=description,
+                    line_total=line_total,
+                    quantity=action.quantity,
+                    raw_text=" ".join(part for part in (description, line_total) if part),
+                    evidence_ids=list(action.evidence_ids or []),
+                )
+            )
+            return "Added manual line item"
+
         if action.action_type == "remove_line_item":
             if action.line_item_index is None:
                 self.hidden_state.last_error = "missing line_item_index"

@@ -9,27 +9,40 @@ from agents.base import Agent
 from agents.heuristic import HeuristicAgent
 from env.config import load_environment
 from env.environment import ReceiptExtractionEnv
+from env.evaluation import DatasetAuditRecord, build_model_client, require_env, run_extraction_model
+from env.models import ReceiptAction, ReceiptDraft
 from env.tasks import TASKS
 
 load_environment()
 
 TASK_ORDER = tuple(TASKS.keys())
+ENV_NAME = "rl-receipt-ocr"
 
 
-def log_start(task: str, env_name: str, agent: str, seed: int) -> None:
-    print(f"[START] task={task} env={env_name} agent={agent} seed={seed}", flush=True)
+def clamp01(value: float) -> float:
+    return max(0.0, min(1.0, float(value)))
+
+
+def one_line(value: object) -> str:
+    text = str(value)
+    return " ".join(text.splitlines()).strip()
+
+
+def log_start(task: str, env_name: str, model: str) -> None:
+    print(f"[START] task={one_line(task)} env={one_line(env_name)} model={one_line(model)}", flush=True)
 
 
 def log_step(step: int, action: str, reward: float, done: bool, error: str | None) -> None:
+    error_value = one_line(error) if error else "null"
     print(
-        f"[STEP] step={step} action={action} reward={reward:.2f} done={str(done).lower()} error={error or 'null'}",
+        f"[STEP] step={step} action={one_line(action)} reward={clamp01(reward):.2f} done={str(done).lower()} error={error_value}",
         flush=True,
     )
 
 
 def log_end(success: bool, steps: int, score: float, rewards: list[float]) -> None:
-    rewards_str = ",".join(f"{reward:.2f}" for reward in rewards)
-    print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
+    rewards_str = ",".join(f"{clamp01(reward):.2f}" for reward in rewards)
+    print(f"[END] success={str(success).lower()} steps={steps} score={clamp01(score):.3f} rewards={rewards_str}", flush=True)
 
 
 def default_agent() -> Agent:
@@ -62,7 +75,7 @@ def run_episode(task: str, seed: int, agent: Agent | None = None, verbose: bool 
     success = False
 
     if verbose:
-        log_start(task=task, env_name="rl-receipt-ocr", agent=selected_agent.name, seed=seed)
+        log_start(task=task, env_name=ENV_NAME, model=selected_agent.name)
 
     while not result.done and steps < env.task.max_steps:
         steps += 1
@@ -94,6 +107,135 @@ def run_episode(task: str, seed: int, agent: Agent | None = None, verbose: bool 
     }
 
 
+def build_llm_client_from_env() -> tuple[Any, str]:
+    base_url = require_env("API_BASE_URL")
+    model_name = require_env("MODEL_NAME")
+    require_env("HF_TOKEN")
+    return build_model_client(base_url), model_name
+
+
+def audit_record_from_env(env: ReceiptExtractionEnv) -> DatasetAuditRecord:
+    hidden_state = env.hidden_state
+    if not hidden_state.image_ref:
+        raise ValueError("LLM inference requires the selected receipt to have a local image path")
+    return DatasetAuditRecord(
+        sample_id=hidden_state.sample_id,
+        task_id=hidden_state.task_id,
+        annotation_path=f"{hidden_state.sample_id}.json",
+        image_path=hidden_state.image_ref,
+        dataset_status="runnable",
+        gold_fields=hidden_state.gold_fields,
+        gold_line_items=hidden_state.gold_line_items,
+    )
+
+
+def format_action(action: ReceiptAction) -> str:
+    return action.model_dump_json(exclude_none=True)
+
+
+def actions_from_llm_prediction(
+    prediction: ReceiptDraft,
+    field_order: list[str],
+    requires_line_items: bool,
+    max_actions: int,
+) -> list[ReceiptAction]:
+    actions: list[ReceiptAction] = []
+    for field in field_order:
+        value = getattr(prediction, field, None)
+        if value is not None and str(value).strip():
+            actions.append(ReceiptAction(action_type="set_field_manual", field=field, value=str(value).strip()))
+
+    if requires_line_items:
+        for item in prediction.line_items:
+            description = item.description or item.raw_text
+            if description or item.line_total:
+                actions.append(
+                    ReceiptAction(
+                        action_type="add_line_item_manual",
+                        value=description,
+                        line_total=item.line_total,
+                        quantity=item.quantity,
+                        evidence_ids=item.evidence_ids or None,
+                    )
+                )
+
+    return actions[:max_actions]
+
+
+def run_llm_episode(task: str, seed: int, client: Any, model_name: str, emit_logs: bool = False) -> dict[str, Any]:
+    env = ReceiptExtractionEnv()
+    result = None
+    rewards: list[float] = []
+    steps = 0
+    score = 0.0
+    success = False
+    sample_id: str | None = None
+    field_scores: dict[str, float] = {}
+    error: str | None = None
+
+    if emit_logs:
+        log_start(task=task, env_name=ENV_NAME, model=model_name)
+
+    try:
+        result = env.reset(task_name=task, seed=seed)
+        sample_id = env.state().sample_id
+        prediction = run_extraction_model(audit_record_from_env(env), client, model_name)
+        actions = actions_from_llm_prediction(
+            prediction=prediction,
+            field_order=env.task.target_fields,
+            requires_line_items=env.task.requires_line_items,
+            max_actions=max(env.task.max_steps - 1, 0),
+        )
+
+        for action in actions:
+            if result.done:
+                break
+            steps += 1
+            result = env.step(action)
+            rewards.append(result.reward)
+            if emit_logs:
+                log_step(steps, format_action(action), result.reward, result.done, env.state().last_error)
+
+        if not result.done:
+            action = ReceiptAction(action_type="submit")
+            steps += 1
+            result = env.step(action)
+            rewards.append(result.reward)
+            if emit_logs:
+                log_step(steps, format_action(action), result.reward, result.done, env.state().last_error)
+    except Exception as exc:  # pragma: no cover - exact model/client failures vary
+        error = str(exc)
+        if result is not None and not result.done and steps < env.task.max_steps:
+            action = ReceiptAction(action_type="submit")
+            steps += 1
+            result = env.step(action)
+            rewards.append(result.reward)
+            if emit_logs:
+                log_step(steps, format_action(action), result.reward, result.done, error)
+    finally:
+        if result is not None and result.done:
+            score = float(result.info.get("final_score", 0.0))
+            success = bool(result.info.get("success", False))
+            field_scores = result.info.get("field_scores", {})
+        if emit_logs:
+            log_end(success=success, steps=steps, score=score, rewards=rewards)
+
+    return {
+        "task": task,
+        "seed": seed,
+        "sample_id": sample_id,
+        "success": success,
+        "score": clamp01(score),
+        "steps": steps,
+        "max_steps": env.task.max_steps,
+        "cumulative_reward": round(sum(rewards), 6),
+        "reward_trace": [round(reward, 6) for reward in rewards],
+        "budget_exhausted": bool(result.info.get("budget_exhausted", False)) if result is not None else False,
+        "field_scores": field_scores,
+        "error": error,
+    }
+
+
 def summarize_task_runs(task: str, runs: list[dict[str, Any]]) -> dict[str, Any]:
     return {
         "task": task,
@@ -118,6 +260,44 @@ def evaluate_tasks(tasks: list[str], seed: int = 7, episodes: int = 1, agent: Ag
 
     return {
         "agent": selected_agent.name,
+        "base_seed": seed,
+        "episodes_per_task": episodes,
+        "tasks": task_summaries,
+        "aggregate": {
+            "task_count": len(task_summaries),
+            "mean_score": round(mean(task_summary["mean_score"] for task_summary in task_summaries), 6),
+            "mean_success_rate": round(mean(task_summary["success_rate"] for task_summary in task_summaries), 6),
+            "mean_steps": round(mean(task_summary["mean_steps"] for task_summary in task_summaries), 6),
+            "mean_cumulative_reward": round(mean(task_summary["mean_cumulative_reward"] for task_summary in task_summaries), 6),
+        },
+    }
+
+
+def evaluate_tasks_with_llm(
+    tasks: list[str],
+    seed: int,
+    episodes: int,
+    client: Any,
+    model_name: str,
+    emit_logs: bool = False,
+) -> dict[str, Any]:
+    task_summaries: list[dict[str, Any]] = []
+    for task in tasks:
+        runs = [
+            run_llm_episode(
+                task=task,
+                seed=episode_seed(seed, task, episode_index),
+                client=client,
+                model_name=model_name,
+                emit_logs=emit_logs,
+            )
+            for episode_index in range(episodes)
+        ]
+        task_summaries.append(summarize_task_runs(task, runs))
+
+    return {
+        "agent": "llm",
+        "model": model_name,
         "base_seed": seed,
         "episodes_per_task": episodes,
         "tasks": task_summaries,
@@ -162,7 +342,7 @@ def print_text_summary(summary: dict[str, Any]) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--agent", choices=["heuristic", "ppo"], default="heuristic")
+    parser.add_argument("--agent", choices=["llm", "heuristic", "ppo"], default="llm")
     parser.add_argument("--checkpoint")
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--task", choices=[*TASK_ORDER, "all"], default="all")
@@ -178,12 +358,25 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        agent = build_agent(agent_name=args.agent, checkpoint=args.checkpoint, device=args.device)
+        tasks = resolve_tasks(args.task)
+        if args.agent == "llm":
+            client, model_name = build_llm_client_from_env()
+            summary = evaluate_tasks_with_llm(
+                tasks=tasks,
+                seed=args.seed,
+                episodes=args.episodes,
+                client=client,
+                model_name=model_name,
+                emit_logs=args.format == "text",
+            )
+        else:
+            agent = build_agent(agent_name=args.agent, checkpoint=args.checkpoint, device=args.device)
+            summary = evaluate_tasks(tasks=tasks, seed=args.seed, episodes=args.episodes, agent=agent, verbose=args.verbose)
     except (FileNotFoundError, ImportError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
 
-    tasks = resolve_tasks(args.task)
-    summary = evaluate_tasks(tasks=tasks, seed=args.seed, episodes=args.episodes, agent=agent, verbose=args.verbose)
+    if args.agent == "llm" and args.format == "text":
+        return 0
     if args.format == "json":
         print(json.dumps(summary, indent=2), flush=True)
     else:

@@ -303,7 +303,7 @@ def image_to_data_url(image_path: str | Path) -> str:
 
 
 def resolve_api_key() -> str:
-    for key_name in ("OPENAI_API_KEY", "HF_TOKEN", "API_KEY"):
+    for key_name in ("HF_TOKEN", "OPENAI_API_KEY", "API_KEY"):
         value = os.getenv(key_name, "").strip()
         if value:
             return value
