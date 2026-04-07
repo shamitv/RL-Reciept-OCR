@@ -1,3 +1,13 @@
+---
+title: Rl Hackathon 26
+emoji: "🐠"
+colorFrom: red
+colorTo: pink
+sdk: docker
+pinned: false
+license: apache-2.0
+---
+
 # OpenEnv Receipt Understanding
 
 This README includes the core hackathon submission details:
