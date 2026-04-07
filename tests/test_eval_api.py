@@ -215,6 +215,38 @@ def test_eval_ui_includes_unprocessed_receipts_and_single_run_action(monkeypatch
     assert ui_run_response.headers["location"] == "/eval/receipts/sample-3"
 
 
+def test_eval_detail_falls_back_to_audit_image_metadata(monkeypatch, tmp_path: Path) -> None:
+    output_dir = tmp_path / "eval-output"
+    _build_artifacts(output_dir)
+    monkeypatch.setenv("RECEIPT_EVAL_OUTPUT_DIR", str(output_dir))
+
+    legacy_image_json = _write_image_json(output_dir, "sample-2", b"legacy-image")
+    audits = [
+        DatasetAuditRecord(
+            sample_id="sample-2",
+            task_id="easy",
+            annotation_path=str(output_dir / "sample-2.json"),
+            image_id="sample-2",
+            image_json_path=str(legacy_image_json),
+            dataset_status="runnable",
+            gold_fields=ReceiptDraft(company="Cafe", date="2019-03-26", address="9 Street", total="10.00"),
+        ),
+    ]
+    monkeypatch.setattr("env.evaluation.audit_dataset", lambda dataset_root=None: audits)
+
+    client = TestClient(app)
+
+    detail_response = client.get("/api/eval/receipts/sample-2")
+    assert detail_response.status_code == 200
+    assert detail_response.json()["task_id"] == "easy"
+    assert detail_response.json()["image_json_path"] == str(legacy_image_json)
+    assert detail_response.json()["has_image"] is True
+
+    page_response = client.get("/eval/receipts/sample-2")
+    assert page_response.status_code == 200
+    assert "Click to enlarge" in page_response.text
+
+
 def test_eval_ui_falls_back_to_processed_records_when_dataset_missing(monkeypatch, tmp_path: Path) -> None:
     output_dir = tmp_path / "eval-output"
     _build_artifacts(output_dir)

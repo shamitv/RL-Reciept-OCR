@@ -141,6 +141,15 @@ def enrich_detail_payload(payload: dict[str, Any]) -> dict[str, Any]:
     return payload
 
 
+def merge_audit_metadata(payload: dict[str, Any], audit: Any) -> dict[str, Any]:
+    for key in ("task_id", "image_id", "image_json_path"):
+        if not payload.get(key):
+            payload[key] = getattr(audit, key, None)
+    if not payload.get("annotation_path"):
+        payload["annotation_path"] = audit.annotation_path
+    return payload
+
+
 def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str, Any] | None:
     try:
         audit = get_audit_record(sample_id)
@@ -160,6 +169,7 @@ def detail_record_payload(store: EvalArtifactStore, sample_id: str) -> dict[str,
 
     if record is not None:
         payload = record.model_dump(mode="json")
+        payload = merge_audit_metadata(payload, audit)
         payload["processed"] = True
         payload["processable"] = audit.dataset_status == "runnable"
         payload["has_image"] = bool(payload.get("image_json_path") and audit.dataset_status != "skipped_missing_image")
