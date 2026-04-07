@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-04-07T19:00:56.582476Z",
+  "dataset_root": "D:\\work\\RL-Reciept-OCR\\dataset\\Receipt dataset\\ds0",
+  "output_dir": "D:\\work\\RL-Reciept-OCR\\artifacts\\eval\\dataset-image-eval",
+  "expected_total_records": 192,
+  "completed_records": 192,
+  "counts": {
+    "partial": 134,
+    "skipped": 46,
+    "failed": 2,
+    "worked": 10
+  },
+  "dataset_status_counts": {
+    "runnable": 146,
+    "skipped_missing_labels": 38,
+    "skipped_unparseable_gold": 8
+  },
+  "mean_score": 0.727607,
+  "records_with_errors": 0,
+  "field_mean_scores": {
+    "company": 0.864762,
+    "date": 0.582192,
+    "address": 0.875732,
+    "subtotal": 0.712329,
+    "tax": 0.794521,
+    "total": 0.883562
+  },
+  "component_mean_scores": {
+    "header_score": 0.206166,
+    "summary_score": 0.146233,
+    "line_items_score": 0.269044,
+    "reconciliation_score": 0.106164,
+    "line_item_count_score": 0.834663
+  },
+  "line_item_availability_counts": {
+    "with_gold_line_items": 143,
+    "without_gold_line_items": 49
+  },
+  "top_failure_reasons": {
+    "missing_required_labels": 38,
+    "date_format_mismatch": 34,
+    "missing_line_items": 16,
+    "line_item_merging": 15,
+    "missing_line_item": 11,
+    "unparseable_gold_fields": 8,
+    "incorrect_subtotal": 7,
+    "reconciliation_failure": 6,
+    "company_name_mismatch": 5,
+    "date_mismatch": 5
+  }
+}
