@@ -311,7 +311,7 @@ def run_llm_audit_record(record: DatasetAuditRecord, client: Any, model_name: st
         raise ValueError(f"Selected inference records must be runnable: {record.sample_id}")
 
     if emit_logs:
-        log_start(task=f"{task}:{record.sample_id}", env_name=ENV_NAME, model=model_name)
+        log_start(task=task, env_name=ENV_NAME, model=model_name)
 
     try:
         result = env.reset_with_sample(sample_from_audit_record(record), task_name=task)
