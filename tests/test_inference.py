@@ -203,3 +203,49 @@ def test_load_selected_audit_records_prefers_copied_dataset_paths(tmp_path: Path
     assert records[0].image_id == "sample-receipt.jpg"
     assert records[0].image_json_path == str(image_json_path)
     assert records[0].annotation_path == str(annotation_path)
+
+
+def test_load_selected_audit_records_falls_back_to_repo_dataset_image_json(tmp_path: Path) -> None:
+    repo_dataset_dir = tmp_path / "dataset" / "Receipt dataset" / "ds0"
+    repo_annotation_path = repo_dataset_dir / "ann" / "sample-receipt.jpg.json"
+    repo_annotation_path.parent.mkdir(parents=True)
+    repo_image_json_path = _write_image_json(repo_dataset_dir, "sample-receipt.jpg")
+    repo_annotation_path.write_text("{}", encoding="utf-8")
+
+    selected_dataset_dir = tmp_path / "artifacts" / "datasets" / "receipt-selection-50" / "dataset"
+    selected_annotation_path = selected_dataset_dir / "ann" / "sample-receipt.jpg.json"
+    selected_annotation_path.parent.mkdir(parents=True)
+    selected_annotation_path.write_text("{}", encoding="utf-8")
+
+    manifest_path = tmp_path / "artifacts" / "datasets" / "receipt-selection-50" / "selected_manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "records": [
+                    {
+                        "sample_id": "sample-receipt.jpg",
+                        "task_id": "easy",
+                        "dataset_status": "runnable",
+                        "image_id": "sample-receipt.jpg",
+                        "image_json_path": "D:/stale/img_json/sample-receipt.jpg.json",
+                        "annotation_path": "D:/stale/ann/sample-receipt.jpg.json",
+                        "gold_fields": {
+                            "company": "Store",
+                            "date": "2019-03-25",
+                            "address": "1 Road",
+                            "total": "10.00",
+                        },
+                        "gold_line_items": [],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    records = load_selected_audit_records(manifest_path)
+
+    assert len(records) == 1
+    assert records[0].image_json_path == str(repo_image_json_path)
+    assert records[0].annotation_path == str(selected_annotation_path)

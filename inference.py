@@ -11,6 +11,7 @@ from agents.heuristic import HeuristicAgent
 from env.config import load_environment
 from env.environment import ReceiptExtractionEnv
 from env.evaluation import DatasetAuditRecord, build_model_client, require_env, run_extraction_model
+from env.image_store import IMAGE_JSON_DIR_NAME
 from env.models import ReceiptAction, ReceiptDraft, ReceiptLineItem, ReceiptSample
 from env.tasks import TASKS
 
@@ -133,21 +134,67 @@ def audit_record_from_env(env: ReceiptExtractionEnv) -> DatasetAuditRecord:
     )
 
 
+def _maybe_existing_path(value: object) -> Path | None:
+    if value is None:
+        return None
+    path = Path(str(value))
+    return path if path.exists() else None
+
+
+def _dataset_root_candidates_from_manifest(manifest_path: Path) -> list[Path]:
+    candidates: list[Path] = []
+    seen: set[Path] = set()
+
+    for ancestor in manifest_path.parents:
+        candidate = ancestor / "dataset" / "Receipt dataset" / "ds0"
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        candidates.append(candidate)
+
+    return candidates
+
+
+def _resolve_selected_dataset_path(
+    *,
+    manifest_path: Path,
+    sample_id: str,
+    subdir: str,
+    manifest_value: object,
+) -> Path:
+    candidates: list[Path] = [manifest_path.parent / "dataset" / subdir / f"{sample_id}.json"]
+
+    manifest_candidate = _maybe_existing_path(manifest_value)
+    if manifest_candidate is not None:
+        candidates.append(manifest_candidate)
+
+    for dataset_root in _dataset_root_candidates_from_manifest(manifest_path):
+        candidates.append(dataset_root / subdir / f"{sample_id}.json")
+
+    seen: set[Path] = set()
+    for candidate in candidates:
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        if candidate.exists():
+            return candidate
+
+    return Path(str(manifest_value if manifest_value is not None else candidates[0]))
+
+
 def audit_record_from_selected_record(record: dict[str, Any], manifest_path: Path) -> DatasetAuditRecord:
     sample_id = str(record["sample_id"])
-    selected_dataset_dir = manifest_path.parent / "dataset"
-    selected_image_json_path = selected_dataset_dir / "img_json" / f"{sample_id}.json"
-    selected_annotation_path = selected_dataset_dir / "ann" / f"{sample_id}.json"
-
-    image_json_path = (
-        selected_image_json_path
-        if selected_image_json_path.exists()
-        else Path(str(record.get("image_json_path", selected_image_json_path)))
+    image_json_path = _resolve_selected_dataset_path(
+        manifest_path=manifest_path,
+        sample_id=sample_id,
+        subdir=IMAGE_JSON_DIR_NAME,
+        manifest_value=record.get("image_json_path"),
     )
-    annotation_path = (
-        selected_annotation_path
-        if selected_annotation_path.exists()
-        else Path(str(record.get("annotation_path", f"{sample_id}.json")))
+    annotation_path = _resolve_selected_dataset_path(
+        manifest_path=manifest_path,
+        sample_id=sample_id,
+        subdir="ann",
+        manifest_value=record.get("annotation_path"),
     )
 
     gold_fields_payload = record.get("gold_fields") or {}
