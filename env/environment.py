@@ -117,6 +117,9 @@ class ReceiptExtractionEnv:
             last_error=self.hidden_state.last_error,
         )
 
+    def close(self) -> None:
+        return None
+
     def step(self, action: ReceiptAction) -> StepResult:
         if self.hidden_state.done:
             return StepResult(observation=self.last_observation, reward=0.0, done=True, info={"error": "episode already done"})

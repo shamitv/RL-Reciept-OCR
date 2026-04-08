@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 from statistics import mean
 from typing import Any
@@ -17,13 +18,17 @@ from env.tasks import TASKS
 
 load_environment()
 
+# Submission-facing environment variables are declared here to mirror the
+# sample inference contract. LOCAL_IMAGE_NAME stays optional because this
+# environment does not use from_docker_image().
+API_BASE_URL = os.getenv("API_BASE_URL") or "https://router.huggingface.co/v1"
+MODEL_NAME = os.getenv("MODEL_NAME") or "Qwen/Qwen2.5-72B-Instruct"
+HF_TOKEN = os.getenv("HF_TOKEN", "").strip()
+LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
+
 TASK_ORDER = tuple(TASKS.keys())
 ENV_NAME = "rl-receipt-ocr"
 DEFAULT_SELECTION_MANIFEST = Path(__file__).resolve().parent / "artifacts" / "datasets" / "receipt-selection-50" / "selected_manifest.json"
-
-
-def clamp01(value: float) -> float:
-    return max(0.0, min(1.0, float(value)))
 
 
 def one_line(value: object) -> str:
@@ -38,14 +43,23 @@ def log_start(task: str, env_name: str, model: str) -> None:
 def log_step(step: int, action: str, reward: float, done: bool, error: str | None) -> None:
     error_value = one_line(error) if error else "null"
     print(
-        f"[STEP] step={step} action={one_line(action)} reward={clamp01(reward):.2f} done={str(done).lower()} error={error_value}",
+        f"[STEP] step={step} action={one_line(action)} reward={reward:.2f} done={str(done).lower()} error={error_value}",
         flush=True,
     )
 
 
 def log_end(success: bool, steps: int, score: float, rewards: list[float]) -> None:
-    rewards_str = ",".join(f"{clamp01(reward):.2f}" for reward in rewards)
-    print(f"[END] success={str(success).lower()} steps={steps} score={clamp01(score):.3f} rewards={rewards_str}", flush=True)
+    rewards_str = ",".join(f"{reward:.2f}" for reward in rewards)
+    print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
+
+
+def close_env(env: object) -> None:
+    close = getattr(env, "close", None)
+    if callable(close):
+        try:
+            close()
+        except Exception:
+            pass
 
 
 def default_agent() -> Agent:
@@ -71,7 +85,7 @@ def episode_seed(base_seed: int, task: str, episode_index: int) -> int:
 def run_episode(task: str, seed: int, agent: Agent | None = None, verbose: bool = False) -> dict[str, Any]:
     selected_agent = agent or default_agent()
     env = ReceiptExtractionEnv()
-    result = env.reset(task_name=task, seed=seed)
+    result = None
     rewards: list[float] = []
     steps = 0
     score = 0.0
@@ -80,20 +94,23 @@ def run_episode(task: str, seed: int, agent: Agent | None = None, verbose: bool 
     if verbose:
         log_start(task=task, env_name=ENV_NAME, model=selected_agent.name)
 
-    while not result.done and steps < env.task.max_steps:
-        steps += 1
-        action = selected_agent.select_action(env)
-        result = env.step(action)
-        rewards.append(result.reward)
+    try:
+        result = env.reset(task_name=task, seed=seed)
+        while not result.done and steps < env.task.max_steps:
+            steps += 1
+            action = selected_agent.select_action(env)
+            result = env.step(action)
+            rewards.append(result.reward)
+            if verbose:
+                log_step(steps, action.model_dump_json(), result.reward, result.done, env.state().last_error)
+            if result.done:
+                score = float(result.info.get("final_score", 0.0))
+                success = bool(result.info.get("success", False))
+                break
+    finally:
+        close_env(env)
         if verbose:
-            log_step(steps, action.model_dump_json(), result.reward, result.done, env.state().last_error)
-        if result.done:
-            score = float(result.info.get("final_score", 0.0))
-            success = bool(result.info.get("success", False))
-            break
-
-    if verbose:
-        log_end(success=success, steps=steps, score=score, rewards=rewards)
+            log_end(success=success, steps=steps, score=score, rewards=rewards)
 
     return {
         "task": task,
@@ -105,16 +122,15 @@ def run_episode(task: str, seed: int, agent: Agent | None = None, verbose: bool 
         "max_steps": env.task.max_steps,
         "cumulative_reward": round(sum(rewards), 6),
         "reward_trace": [round(reward, 6) for reward in rewards],
-        "budget_exhausted": bool(result.info.get("budget_exhausted", False)),
-        "field_scores": result.info.get("field_scores", {}),
+        "budget_exhausted": bool(result.info.get("budget_exhausted", False)) if result is not None else False,
+        "field_scores": result.info.get("field_scores", {}) if result is not None else {},
     }
 
 
 def build_llm_client_from_env() -> tuple[Any, str]:
-    base_url = require_env("API_BASE_URL")
-    model_name = require_env("MODEL_NAME")
-    require_env("HF_TOKEN")
-    return build_model_client(base_url), model_name
+    if not HF_TOKEN:
+        require_env("HF_TOKEN")
+    return build_model_client(API_BASE_URL), MODEL_NAME
 
 
 def audit_record_from_env(env: ReceiptExtractionEnv) -> DatasetAuditRecord:
@@ -317,6 +333,7 @@ def run_llm_episode(task: str, seed: int, client: Any, model_name: str, emit_log
             if emit_logs:
                 log_step(steps, format_action(action), result.reward, result.done, error)
     finally:
+        close_env(env)
         if result is not None and result.done:
             score = float(result.info.get("final_score", 0.0))
             success = bool(result.info.get("success", False))
@@ -329,7 +346,7 @@ def run_llm_episode(task: str, seed: int, client: Any, model_name: str, emit_log
         "seed": seed,
         "sample_id": sample_id,
         "success": success,
-        "score": clamp01(score),
+        "score": score,
         "steps": steps,
         "max_steps": env.task.max_steps,
         "cumulative_reward": round(sum(rewards), 6),
@@ -405,6 +422,7 @@ def run_llm_audit_record(record: DatasetAuditRecord, client: Any, model_name: st
             if emit_logs:
                 log_step(steps, format_action(action), result.reward, result.done, error)
     finally:
+        close_env(env)
         if result is not None and result.done:
             score = float(result.info.get("final_score", 0.0))
             success = bool(result.info.get("success", False))
@@ -417,7 +435,7 @@ def run_llm_audit_record(record: DatasetAuditRecord, client: Any, model_name: st
         "seed": None,
         "sample_id": record.sample_id,
         "success": success,
-        "score": clamp01(score),
+        "score": score,
         "steps": steps,
         "max_steps": env.task.max_steps,
         "cumulative_reward": round(sum(rewards), 6),
