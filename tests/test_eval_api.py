@@ -135,6 +135,7 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     dashboard_response = client.get("/eval")
     assert dashboard_response.status_code == 200
     assert "Receipt Eval Dashboard" in dashboard_response.text
+    assert "Version " in dashboard_response.text
     assert "sample-1" in dashboard_response.text
     assert "Runnable Receipts" in dashboard_response.text
     assert "All Receipts" not in dashboard_response.text
@@ -272,6 +273,72 @@ def test_eval_detail_falls_back_to_audit_image_metadata(monkeypatch, tmp_path: P
     page_response = client.get("/eval/receipts/sample-2")
     assert page_response.status_code == 200
     assert "Click to enlarge" in page_response.text
+
+
+def test_eval_detail_and_image_prefer_current_audit_paths_over_stale_record_paths(monkeypatch, tmp_path: Path) -> None:
+    output_dir = tmp_path / "eval-output"
+    current_image_json = _write_image_json(output_dir, "sample-stale", b"fresh-image")
+
+    records = [
+        ReceiptEvalRecord(
+            sample_id="sample-stale",
+            task_id="easy",
+            annotation_path="D:/stale/ann/sample-stale.json",
+            image_id="sample-stale",
+            image_json_path="D:/stale/img_json/sample-stale.json",
+            dataset_status="runnable",
+            status="worked",
+            gold_fields=ReceiptDraft(company="Store", date="2019-03-25", address="12 Road", total="31.00"),
+            predicted_fields=ReceiptDraft(company="Store", date="2019-03-25", address="12 Road", total="31.00"),
+            field_results={
+                "company": FieldEvaluation(predicted="Store", gold="Store", score=1.0, status="correct"),
+                "date": FieldEvaluation(predicted="2019-03-25", gold="2019-03-25", score=1.0, status="correct"),
+                "address": FieldEvaluation(predicted="12 Road", gold="12 Road", score=1.0, status="correct"),
+                "total": FieldEvaluation(predicted="31.00", gold="31.00", score=1.0, status="correct"),
+            },
+            overall_score=1.0,
+            deterministic_success=True,
+            judge=JudgeEvaluation(summary="Perfect extraction"),
+            created_at="2026-04-06T00:00:00Z",
+        )
+    ]
+    summary = EvalSummary(
+        generated_at="2026-04-06T00:00:00Z",
+        dataset_root="D:/tmp/dataset",
+        output_dir=str(output_dir),
+        expected_total_records=1,
+        completed_records=1,
+        counts={"worked": 1},
+        dataset_status_counts={"runnable": 1},
+        mean_score=1.0,
+    )
+    write_eval_artifacts(output_dir, records, summary, render_markdown_report(summary, records))
+    monkeypatch.setenv("RECEIPT_EVAL_OUTPUT_DIR", str(output_dir))
+    monkeypatch.setattr(
+        "env.evaluation.audit_dataset",
+        lambda dataset_root=None: [
+            DatasetAuditRecord(
+                sample_id="sample-stale",
+                task_id="easy",
+                annotation_path=str(output_dir / "sample-stale.json"),
+                image_id="sample-stale",
+                image_json_path=str(current_image_json),
+                dataset_status="runnable",
+                gold_fields=ReceiptDraft(company="Store", date="2019-03-25", address="12 Road", total="31.00"),
+            )
+        ],
+    )
+
+    client = TestClient(app)
+
+    detail_response = client.get("/api/eval/receipts/sample-stale")
+    assert detail_response.status_code == 200
+    assert detail_response.json()["image_json_path"] == str(current_image_json)
+    assert detail_response.json()["annotation_path"] == str(output_dir / "sample-stale.json")
+
+    image_response = client.get("/api/eval/receipts/sample-stale/image")
+    assert image_response.status_code == 200
+    assert image_response.content == b"fresh-image"
 
 
 def test_eval_ui_marks_stale_skipped_records_as_not_run_when_audit_recovers(monkeypatch, tmp_path: Path) -> None:

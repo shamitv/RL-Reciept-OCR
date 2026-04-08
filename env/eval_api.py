@@ -17,6 +17,64 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 TEMPLATES = Jinja2Templates(directory=str(BASE_DIR / "server" / "templates"))
 TEMPLATES.env.globals["static_asset_version"] = str(int((BASE_DIR / "server" / "static" / "eval.css").stat().st_mtime))
 
+
+def _resolve_git_dir(repo_root: Path) -> Path | None:
+    git_path = repo_root / ".git"
+    if git_path.is_dir():
+        return git_path
+    if git_path.is_file():
+        content = git_path.read_text(encoding="utf-8").strip()
+        prefix = "gitdir: "
+        if content.startswith(prefix):
+            return (repo_root / content[len(prefix) :]).resolve()
+    return None
+
+
+def _resolve_head_sha(git_dir: Path) -> str | None:
+    head_path = git_dir / "HEAD"
+    if not head_path.exists():
+        return None
+
+    head_value = head_path.read_text(encoding="utf-8").strip()
+    if not head_value:
+        return None
+    if not head_value.startswith("ref: "):
+        return head_value
+
+    ref_name = head_value[5:]
+    ref_path = git_dir / ref_name
+    if ref_path.exists():
+        return ref_path.read_text(encoding="utf-8").strip()
+
+    packed_refs_path = git_dir / "packed-refs"
+    if packed_refs_path.exists():
+        for line in packed_refs_path.read_text(encoding="utf-8").splitlines():
+            if not line or line.startswith("#") or line.startswith("^"):
+                continue
+            commit_sha, _, packed_ref = line.partition(" ")
+            if packed_ref == ref_name:
+                return commit_sha
+    return None
+
+
+def resolve_app_version() -> str:
+    for env_name in ("APP_VERSION", "GIT_COMMIT", "HF_COMMIT_SHA"):
+        value = os.getenv(env_name, "").strip()
+        if value:
+            return value[:7]
+
+    git_dir = _resolve_git_dir(BASE_DIR)
+    if git_dir is None:
+        return "unknown"
+
+    head_sha = _resolve_head_sha(git_dir)
+    if not head_sha:
+        return "unknown"
+    return head_sha[:7]
+
+
+TEMPLATES.env.globals["app_version"] = resolve_app_version()
+
 api_router = APIRouter(prefix="/api/eval", tags=["eval"])
 ui_router = APIRouter(tags=["eval-ui"])
 
@@ -146,10 +204,14 @@ def enrich_detail_payload(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def merge_audit_metadata(payload: dict[str, Any], audit: Any) -> dict[str, Any]:
+    # Audit records reflect the current dataset layout for this runtime.
+    # Prefer them over serialized artifact paths, which may be absolute paths
+    # from a different machine (for example, a previous Windows run).
     for key in ("task_id", "image_id", "image_json_path"):
-        if not payload.get(key):
-            payload[key] = getattr(audit, key, None)
-    if not payload.get("annotation_path"):
+        audit_value = getattr(audit, key, None)
+        if audit_value is not None:
+            payload[key] = audit_value
+    if getattr(audit, "annotation_path", None):
         payload["annotation_path"] = audit.annotation_path
     return payload
 
@@ -494,10 +556,13 @@ def eval_receipt_run(sample_id: str) -> dict[str, Any]:
 def eval_receipt_image(sample_id: str) -> Response:
     store = get_store()
     record = store.get_record(sample_id)
-    image_json_path = record.image_json_path if record is not None else None
-    if not image_json_path:
+    try:
         audit = get_audit_record(sample_id)
-        image_json_path = audit.image_json_path if audit is not None else None
+    except FileNotFoundError:
+        audit = None
+    image_json_path = audit.image_json_path if audit is not None else None
+    if not image_json_path and record is not None:
+        image_json_path = record.image_json_path
     if not image_json_path:
         raise HTTPException(status_code=404, detail=f"Receipt image JSON not found for sample_id={sample_id}")
 
