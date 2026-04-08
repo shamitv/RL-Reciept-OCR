@@ -36,3 +36,8 @@ def test_hard_grade_matches_shared_formula_terms() -> None:
 
     assert definition["title"] == "Hard task"
     assert result.score == sum(term["contribution"] for term in terms)
+    assert any(
+        "line_item_count_score is diagnostic only and is not included directly in the final deterministic score"
+        in note
+        for note in definition["notes"]
+    )

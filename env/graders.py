@@ -79,7 +79,7 @@ SCORE_FORMULAS: dict[str, dict[str, Any]] = {
         ),
         "notes": (
             "line items use best-match row similarity: 0.60*description token F1 + 0.40*amount exact match when both amounts exist.",
-            "line item count is diagnostic only and is not included in the final deterministic score.",
+            "line_item_count_score is diagnostic only and is not included directly in the final deterministic score; count mismatches still reduce line-item similarity and may affect reconciliation.",
         ),
     },
 }
