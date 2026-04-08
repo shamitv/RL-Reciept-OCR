@@ -15,6 +15,7 @@ from env.evaluation import DatasetAuditRecord, build_model_client, require_env, 
 from env.image_store import IMAGE_JSON_DIR_NAME
 from env.models import ReceiptAction, ReceiptDraft, ReceiptLineItem, ReceiptSample
 from env.tasks import TASKS
+from env.utils import strict_unit_interval
 
 load_environment()
 
@@ -50,7 +51,8 @@ def log_step(step: int, action: str, reward: float, done: bool, error: str | Non
 
 def log_end(success: bool, steps: int, score: float, rewards: list[float]) -> None:
     rewards_str = ",".join(f"{reward:.2f}" for reward in rewards)
-    print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
+    published_score = strict_unit_interval(score)
+    print(f"[END] success={str(success).lower()} steps={steps} score={published_score:.3f} rewards={rewards_str}", flush=True)
 
 
 def close_env(env: object) -> None:
@@ -117,7 +119,7 @@ def run_episode(task: str, seed: int, agent: Agent | None = None, verbose: bool 
         "seed": seed,
         "sample_id": env.state().sample_id,
         "success": success,
-        "score": score,
+        "score": strict_unit_interval(score),
         "steps": steps,
         "max_steps": env.task.max_steps,
         "cumulative_reward": round(sum(rewards), 6),
@@ -346,7 +348,7 @@ def run_llm_episode(task: str, seed: int, client: Any, model_name: str, emit_log
         "seed": seed,
         "sample_id": sample_id,
         "success": success,
-        "score": score,
+        "score": strict_unit_interval(score),
         "steps": steps,
         "max_steps": env.task.max_steps,
         "cumulative_reward": round(sum(rewards), 6),
@@ -435,7 +437,7 @@ def run_llm_audit_record(record: DatasetAuditRecord, client: Any, model_name: st
         "seed": None,
         "sample_id": record.sample_id,
         "success": success,
-        "score": score,
+        "score": strict_unit_interval(score),
         "steps": steps,
         "max_steps": env.task.max_steps,
         "cumulative_reward": round(sum(rewards), 6),

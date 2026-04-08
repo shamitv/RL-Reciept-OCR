@@ -21,7 +21,7 @@ from env.models import (
 from env.normalizers import normalize_address, normalize_amount, normalize_date, normalize_text
 from env.rewards import RewardTracker
 from env.tasks import get_task
-from env.utils import make_rng
+from env.utils import make_rng, strict_unit_interval
 
 
 @dataclass
@@ -138,12 +138,13 @@ class ReceiptExtractionEnv:
                 task_id=self.task.task_id,
                 gold_line_items=self.hidden_state.gold_line_items,
             )
+            final_score = strict_unit_interval(final.score)
             blank_fields = self._blank_field_count()
             reward = self.reward_tracker.compute_terminal_reward(final, blank_fields)
             self.hidden_state.done = True
             info = {
                 "success": final.success,
-                "final_score": final.score,
+                "final_score": final_score,
                 "field_scores": final.field_scores,
                 "header_score": final.header_score,
                 "summary_score": final.summary_score,
@@ -170,12 +171,13 @@ class ReceiptExtractionEnv:
                 task_id=self.task.task_id,
                 gold_line_items=self.hidden_state.gold_line_items,
             )
+            final_score = strict_unit_interval(final.score)
             reward += self.reward_tracker.compute_terminal_reward(final, self._blank_field_count())
             self.hidden_state.done = True
             info.update(
                 {
                     "success": final.success,
-                    "final_score": final.score,
+                    "final_score": final_score,
                     "field_scores": final.field_scores,
                     "header_score": final.header_score,
                     "summary_score": final.summary_score,

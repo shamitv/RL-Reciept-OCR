@@ -18,6 +18,7 @@ from inference import (
     episode_seed,
     evaluate_tasks,
     load_selected_audit_records,
+    log_end,
     resolve_tasks,
     run_episode,
     run_llm_episode,
@@ -160,6 +161,13 @@ def test_run_llm_episode_uses_existing_extraction_client(monkeypatch, tmp_path, 
     assert all(line.startswith(("[START]", "[STEP]", "[END]")) for line in output_lines)
     assert output_lines[-1].startswith("[END] success=")
     assert result["steps"] >= 1
+
+
+def test_log_end_publishes_score_inside_open_interval(capsys) -> None:
+    log_end(success=True, steps=3, score=1.0, rewards=[0.0, 0.5, 1.0])
+    output = capsys.readouterr().out.strip()
+
+    assert output == "[END] success=true steps=3 score=0.999 rewards=0.00,0.50,1.00"
 
 
 def test_load_selected_audit_records_prefers_copied_dataset_paths(tmp_path: Path) -> None:
