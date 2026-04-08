@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from env.config import load_environment
@@ -22,8 +23,12 @@ app.include_router(eval_api_router)
 app.include_router(eval_ui_router)
 
 
-@app.get("/")
-def root() -> dict[str, object]:
+@app.get("/", response_model=None)
+def root(request: Request) -> Response | dict[str, object]:
+    accept = request.headers.get("accept", "").lower()
+    if "text/html" in accept:
+        return RedirectResponse(url="/eval", status_code=307)
+
     return {
         "name": "rl-receipt-ocr",
         "status": "ok",
