@@ -140,6 +140,8 @@ def test_eval_api_and_ui_endpoints(monkeypatch, tmp_path: Path) -> None:
     assert "Runnable Receipts" in dashboard_response.text
     assert "All Receipts" not in dashboard_response.text
     assert 'href="/eval?task_id=easy"' in dashboard_response.text
+    assert 'href="/web/"' in dashboard_response.text
+    assert "OpenEnv Playground" in dashboard_response.text
     assert 'href="/static/eval.css?v=' in dashboard_response.text
     assert "http://testserver/static/eval.css" not in dashboard_response.text
 

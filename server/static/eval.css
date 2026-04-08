@@ -36,6 +36,7 @@ body.lightbox-open {
 }
 
 .hero,
+.launch-strip,
 .section-heading,
 .detail-nav,
 .filter-bar,
@@ -55,6 +56,18 @@ body.lightbox-open {
   border-radius: 1.4rem;
   background: linear-gradient(135deg, rgba(255, 250, 243, 0.95), rgba(247, 239, 230, 0.8));
   box-shadow: 0 24px 60px rgba(68, 47, 26, 0.08);
+}
+
+.launch-strip {
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(29, 75, 116, 0.12), rgba(247, 239, 230, 0.92));
+}
+
+.launch-strip strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 1.05rem;
 }
 
 .model-strip {
@@ -79,6 +92,7 @@ body.lightbox-open {
 }
 
 .hero-actions a,
+.launch-link,
 .detail-nav a,
 .pagination a,
 button {
@@ -89,6 +103,11 @@ button {
   border-radius: 999px;
   padding: 0.7rem 1rem;
   cursor: pointer;
+}
+
+.launch-link {
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .hero-actions {
@@ -610,6 +629,7 @@ tbody tr:hover {
     position: static;
   }
 
+  .launch-strip,
   .hero,
   .section-heading {
     align-items: flex-start;
