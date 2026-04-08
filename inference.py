@@ -22,7 +22,7 @@ load_environment()
 # sample inference contract. LOCAL_IMAGE_NAME stays optional because this
 # environment does not use from_docker_image().
 API_BASE_URL = os.getenv("API_BASE_URL") or "https://router.huggingface.co/v1"
-MODEL_NAME = os.getenv("MODEL_NAME") or "Qwen/Qwen2.5-72B-Instruct"
+MODEL_NAME = os.getenv("MODEL_NAME") or "google/gemma-3n-E4B-it"
 HF_TOKEN = os.getenv("HF_TOKEN", "").strip()
 LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 
