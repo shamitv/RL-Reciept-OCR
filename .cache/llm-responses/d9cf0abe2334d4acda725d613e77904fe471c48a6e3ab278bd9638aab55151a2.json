@@ -1,0 +1,14 @@
+{
+  "key": "d9cf0abe2334d4acda725d613e77904fe471c48a6e3ab278bd9638aab55151a2",
+  "created_at": "2026-04-07T18:39:54.501858+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly due to poor line item granularity and a date format mismatch. While the header fields (company, address, subtotal, tax, total) were mostly correct, the model collapsed multiple individual line items into two large 'combo' descriptions, failing to capture the individual components of the order.\",\n  \"failure_reasons\": [\n    \"line_item_grouping\",\n    \"date_format_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date 'Jun/22'18' does not match the required ISO format '2018-06-22'.\",\n    \"line_items\": \"The model failed to extract individual line items. Instead of 11 distinct items, it grouped all components of a combo into a single description for the combo total (e.g., combining '1 Combo', 'Chz Burger', 'Add Mayo', etc., into one item). This resulted in a high count delta and low line item score.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

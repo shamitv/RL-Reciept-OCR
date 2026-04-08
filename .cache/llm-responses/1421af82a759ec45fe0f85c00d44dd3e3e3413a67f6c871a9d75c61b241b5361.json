@@ -1,0 +1,14 @@
+{
+  "key": "1421af82a759ec45fe0f85c00d44dd3e3e3413a67f6c871a9d75c61b241b5361",
+  "created_at": "2026-04-07T18:17:47.681849+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. All header fields (company, date, address, subtotal, tax, and total) were extracted accurately. However, the line item extraction failed significantly, capturing only 2 out of 5 gold line items and merging descriptive text into one of the items.\",\n  \"failure_reasons\": [\n    \"missing_line_items\",\n    \"merged_line_items\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct\",\n    \"date\": \"Correct\",\n    \"address\": \"Correct\",\n    \"subtotal\": \"Correct\",\n    \"tax\": \"Correct\",\n    \"total\": \"Correct\",\n    \"line_items\": \"The model failed to extract line items that lacked a price (e.g., 'DINNER PLATTERS', 'EXTRAS', 'COOK MEDIUM') and merged the 'COOK MEDIUM' instruction into the 'Crisfield Special Platter' description.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

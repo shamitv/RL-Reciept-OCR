@@ -1,0 +1,14 @@
+{
+  "key": "ff30bf1221c3138d01324e1bf0759672ae1ac9b87663e6241b9e187d817d13dd",
+  "created_at": "2026-04-07T18:15:23.172347+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"KAZ RAMEN\",\n  \"date\": \"04-Nov-2018 9:07:13P\",\n  \"address\": \"22413 BARTON ROAD\\nGRAND TERRACE, CA 92313\",\n  \"subtotal\": 13.05,\n  \"tax\": 1.01,\n  \"total\": 14.06,\n  \"line_items\": [\n    {\n      \"description\": \"Tonkotsu\",\n      \"line_total\": 9.50\n    },\n    {\n      \"description\": \"Tofu\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"Egg\",\n      \"line_total\": 1.30\n    },\n    {\n      \"description\": \"Corn\",\n      \"line_total\": 0.50\n    },\n    {\n      \"description\": \"Bamboo shoots\",\n      \"line_total\": 1.00\n    },\n    {\n      \"description\": \"Naruto\",\n      \"line_total\": 0.75\n    },\n    {\n      \"description\": \"Spicy\",\n      \"line_total\": 0.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

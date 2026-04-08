@@ -1,0 +1,14 @@
+{
+  "key": "1248a3bfbfdfbd305f4ebff48c83ae111607d95352c2b2272facc1619940bfdd",
+  "created_at": "2026-04-07T17:38:23.181663+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was successful for the header fields (company, date, subtotal, tax, and total), although the address field included an extra phone number. However, the line item extraction failed significantly. The model missed two line items and incorrectly merged the product name lines with the price/quantity lines, resulting in only two items being captured instead of the four specified in the gold labels.\",\n  \"failure_reasons\": [\n    \"line_item_count_mismatch\",\n    \"line_item_incorrect_grouping\"\n  ],\n  \"field_notes\": {\n    \"address\": \"The predicted address includes a phone number ('956-350-8686') which is not part of the gold address.\",\n    \"line_items\": \"The model failed to recognize the four distinct lines as separate items according to the gold standard. Instead, it merged the product names ('PARIS', 'LE CLASSIQUE') with the prices from the preceding lines, leading to a count mismatch and incorrect item descriptions.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

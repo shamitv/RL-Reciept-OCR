@@ -1,0 +1,14 @@
+{
+  "key": "084ac54ad626b704a8236868caab9be659af4a6d83eab1e1e350b18818dad066",
+  "created_at": "2026-04-07T17:37:24.963681+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed to align with the gold labels in several areas. There is a discrepancy in the date, the header fields for subtotal and tax do not match the gold null values, and the line item list is incomplete, missing the subtotal and tax entries.\",\n  \"failure_reasons\": [\n    \"date_mismatch\",\n    \"missing_line_items\",\n    \"header_field_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '3/10/2017' does not match the gold label '2017-10-03'.\",\n    \"subtotal\": \"The predicted subtotal '47.0' was extracted, but the gold label expects null.\",\n    \"tax\": \"The predicted tax '3.29' was extracted, but the gold label expects null.\",\n    \"line_items\": \"The prediction missed two line items present in the gold labels: 'SUBTOTAL' and 'STATE TAX'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

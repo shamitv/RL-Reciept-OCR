@@ -1,0 +1,14 @@
+{
+  "key": "4c2aaccb20b2175b6a56c99e349f2bca384f2abc17bc519503c7b6c99e1b2a98",
+  "created_at": "2026-04-07T17:45:27.948294+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. Although the financial totals (subtotal, tax, total) and the date were extracted correctly, the company name does not match the gold label, and the line items were incorrectly merged, leading to an incorrect item count.\",\n  \"failure_reasons\": [\n    \"company_mismatch\",\n    \"line_item_merging\",\n    \"incorrect_item_count\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted value 'Uncle Julio's' differs from the gold label '8030 Renaissance Parkway'.\",\n    \"address\": \"The predicted address includes the street address, while the gold label only contains the city, state, and zip code.\",\n    \"line_items\": \"The model merged 'Add Chicken Fajita' and 'Pechuga de Pollo' into a single line item, failing to recognize the modifier as a separate entry as specified in the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

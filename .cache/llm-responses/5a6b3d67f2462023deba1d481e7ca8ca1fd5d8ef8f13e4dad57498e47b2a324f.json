@@ -1,0 +1,14 @@
+{
+  "key": "5a6b3d67f2462023deba1d481e7ca8ca1fd5d8ef8f13e4dad57498e47b2a324f",
+  "created_at": "2026-04-07T17:47:40.073488+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded but failed on several key aspects. While header information like company and date were mostly correct, the address contained inaccuracies, and the line item extraction was incomplete and merged distinct items.\",\n  \"failure_reasons\": [\n    \"Incomplete line item extraction: Two items (the 'LUNCH' descriptors/modifiers) were merged into the main item descriptions, and two items were missing entirely.\",\n    \"Address inaccuracy: The predicted address contains incorrect street numbers and zip codes compared to the gold label.\",\n    \"Formatting issues: Currency symbols ($) were included in numeric fields (subtotal, tax, total) which deviates from the gold format.\",\n    \"Line item count mismatch: The model extracted 5 line items instead of the 7 present in the gold standard.\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct format variation.\",\n    \"address\": \"Incorrect street number (11773 vs 11735) and incorrect zip code (33196 vs 331396).\",\n    \"subtotal\": \"Includes currency symbol.\",\n    \"tax\": \"Includes currency symbol.\",\n    \"total\": \"Includes currency symbol.\",\n    \"line_items\": \"Failed to separate 'LUNCH' as a distinct line item/modifier; merged it into the description. Missed two items from the gold set.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

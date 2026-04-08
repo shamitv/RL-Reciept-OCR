@@ -1,0 +1,14 @@
+{
+  "key": "dde75c5780200553ed29074336b4e63d578eccc6bf5c2f5d39d6fceddb1718b0",
+  "created_at": "2026-04-07T18:33:41.926989+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to line item merging, where two distinct items were combined into a single entry. Additionally, the date format does not match the gold standard, and an address was extracted despite the gold label expecting null.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"date_format_mismatch\",\n    \"address_extraction_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date 'Apr 10, 2019' does not match the gold format '2019-04-10'.\",\n    \"address\": \"The model extracted an address, but the gold label expected null.\",\n    \"line_items\": \"The model merged 'Flame Broiled Chicken' and '1/2 Chicken, Hummus, House Salad' into one line item instead of treating them as two separate items.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

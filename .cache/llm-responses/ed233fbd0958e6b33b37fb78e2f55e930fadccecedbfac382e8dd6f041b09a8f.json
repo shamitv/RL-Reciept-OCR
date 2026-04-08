@@ -1,0 +1,14 @@
+{
+  "key": "ed233fbd0958e6b33b37fb78e2f55e930fadccecedbfac382e8dd6f041b09a8f",
+  "created_at": "2026-04-07T18:53:11.957137+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"DEL FRISCO'S #8620\",\n  \"date\": \"Apr07.16 07:53PM\",\n  \"address\": \"1221 Avenue of the Americas New York, New York 10020\",\n  \"subtotal\": 404.00,\n  \"tax\": 35.86,\n  \"total\": 439.86,\n  \"line_items\": [\n    {\n      \"description\": \"4 Strip 16oz\",\n      \"line_total\": 212.00\n    },\n    {\n      \"description\": \"1 Ribeye Bone In\",\n      \"line_total\": 69.50\n    },\n    {\n      \"description\": \"1 Cauliflower\",\n      \"line_total\": 16.50\n    },\n    {\n      \"description\": \"1 Baked Potato\",\n      \"line_total\": 10.50\n    },\n    {\n      \"description\": \"1 Asparagus\",\n      \"line_total\": 15.50\n    },\n    {\n      \"description\": \"1 Onion Rings\",\n      \"line_total\": 14.50\n    },\n    {\n      \"description\": \"1 Sauteed Spinach\",\n      \"line_total\": 16.00\n    },\n    {\n      \"description\": \"3 VOSS Sparkling\",\n      \"line_total\": 25.50\n    },\n    {\n      \"description\": \"6 Coke Btl\",\n      \"line_total\": 24.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

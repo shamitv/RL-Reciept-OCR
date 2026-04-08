@@ -1,0 +1,14 @@
+{
+  "key": "f7b1b36f91e127bed9f595d205a6c98d1d1fa04fd7bf072c4b49d45bef7dc5f2",
+  "created_at": "2026-04-07T18:01:19.213169+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, correctly identifying the company, address, subtotal, tax, total, and all line items. The only significant failure was in the date field, which included a timestamp and used a different date format than the gold label.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"date_value_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date includes a time component ('8:02 AM') and uses an MM/DD/YY format, whereas the gold label expects YYYY-MM-DD.\",\n    \"total\": \"Minor discrepancy in decimal formatting (10.9 vs 10.90).\",\n    \"line_items\": \"Line item descriptions were correctly extracted but converted to Title Case instead of the UPPERCASE format found in the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "3853f076000446fc6c61a12b06fe6d48c1f09e0349d065b6445fc524b61a437e",
+  "created_at": "2026-04-07T18:54:41.430373+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. While the header fields (company, date, address, subtotal, tax, total) were correctly identified with minor formatting differences, the line item extraction failed to capture the 'raw_text' and 'evidence_ids' required for full validation.\",\n  \"failure_reasons\": [\n    \"Missing raw_text in line items\",\n    \"Missing evidence_ids in line items\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct (format differs from gold but represents the same date).\",\n    \"address\": \"Correct (minor punctuation difference).\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"The descriptions and line totals match the gold labels, but the 'raw_text' and 'evidence_ids' fields are null/empty, which prevents full verification of the extraction source.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

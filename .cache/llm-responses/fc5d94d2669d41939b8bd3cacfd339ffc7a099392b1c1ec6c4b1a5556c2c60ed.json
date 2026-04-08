@@ -1,0 +1,14 @@
+{
+  "key": "fc5d94d2669d41939b8bd3cacfd339ffc7a099392b1c1ec6c4b1a5556c2c60ed",
+  "created_at": "2026-04-07T17:47:23.379795+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"SUKHOTHAI SUSHI + ASIAN FUSION\",\n  \"date\": \"19-Apr-2019\",\n  \"address\": \"11773 SW 84th AVE UNIT 36 MIAMI, FL 33196\",\n  \"subtotal\": \"$22.98\",\n  \"tax\": \"$1.61\",\n  \"total\": \"$28.04\",\n  \"line_items\": [\n    {\n      \"description\": \"Chicken Fried Rice And Egg Lunch\",\n      \"line_total\": \"$7.99\"\n    },\n    {\n      \"description\": \"California Tropic And Miso Lunch\",\n      \"line_total\": \"$7.99\"\n    },\n    {\n      \"description\": \"Add Two Tostones\",\n      \"line_total\": \"$1.00\"\n    },\n    {\n      \"description\": \"Sprite\",\n      \"line_total\": \"$2.50\"\n    },\n    {\n      \"description\": \"Perrier Sparkling Water\",\n      \"line_total\": \"$3.50\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

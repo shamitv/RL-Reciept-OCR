@@ -1,0 +1,14 @@
+{
+  "key": "be9f1ecaee758e1906ae1c6f6ef38fd9c6c178b39722693669ca0f320e1e949e",
+  "created_at": "2026-04-07T17:49:00.535300+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"BK SOUL FOOD & CATERING\",\n  \"date\": \"June 23, 2019 at 2:33 PM\",\n  \"address\": \"11318 Yonkers Ave Yonkers, NY 10704\",\n  \"subtotal\": 24.50,\n  \"tax\": 2.17,\n  \"total\": 26.67,\n  \"line_items\": [\n    {\n      \"description\": \"WINGS (5)\",\n      \"line_total\": 12.50\n    },\n    {\n      \"description\": \"MAC & CHEESE\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"YAMS\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"SIDE (SM) x3\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"YAMS\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"MAC & CHEESE\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"COLLARD GREENS\",\n      \"line_total\": null\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

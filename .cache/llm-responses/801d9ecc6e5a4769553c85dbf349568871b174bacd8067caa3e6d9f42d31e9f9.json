@@ -1,0 +1,14 @@
+{
+  "key": "801d9ecc6e5a4769553c85dbf349568871b174bacd8067caa3e6d9f42d31e9f9",
+  "created_at": "2026-04-07T18:03:47.067663+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was successful in identifying the correct values for all requested fields. However, the reconciliation failed because the sum of the subtotal and tax does not equal the total. This discrepancy is caused by the 'Automatic Gratuity' ($3.60) listed on the receipt, which is included in the total but not accounted for in the subtotal or tax fields.\",\n  \"failure_reasons\": [\n    \"reconciliation_failure\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The extracted date format (7/21/2018) differs from the gold format (2018-07-21) but is semantically identical.\",\n    \"monetary_fields\": \"The predicted subtotal, tax, and total include currency symbols ($), while the gold labels are numeric strings.\",\n    \"reconciliation\": \"The total of 25.78 does not equal the sum of subtotal (20.00) and tax (2.18). The difference of 3.60 corresponds exactly to the 'Automatic Gratuity' shown on the receipt.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

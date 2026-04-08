@@ -1,0 +1,14 @@
+{
+  "key": "2ec13ec6e27a12eda9821a3934ea759d0cf217441f4596a2b64d2356f11732b3",
+  "created_at": "2026-04-07T18:24:08.642875+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is largely successful in capturing the core financial data and company information. However, it failed to match the specific date format required, omitted trailing zeros in the tax field, and truncated the line item descriptions by excluding the quantity suffix.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"description_truncation\",\n    \"decimal_precision_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date includes the timestamp and uses a different format (MM/DD/YYYY) than the gold label (YYYY-MM-DD).\",\n    \"tax\": \"The predicted value '2.6' lacks the trailing zero present in the gold label '2.60'.\",\n    \"line_items\": \"The descriptions 'Adult Dinner' and 'Soda' are missing the '2' suffix that is included in the gold description fields.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

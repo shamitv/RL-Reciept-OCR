@@ -1,0 +1,14 @@
+{
+  "key": "e653102f40d4f59c9218e492674e208efa403b27b6d158236d12669deb52c279",
+  "created_at": "2026-04-07T18:44:06.034467+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was successful. All primary header fields (company, date, address, subtotal, tax, total) and the core line item details (description, line_total) were correctly identified and match the gold labels. Minor omissions include the 'raw_text' and 'evidence_ids' for the line item.\",\n  \"failure_reasons\": [],\n  \"field_notes\": {\n    \"tax\": \"Predicted '0.6' instead of '0.60', which is a semantic match.\",\n    \"line_items\": \"The 'raw_text' and 'evidence_ids' fields for the line item were not extracted.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

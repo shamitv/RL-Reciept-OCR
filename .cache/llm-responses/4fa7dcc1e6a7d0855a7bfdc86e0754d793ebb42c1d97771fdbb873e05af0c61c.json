@@ -1,0 +1,14 @@
+{
+  "key": "4fa7dcc1e6a7d0855a7bfdc86e0754d793ebb42c1d97771fdbb873e05af0c61c",
+  "created_at": "2026-04-07T18:59:31.566242+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly. While the header information (company, date, address) was partially captured, the financial totals (subtotal, tax, total) are incorrect, and the line item extraction contains multiple errors in both description and line totals.\",\n  \"failure_reasons\": [\n    \"Incorrect total calculation: The predicted total (34.00) does not match the gold total (0.00), although the predicted total actually matches the sum of the items on the receipt.\",\n    \"Line item value mismatch: Several line items have incorrect line totals (e.g., 'Vassoi e Stoviglie', 'Macedonia', 'Pomodorini').\",\n    \"Financial field errors: Subtotal, tax, and total fields do not align with the gold labels.\",\n    \"Spelling errors: 'Buffala' instead of 'Bufala'.\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The company name was merged with the legal entity name, which is a partial match.\",\n    \"date\": \"Correctly extracted in a different format.\",\n    \"address\": \"Partially extracted, missing the legal entity and VAT information present in the gold label.\",\n    \"subtotal\": \"Incorrect; gold label is null.\",\n    \"tax\": \"Incorrect; gold label is null.\",\n    \"total\": \"Incorrect; gold label is 0.00, predicted is 34.00.\",\n    \"line_items\": \"Multiple errors: 'Vassoi e Stoviglie' has an incorrect total of 1.00 (gold is null); 'Macedonia' has a total of 10.00 (gold is null); 'Pomodorini' has a total of 1.00 (gold is 4.00).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

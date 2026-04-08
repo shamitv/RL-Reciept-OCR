@@ -1,0 +1,14 @@
+{
+  "key": "47e7ef66e492b0b3dd42b9689fb9e694728deaf652497722921390028645a123",
+  "created_at": "2026-04-07T18:31:20.953252+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing header information but failed significantly on line items and subtotal accuracy.\",\n  \"failure_reasons\": [\n    \"line_item_omission\",\n    \"incorrect_subtotal\",\n    \"merging_of_modifiers_into_descriptions\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct (format differs from gold but value is identical).\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Incorrect. The predicted subtotal is 8.80, whereas the gold subtotal is null. The value 8.80 appears to be a misinterpretation of a line item total.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"Major failure. The model merged modifiers (e.g., 'no pickles', 'CRISPY', 'horchata') into the main item descriptions instead of treating them as separate line items or metadata. It also missed 7 out of 12 gold line items, specifically failing to separate the individual components of the receipt.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

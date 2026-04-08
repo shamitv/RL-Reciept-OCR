@@ -1,0 +1,14 @@
+{
+  "key": "01648c6ab0a7e5787bac0974a54351297b9570eae08c2503419f7d25ff9675f6",
+  "created_at": "2026-04-07T17:36:45.680577+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was successful for all header fields, including company, date, address, subtotal, tax, and total. However, the line item extraction failed to correctly separate modifier items from their parent items. Specifically, 'SHREDDED BEEF' and 'SHREDDED BEEG' were appended to the descriptions of the preceding items rather than being extracted as individual line items, resulting in a lower line item count (7 predicted vs 9 gold).\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"line_item_count_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Perfect match.\",\n    \"date\": \"Correctly interpreted 'Feb23'19' as '2019-02-23'.\",\n    \"address\": \"Perfect match.\",\n    \"subtotal\": \"Perfect match.\",\n    \"tax\": \"Perfect match.\",\n    \"total\": \"Perfect match.\",\n    \"line_items\": \"Failed to distinguish between main items and modifiers. 'SHREDDED BEEF' and 'SHREDDED BEEG' were merged into the descriptions of '2 Enchi Omelete' and '1 Open Food' respectively.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

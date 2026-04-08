@@ -1,0 +1,14 @@
+{
+  "key": "6f3852d2944450d8328ede775a484d922efec8d9e7197e4130846221707ee605",
+  "created_at": "2026-04-07T18:52:18.754304+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Gourdough's Public House\",\n  \"date\": \"Jan21'17\",\n  \"address\": \"2700 South Lamar Blvd Austin, TX 78704\",\n  \"subtotal\": \"11.00\",\n  \"tax\": \"0.91\",\n  \"total\": \"11.91\",\n  \"line_items\": [\n    {\n      \"description\": \"FREEBIRD\",\n      \"line_total\": \"5.50\"\n    },\n    {\n      \"description\": \"ICE CREAM\",\n      \"line_total\": \"2.00\"\n    },\n    {\n      \"description\": \"LONESTAR\",\n      \"line_total\": \"3.50\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

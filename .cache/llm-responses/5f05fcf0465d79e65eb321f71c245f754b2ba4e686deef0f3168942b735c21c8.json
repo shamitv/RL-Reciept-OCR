@@ -1,0 +1,14 @@
+{
+  "key": "5f05fcf0465d79e65eb321f71c245f754b2ba4e686deef0f3168942b735c21c8",
+  "created_at": "2026-04-07T17:59:30.731051+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to incorrect line item calculations and a date format mismatch. While the header fields (subtotal, tax, total) were mostly correct, the line item '3 Prem Glass' had an incorrect line total, causing a reconciliation failure.\",\n  \"failure_reasons\": [\n    \"Incorrect line item total: The predicted line total for '3 Prem Glass' was 7.5, whereas the gold label and receipt indicate 22.50.\",\n    \"Date format mismatch: The predicted date includes time and a different format compared to the gold standard.\",\n    \"Line item description error: 'Prim' was misread as 'Prem'.\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Predicted 'Primo Family Restaurant' is a slight variation of the gold 'Family Restaurant', likely including the brand name.\",\n    \"date\": \"Predicted '5/3/19 8:14 PM' includes time, whereas gold expects '2019-03-05'.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"The first line item '3 Prem Glass' has a line_total of 7.5, which is the unit price, not the total price (22.50). This caused the line item reconciliation to fail.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

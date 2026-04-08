@@ -1,0 +1,14 @@
+{
+  "key": "5d39ce9deaccfa5ab8542340d82e30541fe2a361eb623a335069848d69862d78",
+  "created_at": "2026-04-07T18:07:05.050735+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"King Taco # 30\",\n  \"date\": \"3/17/17\",\n  \"address\": null,\n  \"subtotal\": 12.67,\n  \"tax\": 1.11,\n  \"total\": 13.78,\n  \"line_items\": [\n    {\n      \"description\": \"1 SOPE ASADA CON TODO\",\n      \"line_total\": 3.10\n    },\n    {\n      \"description\": \"1 COPA S.ROJA\",\n      \"line_total\": 1.59\n    },\n    {\n      \"description\": \"1 TACO ASADA CON CEBOLLA COPA S.ROJA\",\n      \"line_total\": 1.59\n    },\n    {\n      \"description\": \"1 TACO PASTOR NO CEBOLLA COPA S.ROJA\",\n      \"line_total\": 1.59\n    },\n    {\n      \"description\": \"1 QUESADILLA ASADA 1 ORDEN CHIPS\",\n      \"line_total\": 4.89\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

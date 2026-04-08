@@ -1,0 +1,14 @@
+{
+  "key": "c3ceacc4f6f52100c638b953faf6c01c5c28b941567c1713fd703aaa8b6d698d",
+  "created_at": "2026-04-07T17:40:08.379365+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed because it missed a critical line item: the 'ONLINE OFFER (8.99)'. This item acts as a discount that reconciles the sum of the food items to the subtotal. Because this discount was not captured, the sum of the extracted line items (44.94) does not match the extracted subtotal (35.95), resulting in a reconciliation failure.\",\n  \"failure_reasons\": [\n    \"missing_line_item\"\n  ],\n  \"field_notes\": \"All header fields (company, date, address, subtotal, tax, and total) were extracted correctly. However, the omission of the 'ONLINE OFFER' line item prevents the line items from summing to the subtotal.\"\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "d0eec2391213a7da03e238a22be2618c7c1b66de5adfa91abffcda5416715c43",
+  "created_at": "2026-04-07T18:18:11.091212+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"The Place 2 Be\",\n  \"date\": \"17-Feb-2018\",\n  \"address\": \"615 Franklin Ave, Hartford, CT 06114\",\n  \"subtotal\": null,\n  \"tax\": \"$21.50\",\n  \"total\": \"$22.87\",\n  \"line_items\": [\n    {\n      \"description\": \"American Coffee\",\n      \"line_total\": \"$1.75\"\n    },\n    {\n      \"description\": \"Nutella Coconut Pancakes\",\n      \"line_total\": \"$8.00\"\n    },\n    {\n      \"description\": \"American Coffee\",\n      \"line_total\": \"$1.75\"\n    },\n    {\n      \"description\": \"Cheddar Grits\",\n      \"line_total\": \"$10.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

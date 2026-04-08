@@ -1,0 +1,14 @@
+{
+  "key": "4d0bee89523ccc9961a1a0a4b2da703754f42fa7b38e3b678d526ad334f90236",
+  "created_at": "2026-04-07T17:24:04.124180+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded but failed to capture all line items and contained errors in item descriptions and totals.\",\n  \"failure_reasons\": [\n    \"missing_line_items\",\n    \"incorrect_line_item_description\",\n    \"incorrect_line_item_total\",\n    \"date_format_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"The date format '05/11/18' is technically correct based on the image, but the gold label expects '2018-11-05'.\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Correct (minor decimal difference).\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": {\n      \"missing\": \"One line item was missed (the gold item with no description and $36.00 total was incorrectly merged/misinterpreted as the total for '3 Sockeye Salmon - Sashimi').\",\n      \"errors\": [\n        \"Predicted 'Mega Poke Bowl' at $17.00, whereas gold label says 'MAG PKE BOWL' at $12.00.\",\n        \"Predicted '3 Sockeye Salmon - Sashimi' at $36.00, whereas gold label says $3.00 (the $36.00 is a separate line item with no description).\",\n        \"Spelling error in 'Hamachi Japenno' (Gold: 'Hamachi Jappapeno').\"\n      ]\n    }\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

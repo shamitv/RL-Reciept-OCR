@@ -1,0 +1,14 @@
+{
+  "key": "1ef704498c68638ee2c23df2dc92bd8c511df3fad517fceae0bc494821ad5adc",
+  "created_at": "2026-04-07T18:26:44.897910+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"RED & HOT II\",\n  \"date\": \"10-20-2018\",\n  \"address\": \"349 7 AVE. (CORNER OF 10ST) BROOKLYN, NY 11215\",\n  \"subtotal\": \"0.00\",\n  \"tax\": \"1.91\",\n  \"total\": \"23.46\",\n  \"line_items\": [\n    {\n      \"description\": \"Vegetable Roll Egg Roll\",\n      \"line_total\": \"0.00\"\n    },\n    {\n      \"description\": \"L35.Sesame chicken 1 W/R 1 F/R\",\n      \"line_total\": \"13.90\"\n    },\n    {\n      \"description\": \"L(L)Veg Spare Ribs .BBS W/R\",\n      \"line_total\": \"7.65\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

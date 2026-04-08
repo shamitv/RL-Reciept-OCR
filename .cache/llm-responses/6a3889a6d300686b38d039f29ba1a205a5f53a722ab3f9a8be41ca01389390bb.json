@@ -1,0 +1,14 @@
+{
+  "key": "6a3889a6d300686b38d039f29ba1a205a5f53a722ab3f9a8be41ca01389390bb",
+  "created_at": "2026-04-07T18:04:02.745691+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"NAANCHING\",\n  \"date\": \"24-Mar 2019\",\n  \"address\": \"103 MONTGOMERY ST JERSEY CITY, NJ 07302\",\n  \"subtotal\": \"$56.00\",\n  \"tax\": \"$3.71\",\n  \"total\": \"$69.79\",\n  \"line_items\": [\n    {\n      \"description\": \"Chicken Lollipop\",\n      \"line_total\": \"$9.00\"\n    },\n    {\n      \"description\": \"Thai Fried Rice\",\n      \"line_total\": \"$12.00\"\n    },\n    {\n      \"description\": \"Chicken Tikka Masala\",\n      \"line_total\": \"$16.00\"\n    },\n    {\n      \"description\": \"Naan\",\n      \"line_total\": \"$3.00\"\n    },\n    {\n      \"description\": \"Vegetable Biryani\",\n      \"line_total\": \"$12.00\"\n    },\n    {\n      \"description\": \"Mango Lassi\",\n      \"line_total\": \"$4.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

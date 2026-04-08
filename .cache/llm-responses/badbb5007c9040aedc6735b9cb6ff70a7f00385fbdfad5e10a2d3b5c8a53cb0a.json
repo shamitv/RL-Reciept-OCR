@@ -1,0 +1,14 @@
+{
+  "key": "badbb5007c9040aedc6735b9cb6ff70a7f00385fbdfad5e10a2d3b5c8a53cb0a",
+  "created_at": "2026-04-07T18:47:40.618591+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed to match the gold labels for the subtotal, total, and date fields. However, the predicted values for subtotal and total are actually more accurate to the receipt image than the gold labels, which appear to have swapped the subtotal/total and used a tip amount as the total.\",\n  \"failure_reasons\": [\n    \"Value mismatch for subtotal and total (likely due to incorrect gold labels)\",\n    \"Date format mismatch\",\n    \"Partial match for company name\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Predicted name is a subset of the gold label.\",\n    \"date\": \"Predicted format is MM/DD/YY, whereas gold is YYYY-MM-DD.\",\n    \"subtotal\": \"Mismatch: Predicted 38.95 (matches image) vs Gold 42.16.\",\n    \"total\": \"Mismatch: Predicted 42.16 (matches image) vs Gold 7.59 (which is the 18% tip).\",\n    \"line_items\": \"All line items were extracted correctly.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

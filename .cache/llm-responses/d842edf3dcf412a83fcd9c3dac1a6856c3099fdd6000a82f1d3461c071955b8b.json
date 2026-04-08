@@ -1,0 +1,14 @@
+{
+  "key": "d842edf3dcf412a83fcd9c3dac1a6856c3099fdd6000a82f1d3461c071955b8b",
+  "created_at": "2026-04-07T18:51:40.356897+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful in capturing the core financial data and the line item. However, it failed on the date format and missed the raw text for the line item.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"missing_line_item_raw_text\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date format (07/03/2015) does not match the gold format (2015-03-07).\",\n    \"line_items\": \"The description case differs from the gold label (Whiskey vs WHISKEY), and the 'raw_text' field is null.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

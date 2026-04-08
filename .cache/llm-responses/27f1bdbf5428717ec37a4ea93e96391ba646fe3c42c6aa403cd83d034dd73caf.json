@@ -1,0 +1,14 @@
+{
+  "key": "27f1bdbf5428717ec37a4ea93e96391ba646fe3c42c6aa403cd83d034dd73caf",
+  "created_at": "2026-04-07T18:20:49.474780+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Go Mongo BBQ\",\n  \"date\": \"Jan 28, 2018 5:48:07 PM\",\n  \"address\": \"6661 Stanford Ranch Rd. Rocklin, CA 95677\",\n  \"subtotal\": 48.54,\n  \"tax\": 3.52,\n  \"total\": 52.06,\n  \"line_items\": [\n    {\n      \"description\": \"BBQ Dinner\",\n      \"line_total\": 47.15\n    },\n    {\n      \"description\": \"beverage\",\n      \"line_total\": 4.91\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

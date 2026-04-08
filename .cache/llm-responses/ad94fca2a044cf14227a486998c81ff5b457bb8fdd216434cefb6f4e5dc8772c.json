@@ -1,0 +1,14 @@
+{
+  "key": "ad94fca2a044cf14227a486998c81ff5b457bb8fdd216434cefb6f4e5dc8772c",
+  "created_at": "2026-04-07T18:01:30.253641+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing header information but failed significantly on line item segmentation. While the company, date, address, and totals are mostly accurate, the model merged two distinct gold line items into a single predicted item and failed to capture the second item as a separate entity.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"missing_line_item\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company name is cleaner than the gold label, which contains a leading 'o'.\",\n    \"date\": \"The predicted date includes the timestamp, which is more descriptive than the gold label.\",\n    \"address\": \"Accurate.\",\n    \"subtotal\": \"Accurate (minor formatting difference).\",\n    \"tax\": \"Accurate.\",\n    \"total\": \"Accurate.\",\n    \"line_items\": \"The model failed to separate '1 Ribeye Steak Lunch 10' and '> med-rare' into two distinct line items. Instead, it concatenated them into one description, resulting in a loss of granularity and a mismatch in line item count.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

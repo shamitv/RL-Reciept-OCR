@@ -1,0 +1,14 @@
+{
+  "key": "6644e49e5a7478d19c6fe845331db8536a039495c16221765451e87a43d4256b",
+  "created_at": "2026-04-07T18:36:18.258824+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Arthur's\",\n  \"date\": \"Oct01'17\",\n  \"address\": \"237 Washington\\nHoboken, NJ 07030\",\n  \"subtotal\": \"56.80\",\n  \"tax\": \"3.98\",\n  \"total\": \"84.78\",\n  \"line_items\": [\n    {\n      \"description\": \"1 \\\"Arthur's Burger #ChsBleu\",\n      \"line_total\": \"13.95\"\n    },\n    {\n      \"description\": \"1 \\\"Our\\\" Burger **Avocado\",\n      \"line_total\": \"15.95\"\n    },\n    {\n      \"description\": \"1 Loaded Nachos\",\n      \"line_total\": \"12.95\"\n    },\n    {\n      \"description\": \"1 Pint Boston Lager\",\n      \"line_total\": \"6.00\"\n    },\n    {\n      \"description\": \"2 Pint Yuengling\",\n      \"line_total\": \"12.00\"\n    },\n    {\n      \"description\": \"1 Kona Longboard\",\n      \"line_total\": \"6.00\"\n    },\n    {\n      \"description\": \"1 Quesadilla\",\n      \"line_total\": \"13.95\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

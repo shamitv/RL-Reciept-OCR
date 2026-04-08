@@ -1,0 +1,14 @@
+{
+  "key": "75a2706046c9e61d7687f747d7b06a09ac6cd153bbbd283029f00349bc9f7ff9",
+  "created_at": "2026-04-07T17:43:44.296732+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"WINGS & THINGS\",\n  \"date\": \"MAR.19'17\",\n  \"address\": \"1717 DUTCH BRDY ELMONT, NY 11003\",\n  \"subtotal\": \"6.47\",\n  \"tax\": \"0.75\",\n  \"total\": \"9.50\",\n  \"line_items\": [\n    {\n      \"description\": \"1 MAC&CHZ - SMALL\",\n      \"line_total\": \"1.19\"\n    },\n    {\n      \"description\": \"1 COLL GRN - SMALL\",\n      \"line_total\": \"1.19\"\n    },\n    {\n      \"description\": \"1 CORN BREAD\",\n      \"line_total\": \".62\"\n    },\n    {\n      \"description\": \"15 WINGS\",\n      \"line_total\": \"5.75\"\n    },\n    {\n      \"description\": \"SPCY FRY\",\n      \"line_total\": null\n    },\n    {\n      \"description\": \"TXTL\",\n      \"line_total\": \".75\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "95030b4a7ef5ebc3489e930cd8c22b4194076be6f1342603a5def31f0c0f2a6c",
+  "created_at": "2026-04-07T18:24:57.456310+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was largely successful, correctly identifying the company, subtotal, tax, and total. However, the date failed validation (likely due to format or ambiguity), and there are minor spelling discrepancies in the line item descriptions compared to the gold labels. Additionally, the 'raw_text' field for line items was not populated.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"line_item_description_mismatch\",\n    \"missing_raw_text\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '06/08/19' received a score of 0.0, indicating a mismatch with the gold ISO format '2019-08-06'.\",\n    \"address\": \"The predicted address is actually more accurate to the image ('Parkway') than the gold label ('Parway').\",\n    \"line_items\": \"Descriptions contain minor spelling variations from the gold labels (e.g., 'VILLAGGIO BREEZE' vs 'VILLAGIO BREZZE'). The 'raw_text' field is null for all predicted line items.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

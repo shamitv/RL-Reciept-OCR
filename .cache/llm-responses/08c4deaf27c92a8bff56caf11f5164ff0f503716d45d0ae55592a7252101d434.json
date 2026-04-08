@@ -1,0 +1,14 @@
+{
+  "key": "08c4deaf27c92a8bff56caf11f5164ff0f503716d45d0ae55592a7252101d434",
+  "created_at": "2026-04-07T17:42:24.465461+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but contains significant errors. The tax amount was incorrectly identified as the first line item's value ($21.49), which subsequently caused that line item to be missing from the line items list. Additionally, the address zip code was truncated.\",\n  \"failure_reasons\": [\n    \"tax_misidentification\",\n    \"line_item_omission\",\n    \"address_truncation\"\n  ],\n  \"field_notes\": {\n    \"tax\": \"The model extracted '$21.49' (the first line item) as the tax, whereas the actual tax is '$4.39'.\",\n    \"address\": \"The zip code is incomplete, showing '9201' instead of '90201'.\",\n    \"line_items\": \"The line item with value '$21.49' is missing because its value was incorrectly assigned to the tax field.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

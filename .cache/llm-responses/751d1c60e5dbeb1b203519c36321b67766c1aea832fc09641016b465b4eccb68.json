@@ -1,0 +1,14 @@
+{
+  "key": "751d1c60e5dbeb1b203519c36321b67766c1aea832fc09641016b465b4eccb68",
+  "created_at": "2026-04-07T18:58:22.327163+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was successful. All header fields (company, date, address, subtotal, tax, total) and all line items were correctly extracted and match the gold labels.\",\n  \"failure_reasons\": [],\n  \"field_notes\": \"The date format (5/19/2019) differs from the gold label (2019-05-19) but is semantically identical. The address includes newlines which is acceptable. Line items match the gold descriptions and totals perfectly.\"\n}\n"
+        }
+      }
+    ]
+  }
+}

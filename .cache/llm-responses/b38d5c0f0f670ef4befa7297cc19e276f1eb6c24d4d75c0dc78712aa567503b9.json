@@ -1,0 +1,14 @@
+{
+  "key": "b38d5c0f0f670ef4befa7297cc19e276f1eb6c24d4d75c0dc78712aa567503b9",
+  "created_at": "2026-04-07T18:29:26.086590+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded but failed on key financial fields and date formatting. While the company name and line items were mostly correct, the subtotal was incorrect, and the date format did not match the gold standard.\",\n  \"failure_reasons\": [\n    \"Incorrect subtotal extraction (predicted 41.0 vs gold 31.80)\",\n    \"Date format mismatch (predicted 06/02/15 vs gold 2015-02-06)\",\n    \"Typo in line item description (predicted 'LORAIRE' vs gold 'LORAINE')\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Extracted correctly with minor spacing difference.\",\n    \"date\": \"Extracted as DD/MM/YY instead of YYYY-MM-DD.\",\n    \"subtotal\": \"Failed. The model picked up the 'OPEN $COINCUT' line (41.00) instead of the actual subtotal (31.80).\",\n    \"tax\": \"Extracted correctly.\",\n    \"total\": \"Extracted correctly.\",\n    \"line_items\": \"All items found, but the third item contains a spelling error ('LORAIRE' instead of 'LORAINE').\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

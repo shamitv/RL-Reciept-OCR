@@ -1,0 +1,14 @@
+{
+  "key": "595286777b004f20b145b4fb6420f871aa252ab21d4c17e0f474a22574de1114",
+  "created_at": "2026-04-07T18:29:13.472170+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful. All primary header fields (company, subtotal, tax, total) were correctly identified. The date and total fields have minor formatting differences (date format and decimal precision) but are semantically correct. Line items were correctly identified with accurate prices, although the descriptions omitted the leading quantity digit present in the gold labels.\",\n  \"failure_reasons\": [],\n  \"field_notes\": {\n    \"date\": \"Predicted format '19-Mar-2019' differs from gold '2019-03-19' but is correct.\",\n    \"total\": \"Predicted '19.1' differs from gold '19.10' in decimal precision but is numerically identical.\",\n    \"line_items\": \"Descriptions in the prediction (e.g., '6.5 Chicken Korma') omitted the leading '1' found in the gold descriptions ('1 6.5 CHICKEN KORMA'). Additionally, 'raw_text' and 'evidence_ids' were not provided in the prediction.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

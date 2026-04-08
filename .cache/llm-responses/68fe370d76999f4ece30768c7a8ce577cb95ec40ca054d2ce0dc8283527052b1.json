@@ -1,0 +1,14 @@
+{
+  "key": "68fe370d76999f4ece30768c7a8ce577cb95ec40ca054d2ce0dc8283527052b1",
+  "created_at": "2026-04-07T18:31:43.526602+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing the core financial values and date, but failed significantly in the company field and line item accuracy. The model hallucinated an extra line item that was actually part of the company/header text in the gold label, and it failed to match the gold line item count.\",\n  \"failure_reasons\": [\n    \"hallucination\",\n    \"incorrect_field_segmentation\",\n    \"mismatched_line_item_count\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company 'VIA EMILIA 9' is a subset of the gold company field, which incorrectly included a line item description ('1 Stufato Al Latte Di Ravenna $22.90').\",\n    \"date\": \"The date format differs (DD-MMM-YYYY vs YYYY-MM-DD) but the information is correct.\",\n    \"subtotal\": \"Predicted value includes a currency symbol ($), whereas gold is numeric only.\",\n    \"tax\": \"Predicted value includes a currency symbol ($), whereas gold is numeric only.\",\n    \"total\": \"Predicted value includes a currency symbol ($), whereas gold is numeric only.\",\n    \"line_items\": \"The model extracted 3 line items, whereas the gold label only contains 2. The third item ('Stufato Al Latte Di Ravenna') was incorrectly identified as a line item instead of being part of the header/company string as per the gold label.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

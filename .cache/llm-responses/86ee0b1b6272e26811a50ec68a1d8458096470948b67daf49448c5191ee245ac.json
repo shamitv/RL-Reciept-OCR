@@ -1,0 +1,14 @@
+{
+  "key": "86ee0b1b6272e26811a50ec68a1d8458096470948b67daf49448c5191ee245ac",
+  "created_at": "2026-04-07T17:35:39.611890+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to significant errors in line item parsing and reconciliation. While header fields like date, subtotal, tax, and total were mostly correct, the line items were incorrectly mapped, misaligned with their prices, and included extra items not present in the gold standard.\",\n  \"failure_reasons\": [\n    \"line_item_misalignment\",\n    \"hallucinated_line_items\",\n    \"incorrect_line_item_totals\",\n    \"company_name_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company name 'Quick 73 Smoke City Market' includes extra text not present in the gold label.\",\n    \"date\": \"Correctly extracted, though includes time.\",\n    \"address\": \"Minor discrepancy in street number (5242 vs 5243).\",\n    \"subtotal\": \"Correct (ignoring currency symbol).\",\n    \"tax\": \"Correct (ignoring currency symbol).\",\n    \"total\": \"Correct (ignoring currency symbol).\",\n    \"line_items\": \"Major failure. The model extracted 8 items instead of 6. It misaligned descriptions with prices (e.g., 'Pulled Pork Sand' assigned $0.00, and '*Reg' assigned $3.35). It also hallucinated a 'Beef Ribs' item as a separate line item when it was part of the company/header context in the gold label, and failed to correctly capture the 'Creamed Corn' total.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

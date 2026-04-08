@@ -1,0 +1,14 @@
+{
+  "key": "6e89223a9a1ca161e19e6ca9fd2fb8d3ee563678455a2b53382aec53e7c6cf5f",
+  "created_at": "2026-04-07T18:58:02.200062+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed to capture the correct total and missed several line items. The predicted total (118.46) represents the sum of the subtotal and tax, failing to include the handwritten tip (35.54) required to reach the gold total (154.00). Additionally, the line item count is lower than the gold because the 'MEDIUM' descriptor items were omitted, and there is a price discrepancy for the 'Garlic Naan' compared to the gold label.\",\n  \"failure_reasons\": [\n    \"incorrect_total\",\n    \"missing_line_items\",\n    \"value_mismatch\"\n  ],\n  \"field_notes\": {\n    \"total\": \"The predicted total of 118.46 is the sum of subtotal and tax, whereas the gold total of 154.00 includes the tip.\",\n    \"line_items\": \"The model missed the 'MEDIUM' line items present in the gold labels. The 'Garlic Naan' line total (4.0) does not match the gold label (0.00), although the prediction appears to match the visual text in the image.\",\n    \"address\": \"The predicted address includes the phone number appended to the end, which is a minor deviation from the gold.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

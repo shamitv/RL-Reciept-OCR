@@ -1,0 +1,14 @@
+{
+  "key": "aa218a51b0d4cce6327ba3307acb971bdd494022abda35e645cc4e69f6fe4e1f",
+  "created_at": "2026-04-07T19:00:56.545792+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, capturing all header fields and all line items correctly. Minor discrepancies exist in the formatting of numerical values (trailing zeros) and slight transcription errors in line item descriptions (e.g., 'GI' instead of 'GL').\",\n  \"failure_reasons\": [\n    \"minor_transcription_error\",\n    \"formatting_inconsistency\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct (format differs from gold but represents the same date).\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Correct (value 118.0 vs 118.00).\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"All 8 items were found. Note: 'GL' (Glass) was transcribed as 'GI' in two items ('GI Sangiovese' and 'GI Merlot'). Line totals were truncated (e.g., 17.0 instead of 17.00).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

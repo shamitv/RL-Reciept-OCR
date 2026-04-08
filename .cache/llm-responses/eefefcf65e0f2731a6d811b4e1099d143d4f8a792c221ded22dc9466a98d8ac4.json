@@ -1,0 +1,14 @@
+{
+  "key": "eefefcf65e0f2731a6d811b4e1099d143d4f8a792c221ded22dc9466a98d8ac4",
+  "created_at": "2026-04-07T18:08:51.045441+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was largely successful, correctly identifying the company, address, subtotal, tax, total, and all line items. However, it failed to match the gold date value/format and failed to provide the 'raw_text' and 'evidence_ids' for the line items.\",\n  \"failure_reasons\": [\n    \"date_mismatch\",\n    \"missing_line_item_metadata\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '5/4/2017' does not match the gold label '2017-04-05'.\",\n    \"line_items\": \"The predicted line items are missing 'raw_text' and 'evidence_ids' fields.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

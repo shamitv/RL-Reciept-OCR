@@ -1,0 +1,14 @@
+{
+  "key": "08fbd3c6cc7c16c25f7ac69e8206d5bfe72f65a5181c68e059d1019c29f0c837",
+  "created_at": "2026-04-07T17:37:50.345223+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful. All primary header fields (company, date, address, subtotal, tax, total) and all line items were correctly identified. There are minor formatting differences such as the inclusion of currency symbols in the monetary fields and a different date format, but the underlying data is accurate.\",\n  \"failure_reasons\": [],\n  \"field_notes\": {\n    \"date\": \"Format differs from gold (MM/DD/YY vs YYYY-MM-DD).\",\n    \"subtotal\": \"Included currency symbol '$'.\",\n    \"tax\": \"Included currency symbol '$'.\",\n    \"total\": \"Included currency symbol '$'.\",\n    \"line_items\": \"Descriptions were cleaned of the leading quantity/count (e.g., '1 Scallion Pancake' became 'Scallion Pancake'), and 'raw_text' and 'evidence_ids' were not provided.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "bb066d08405fbe6170d8a60ed6e7975637e65d704fb3b7bdd46f03dc61ca9358",
+  "created_at": "2026-04-07T18:48:56.173952+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, capturing all line items and the primary financial totals (subtotal, tax, total) accurately. Minor discrepancies were noted in the company name, address composition, and the absence of raw text for line items.\",\n  \"failure_reasons\": [\n    \"incomplete_company_name\",\n    \"misplaced_address_component\",\n    \"missing_line_item_raw_text\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The restaurant number '1100580' was omitted from the company name.\",\n    \"address\": \"The restaurant number '1100580' was included in the address field instead of the company field.\",\n    \"date\": \"The date format (MM/DD/YYYY) differs from the gold standard (YYYY-MM-DD).\",\n    \"line_items\": \"While descriptions and totals are correct, the 'raw_text' field for all line items is null.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

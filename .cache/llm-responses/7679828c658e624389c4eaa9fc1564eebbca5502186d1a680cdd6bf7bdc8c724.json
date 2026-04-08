@@ -1,0 +1,14 @@
+{
+  "key": "7679828c658e624389c4eaa9fc1564eebbca5502186d1a680cdd6bf7bdc8c724",
+  "created_at": "2026-04-07T18:22:15.664919+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to severe misalignment in line item totals. While the header fields (subtotal, tax, total) are correct, the individual line item prices are incorrectly mapped to descriptions, causing the sum of line items to deviate significantly from the subtotal. There is also a date format mismatch.\",\n  \"failure_reasons\": [\n    \"line_item_misalignment\",\n    \"reconciliation_error\",\n    \"date_format_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Minor punctuation difference (' vs 'S).\",\n    \"date\": \"Format mismatch (MM/DD/YY vs YYYY-MM-DD).\",\n    \"address\": \"Minor punctuation difference.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"Severe misalignment: line totals are shifted and incorrectly associated with descriptions. The sum of predicted line items (101.0) does not match the predicted subtotal (50.5). The model also included an item (COSMO) that was missing from the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

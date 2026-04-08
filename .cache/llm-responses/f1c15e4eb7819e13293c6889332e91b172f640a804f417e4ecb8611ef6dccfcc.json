@@ -1,0 +1,14 @@
+{
+  "key": "f1c15e4eb7819e13293c6889332e91b172f640a804f417e4ecb8611ef6dccfcc",
+  "created_at": "2026-04-07T17:39:13.354742+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While the company, address, and total were correct, the subtotal and tax were incorrect, and the line item prices were systematically misaligned with their descriptions.\",\n  \"failure_reasons\": [\n    \"incorrect_subtotal\",\n    \"incorrect_tax\",\n    \"date_format_mismatch\",\n    \"line_item_price_shift\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The extracted date '5/12/2017' does not match the gold standard '2017-12-05', indicating a failure in date normalization or interpretation.\",\n    \"subtotal\": \"The extracted subtotal '25.00' is incorrect; the gold value is '43.00'.\",\n    \"tax\": \"The extracted tax '43.00' is incorrect; it appears the model captured the subtotal value instead.\",\n    \"line_items\": \"There is a systematic row-shift error in the line items where the price for each item (starting from the third item) is taken from the preceding item's price.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

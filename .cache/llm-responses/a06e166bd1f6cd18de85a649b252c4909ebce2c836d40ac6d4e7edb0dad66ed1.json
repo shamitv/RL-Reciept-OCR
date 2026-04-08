@@ -1,0 +1,14 @@
+{
+  "key": "a06e166bd1f6cd18de85a649b252c4909ebce2c836d40ac6d4e7edb0dad66ed1",
+  "created_at": "2026-04-07T17:42:53.194205+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"RINCON MEXICANO\",\n  \"date\": \"09-May-2017\",\n  \"address\": \"99 BROADWAY SOMERVILLE, MA 02145\",\n  \"subtotal\": 28.95,\n  \"tax\": 2.03,\n  \"total\": 30.98,\n  \"line_items\": [\n    {\n      \"description\": \"Arroz\",\n      \"line_total\": 3.00\n    },\n    {\n      \"description\": \"Taco De Pescado\",\n      \"line_total\": 7.00\n    },\n    {\n      \"description\": \"Taco Tuesday Pollo\",\n      \"line_total\": 2.00\n    },\n    {\n      \"description\": \"Taco D Carne Asada\",\n      \"line_total\": 2.99\n    },\n    {\n      \"description\": \"Taco D Chorizo\",\n      \"line_total\": 2.99\n    },\n    {\n      \"description\": \"Taco Tuesday Pastor\",\n      \"line_total\": 1.00\n    },\n    {\n      \"description\": \"Horchata\",\n      \"line_total\": 2.99\n    },\n    {\n      \"description\": \"Taco Tuesday Pollo\",\n      \"line_total\": 1.00\n    },\n    {\n      \"description\": \"Taco D Cochinita\",\n      \"line_total\": 2.99\n    },\n    {\n      \"description\": \"Taco D Carnitas\",\n      \"line_total\": 2.99\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

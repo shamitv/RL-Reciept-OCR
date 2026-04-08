@@ -1,0 +1,14 @@
+{
+  "key": "be8dd67134b227f4a8d3c6157e699ee43cbbab082c95cfcbd1aa2db9201f5b17",
+  "created_at": "2026-04-07T17:53:48.540232+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is semantically accurate to the receipt image but fails to match the gold labels due to differences in field partitioning and date formatting. Notably, the gold label for 'tax' is incorrect (it matches the total), whereas the prediction correctly identifies the tax as 0.7. The prediction also failed to capture metadata for the line item.\",\n  \"failure_reasons\": [\n    \"Field partitioning mismatch (Company and Address)\",\n    \"Date format mismatch\",\n    \"Gold label error (Tax field)\",\n    \"Missing line item metadata (raw_text and evidence_ids)\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The gold label includes the street address within the company field, which the prediction omitted.\",\n    \"date\": \"The prediction uses MM/DD/YY format, while the gold label uses YYYY-MM-DD.\",\n    \"address\": \"The prediction included the street address, whereas the gold label only contained the city, state, and zip.\",\n    \"tax\": \"The gold label is erroneous, listing the total (10.70) as the tax. The prediction correctly extracted 0.7 from the receipt.\",\n    \"line_items\": \"The prediction failed to extract the 'raw_text' and 'evidence_ids' for the line item.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

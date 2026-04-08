@@ -1,0 +1,14 @@
+{
+  "key": "933c2c9f0e2ff11fbd45b99b43b738bd6ef49f8f05ee2a5d9c590ae638dca4a9",
+  "created_at": "2026-04-07T18:44:53.996638+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly. While the company and address were correctly identified, the date format was incorrect, and all financial summary fields (subtotal, tax, total) were wrong. Furthermore, the line item extraction was incomplete and incorrectly aggregated multiple items into single entries, leading to a low overall score.\",\n  \"failure_reasons\": [\n    \"Incorrect date format\",\n    \"Incorrect subtotal, tax, and total values\",\n    \"Incomplete line item extraction (missing several items)\",\n    \"Incorrect line item aggregation (merging description and price/service into one item)\",\n    \"Failure to capture all line items present in the gold label\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Extracted as '11/10/18', whereas gold label expects '2018-10-11'.\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Incorrectly extracted as '35.50' instead of '50.49'.\",\n    \"tax\": \"Incorrectly extracted as '5.00' instead of '2.74'.\",\n    \"total\": \"Incorrectly extracted as '40.50' instead of '53.23'.\",\n    \"line_items\": \"The model failed to extract all 16 gold line items. It attempted to group items (e.g., combining 'Bistec Palomilla' with its side and 'Dine in' price), resulting in only 6 predicted items that do not match the granularity of the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

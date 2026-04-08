@@ -1,0 +1,14 @@
+{
+  "key": "f3b377c14812713a5495bb11e1684e505b009e222875aaf8581a88ec728ad32a",
+  "created_at": "2026-04-07T18:39:25.181214+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Sonic America's Drive-In\",\n  \"date\": \"Jun/22'18\",\n  \"address\": \"518 Robertson Boulevard Walterboro, SC 29488\",\n  \"subtotal\": 11.88,\n  \"tax\": 1.19,\n  \"total\": 13.07,\n  \"line_items\": [\n    {\n      \"description\": \"1 Combo Chz Burger Add Mayo Add Must Add Ket Med Fries Med Dr Pepper\",\n      \"line_total\": 6.79\n    },\n    {\n      \"description\": \"1 Pren Dog Combo NY Dog Med Tots Med Coffee\",\n      \"line_total\": 5.09\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

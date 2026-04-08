@@ -1,0 +1,14 @@
+{
+  "key": "e6287b9adb535fdbd1f6dc088b84340b8ca1342436cc0f9ced6d05009cb72a9b",
+  "created_at": "2026-04-07T18:34:45.631469+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"SS PARADISE Andhra Style Family Restaurant\",\n  \"date\": \"06.07.2017\",\n  \"address\": \"Vidyaranyapura, BANGALORE-560097\",\n  \"subtotal\": \"617.00\",\n  \"tax\": null,\n  \"total\": \"617.00\",\n  \"line_items\": [\n    {\n      \"description\": \"TANDOORI CHICKEN\",\n      \"line_total\": 179.00\n    },\n    {\n      \"description\": \"MUTTON RAGON JOSH\",\n      \"line_total\": 209.00\n    },\n    {\n      \"description\": \"FISH BIRIYANI\",\n      \"line_total\": 229.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

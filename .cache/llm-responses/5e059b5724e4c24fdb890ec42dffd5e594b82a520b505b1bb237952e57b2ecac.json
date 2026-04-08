@@ -1,0 +1,14 @@
+{
+  "key": "5e059b5724e4c24fdb890ec42dffd5e594b82a520b505b1bb237952e57b2ecac",
+  "created_at": "2026-04-07T18:20:43.543827+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed to accurately capture all fields. Key issues include an incorrect date format, a mismatch in the subtotal value, and a line item merger where two separate items were combined into one, leading to a missing item and an incorrect description.\",\n  \"failure_reasons\": [\n    \"date_format_error\",\n    \"subtotal_mismatch\",\n    \"line_item_merger\",\n    \"line_item_typo\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The date was extracted in an incorrect format ('Jul'16'17 08:15PM') instead of the expected '2017-07-16'.\",\n    \"subtotal\": \"The subtotal was extracted as '133.00' instead of the gold value '133.90'.\",\n    \"line_items\": \"The item '2 GLASS' was merged into the '1 Mojito Pitcher Original w/' item, resulting in a missing line item. Additionally, '2 CHU TORO' was misread as '2 Cru Toro'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

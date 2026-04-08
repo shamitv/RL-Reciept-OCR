@@ -1,0 +1,14 @@
+{
+  "key": "99cf772f8172ebf9696bf9dfd7f5a2977a28b4ae13cd0ee5aea8d705cf0ad2a0",
+  "created_at": "2026-04-07T17:54:51.866593+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"BIG JO'S\",\n  \"date\": \"Jan 25, 2018\",\n  \"address\": \"1955 BROADWAY\\nSANTA MONICA, CA 90404\",\n  \"subtotal\": 51.25,\n  \"tax\": 5.25,\n  \"total\": 56.50,\n  \"line_items\": [\n    {\n      \"description\": \"HB\\nRegular Price\",\n      \"line_total\": 4.00\n    },\n    {\n      \"description\": \"French Fries x 2\\n($2.50 each)\",\n      \"line_total\": 5.00\n    },\n    {\n      \"description\": \"Turkey Burger\\nCombo\",\n      \"line_total\": 8.85\n    },\n    {\n      \"description\": \"HB\\nCombo, Grilled Onion ($0.75)\",\n      \"line_total\": 8.35\n    },\n    {\n      \"description\": \"CB x 2\\n($7.85 each)\",\n      \"line_total\": 15.70\n    },\n    {\n      \"description\": \"Combo\",\n      \"line_total\": 5.00\n    },\n    {\n      \"description\": \"CB\\nRegular Price, Grilled Onion ($0.75)\",\n      \"line_total\": 5.00\n    },\n    {\n      \"description\": \"Chill Fries\",\n      \"line_total\": 4.35\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

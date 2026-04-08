@@ -1,0 +1,14 @@
+{
+  "key": "7fdb2d20858ed7863efdfbc7decf6dc2027f520247e0ad70f1cbf64aa3defdb2",
+  "created_at": "2026-04-07T17:43:34.134865+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, capturing all line items and most header information correctly. The only significant failure was the date format, which did not match the ISO format required by the gold label.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Matches gold label exactly.\",\n    \"date\": \"Failed to match gold label '2019-12-01'; extracted as '01/12/19'.\",\n    \"address\": \"Matches gold label (slight variation in comma placement is acceptable).\",\n    \"subtotal\": \"Matches gold label (numerical value is identical).\",\n    \"tax\": \"Matches gold label.\",\n    \"total\": \"Matches gold label.\",\n    \"line_items\": \"All 5 line items were correctly identified with matching descriptions and totals, although raw_text and evidence_ids were missing.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "0df5e5e043fc0b15f185a31c9ac3e7eb0f008cdb3f5939e99ddfda5ff9fee691",
+  "created_at": "2026-04-07T18:04:45.314148+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. It correctly identified the company, address, and primary food items. However, it failed to capture all line items, specifically missing the modifier/note lines (e.g., 'MED', 'VEGETABLES', 'MILD PLEASE') present in the gold labels. Additionally, numeric fields like subtotal, tax, and total include currency symbols, which deviates from the gold format.\",\n  \"failure_reasons\": [\n    \"missing_line_items\",\n    \"incorrect_format_for_numeric_fields\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Matches gold label.\",\n    \"date\": \"Matches gold label (different format: DD-Mon YYYY vs YYYY-MM-DD).\",\n    \"address\": \"Matches gold label.\",\n    \"subtotal\": \"Matches value but includes '$' symbol.\",\n    \"tax\": \"Matches value but includes '$' symbol.\",\n    \"total\": \"Matches value but includes '$' symbol.\",\n    \"line_items\": \"Missed 5 line items that were categorized as modifiers or notes in the gold data.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

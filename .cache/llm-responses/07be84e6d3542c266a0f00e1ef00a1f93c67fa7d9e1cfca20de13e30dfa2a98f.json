@@ -1,0 +1,14 @@
+{
+  "key": "07be84e6d3542c266a0f00e1ef00a1f93c67fa7d9e1cfca20de13e30dfa2a98f",
+  "created_at": "2026-04-07T17:24:43.437804+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is highly successful in terms of capturing the core financial data (subtotal, tax, total) and all line items. The primary discrepancies arise from the date format/interpretation and the address, where the prediction is actually more accurate to the image than the gold label, which contains several typos. Additionally, the line item score is likely suppressed because the prediction omitted 'raw_text' and 'evidence_ids'.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"address_mismatch_due_to_gold_typos\",\n    \"missing_line_item_metadata\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '08/09/19' does not match the gold format '2019-09-08'.\",\n    \"address\": \"The prediction '223 Newport Ave Pawtucket, RI 02861' is a more accurate transcription of the image than the gold label ('223 Heuport Ave Pautuckrt, R1 02861').\",\n    \"line_items\": \"All items and totals were correctly identified, though descriptions were normalized (e.g., 'SKEVERS' to 'Skewers') and 'raw_text'/'evidence_ids' were not extracted.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

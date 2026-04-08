@@ -1,0 +1,14 @@
+{
+  "key": "48c71fe83b82a8d0972d70da1bfa7693f2c6bda3df4ec2109e4bf475a7ba6eaf",
+  "created_at": "2026-04-07T17:40:15.772416+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"HAWWI ETHIOPIAN RESTAU\",\n  \"date\": \"13-Jul-2018\",\n  \"address\": \"1125 QUEEN ST ALEXANDRIA, VA 22314\",\n  \"subtotal\": \"$62.85\",\n  \"tax\": \"$6.91\",\n  \"total\": \"$69.76\",\n  \"line_items\": [\n    {\n      \"description\": \"26.Fish Goulash\",\n      \"line_total\": \"$19.95\"\n    },\n    {\n      \"description\": \"30.Dulet\",\n      \"line_total\": \"$20.95\"\n    },\n    {\n      \"description\": \"34.Vegetarian Dish\",\n      \"line_total\": \"$21.95\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "79adf8278bb361e5bed66c25ca08e2635a04c34f9bc0413faf52396b85bacf75",
+  "created_at": "2026-04-07T18:51:08.664040+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed the overall validation due to reconciliation errors and minor formatting discrepancies. While most header fields and line items were correctly identified, the inclusion of currency symbols in numeric fields and a slight mismatch in the company name caused issues. Most importantly, the subtotal, tax, and total values do not reconcile with the line item total provided, leading to a reconciliation failure.\",\n  \"failure_reasons\": [\n    \"reconciliation_failure\",\n    \"formatting_mismatch\",\n    \"company_name_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted value 'ipanema Brazilian Steak House' includes 'ipanema', which is part of the logo but differs from the gold label 'Brazilian Steak House'.\",\n    \"date\": \"Correctly extracted, though format differs (MM/DD/YY vs YYYY-MM-DD).\",\n    \"subtotal\": \"Extracted with currency symbol '$', whereas gold label is numeric.\",\n    \"tax\": \"Extracted with currency symbol '$', whereas gold label is numeric.\",\n    \"total\": \"Extracted with currency symbol '$', whereas gold label is numeric.\",\n    \"line_items\": \"The line item description and total match, but the 'raw_text' and 'evidence_ids' are missing in the prediction.\",\n    \"reconciliation\": \"The sum of the line item ($41.95) + tax ($2.94) equals $44.89, which does not match the predicted total of $55.38. The discrepancy is due to the missing gratuity ($10.49) in the line item extraction, which is required to reach the total.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

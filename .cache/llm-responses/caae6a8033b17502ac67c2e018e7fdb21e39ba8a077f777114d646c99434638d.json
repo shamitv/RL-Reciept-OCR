@@ -1,0 +1,14 @@
+{
+  "key": "caae6a8033b17502ac67c2e018e7fdb21e39ba8a077f777114d646c99434638d",
+  "created_at": "2026-04-07T18:23:19.566816+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. While the date, address, and total were correctly identified, the subtotal and tax fields are incorrect. Line items also contain errors, including a truncated description and incorrect line total for the first item, as well as a spelling discrepancy.\",\n  \"failure_reasons\": [\n    \"Incorrect subtotal (extracted unit price instead of subtotal)\",\n    \"Incorrect tax (extracted sales tax instead of resort tax)\",\n    \"Line item errors (truncated description, incorrect line total, and spelling mismatch)\"\n  ],\n  \"field_notes\": {\n    \"subtotal\": \"Predicted 55.00, which is the unit price of the first item; the actual subtotal is 149.00.\",\n    \"tax\": \"Predicted 10.01 (Sales Tax) instead of the gold label's 2.86 (Resort Tax).\",\n    \"line_items[0]\": \"The description '2 FBD BLUE MARGARI' is truncated, and the line total '55.00' is the unit price rather than the line total of '110.00'.\",\n    \"line_items[1]\": \"Spelling mismatch: 'CHEESE' vs gold 'CHESSE'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

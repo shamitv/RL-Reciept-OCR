@@ -1,0 +1,14 @@
+{
+  "key": "20d0fead3c270af3ae422fee5a9e7071718bb65ce0f04113dfac4ffff014dfcd",
+  "created_at": "2026-04-07T17:35:12.214705+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed to achieve high accuracy due to line item mismatches and formatting discrepancies. While the total count of line items matched, the content did not: the model extracted an item ('Patron Silver') that was not in the gold list and missed one of the 'Chicken Caprese' entries present in the gold list. Additionally, there were minor formatting differences in the date, address, and subtotal.\",\n  \"failure_reasons\": [\n    \"line_item_mismatch\",\n    \"hallucination_relative_to_gold\",\n    \"missing_item\",\n    \"formatting_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The model corrected a typo ('Freindly' to 'Friendly') found in the gold label.\",\n    \"date\": \"The date format differs from the gold label (MM/DD/YYYY vs YYYY-MM-DD).\",\n    \"address\": \"The predicted address includes a phone number not present in the gold address field.\",\n    \"subtotal\": \"The predicted subtotal is missing the trailing zero ('71.4' vs '71.40').\",\n    \"line_items\": \"The model extracted 'Patron Silver', which is on the receipt but absent from the gold line items. It also failed to extract both 'Chicken Caprese' entries (one misspelled in gold) that were required by the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

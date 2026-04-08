@@ -1,0 +1,14 @@
+{
+  "key": "e6c65e3bf0a7432d73e5b027e67ebe7a3d2ebbd8bb6ca53ef919a2aa5f80525f",
+  "created_at": "2026-04-07T18:38:20.614011+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is highly successful in capturing the core financial data and company information. Minor discrepancies exist in the date format (inclusion of timestamp) and the line item descriptions (omission of the quantity prefix).\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"description_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date includes a timestamp ('3:01:40P'), whereas the gold label requires the ISO format '2018-08-12'.\",\n    \"line_items\": \"The predicted descriptions omit the quantity prefix ('1') found in the gold labels. Also, the 'raw_text' field is null in the prediction.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

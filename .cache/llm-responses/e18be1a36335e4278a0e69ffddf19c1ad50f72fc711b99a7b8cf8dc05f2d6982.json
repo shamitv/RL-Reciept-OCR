@@ -1,0 +1,14 @@
+{
+  "key": "e18be1a36335e4278a0e69ffddf19c1ad50f72fc711b99a7b8cf8dc05f2d6982",
+  "created_at": "2026-04-07T17:57:35.949432+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded but failed the overall validation due to an incorrect date format and an incomplete company name. While the financial totals and line items were captured accurately, the date '06/10' lacks the year, and the company name 'LANDFALL RESTAURANT' omitted the 'APRIL TO DECEMBER' suffix.\",\n  \"failure_reasons\": [\n    \"Incomplete company name extraction\",\n    \"Incomplete date extraction (missing year)\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted value 'LANDFALL RESTAURANT' is a partial match; it missed the 'APRIL TO DECEMBER' portion of the gold label.\",\n    \"date\": \"The predicted value '06/10' is incomplete as it lacks the year '2017' present in the gold label.\",\n    \"subtotal\": \"Matches gold label (normalized 6.0 vs 6.00).\",\n    \"tax\": \"Matches gold label (normalized 0.4 vs 0.40).\",\n    \"total\": \"Matches gold label.\",\n    \"line_items\": \"The line item description and total match the gold label, though the raw_text and evidence_ids are missing.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

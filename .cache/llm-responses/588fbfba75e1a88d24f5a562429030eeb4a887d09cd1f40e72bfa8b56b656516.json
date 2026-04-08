@@ -1,0 +1,14 @@
+{
+  "key": "588fbfba75e1a88d24f5a562429030eeb4a887d09cd1f40e72bfa8b56b656516",
+  "created_at": "2026-04-07T18:09:54.494056+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded but failed on key financial fields and line item accuracy. The subtotal was incorrectly identified as a category total ('Food: $8.98') rather than the actual subtotal ($11.97), leading to a reconciliation failure. Additionally, several line items were missing prices, and the item count was lower than the gold standard.\",\n  \"failure_reasons\": [\n    \"Incorrect subtotal extraction (extracted category total instead of receipt subtotal)\",\n    \"Missing line item prices (line_total is null for several items)\",\n    \"Missing line items (only 8 predicted vs 10 gold)\",\n    \"Reconciliation failure due to subtotal mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (includes timestamp which is acceptable).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Failed. Extracted '8.98' (the 'Food' category total) instead of the actual subtotal '11.97'.\",\n    \"tax\": \"Correctly extracted.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"Incomplete and inaccurate. Several items (MOOYAH Sauce, Lettuce, Pickles, Regular Fries) have null line_totals. Two items (Food and Beverage categories) were omitted from the prediction, and the mapping of prices to items like 'Fried Onion Strings' was incorrect (it took the price from Regular Fries).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

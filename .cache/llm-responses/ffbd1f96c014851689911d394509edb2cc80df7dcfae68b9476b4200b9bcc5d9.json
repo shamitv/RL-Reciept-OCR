@@ -1,0 +1,14 @@
+{
+  "key": "ffbd1f96c014851689911d394509edb2cc80df7dcfae68b9476b4200b9bcc5d9",
+  "created_at": "2026-04-07T18:41:53.036064+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is highly successful, correctly identifying all major financial fields (subtotal, tax, total) and all line items. There are minor discrepancies in the company name and date format, and the line items lack the quantity and raw text details present in the gold labels.\",\n  \"failure_reasons\": [\n    \"partial_company_name\",\n    \"missing_line_item_quantity\",\n    \"missing_line_item_raw_text\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company name 'KALOOKI'S' is a subset of the gold label 'KALOOKI'S Kalooki's'.\",\n    \"date\": \"The date format differs (MM/DD/YYYY vs YYYY-MM-DD), though the value is correct.\",\n    \"line_items\": \"The predicted descriptions are cleaned of quantity and price information, whereas the gold descriptions include them. Additionally, the 'quantity' and 'raw_text' fields are null in the prediction.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

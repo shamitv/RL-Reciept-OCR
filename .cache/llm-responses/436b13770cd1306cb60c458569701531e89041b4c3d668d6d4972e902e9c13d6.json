@@ -1,0 +1,14 @@
+{
+  "key": "436b13770cd1306cb60c458569701531e89041b4c3d668d6d4972e902e9c13d6",
+  "created_at": "2026-04-07T18:28:34.136183+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. While all header fields (company, date, address, subtotal, tax, total) were correctly identified, the line item extraction failed the reconciliation check. Although the number of items matched, the predicted line items included currency symbols (e.g., '$8.00') in the 'line_total' field, whereas the gold standard expects numeric strings (e.g., '8.00'). Additionally, the 'raw_text' field for line items was not populated.\",\n  \"failure_reasons\": [\n    \"format_mismatch\",\n    \"missing_field\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (format differs but value is accurate).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Correctly extracted, but includes currency symbol.\",\n    \"tax\": \"Correctly extracted, but includes currency symbol.\",\n    \"total\": \"Correctly extracted, but includes currency symbol.\",\n    \"line_items\": \"The line_total values contain '$' symbols which deviates from the gold standard format. The raw_text field is null for all items.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

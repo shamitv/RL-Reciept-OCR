@@ -1,0 +1,14 @@
+{
+  "key": "f37558b46d7ea8e4e124b1a9b1adf2648707aad669210788e4b0aa7f27926a9d",
+  "created_at": "2026-04-07T17:46:32.005625+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Micros Demo System Welcome to Yogurtland\",\n  \"date\": \"Sep07'18 09:28PM\",\n  \"address\": \"12502 North Kendall Drive Miami, FL 33186\",\n  \"subtotal\": null,\n  \"tax\": null,\n  \"total\": \"17.80\",\n  \"line_items\": []\n}"
+        }
+      }
+    ]
+  }
+}

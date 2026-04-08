@@ -1,0 +1,14 @@
+{
+  "key": "9f5672e5fcca4db789febeb187977cb9845026ff355745be98a1bc32cf73d786",
+  "created_at": "2026-04-07T18:16:03.852063+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful in capturing the company, address, and all financial totals. All seven line items were correctly identified with their corresponding amounts. The primary failure was the date field, which included time and used a different format than the gold label.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"missing_raw_text_in_line_items\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '04-Nov-2018 9:07:13P' includes time and a different format compared to the gold standard '2018-11-04'.\",\n    \"line_items\": \"Line items are accurate in description and total, but the 'raw_text' field is null, and there are minor differences in casing and trailing zeros in the 'line_total' field.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

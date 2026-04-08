@@ -1,0 +1,14 @@
+{
+  "key": "69f8eed2595167b9748cf44a3b073bbb26ae2b9cbaee89fe2258db1c2e76b4ff",
+  "created_at": "2026-04-07T17:46:27.821734+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded but failed on key fields and line item completeness. The date was incorrectly parsed, and one significant line item ('1 PARTY PK 18-22') was missing from the predicted line items list.\",\n  \"failure_reasons\": [\n    \"Incorrect date extraction (predicted 2013 instead of 2016)\",\n    \"Missing line item (the largest item '1 PARTY PK 18-22' was omitted)\",\n    \"Incomplete line item extraction (missing raw_text and evidence_ids)\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted 'Panda Express'.\",\n    \"date\": \"Incorrect. Predicted '3/16/2013' while gold label is '2016-03-16'.\",\n    \"address\": \"Correctly extracted 'Everett, WA'.\",\n    \"subtotal\": \"Correctly extracted '151.00' (minor formatting difference '151.0' is acceptable).\",\n    \"tax\": \"Correctly extracted '13.89'.\",\n    \"total\": \"Correctly extracted '164.89'.\",\n    \"line_items\": \"Failed to capture the first line item '1 PARTY PK 18-22' which contained the bulk of the total. Additionally, all predicted line items lack 'raw_text' and 'evidence_ids'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

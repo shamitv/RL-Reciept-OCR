@@ -1,0 +1,14 @@
+{
+  "key": "5e5f33dc9bacf9b0b4b0d847831c363faa22c3a1a8290967c0d693b4bb77ce43",
+  "created_at": "2026-04-07T18:59:14.514931+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in identifying line items and the company name, but failed significantly on key financial totals and date formatting. While the line item descriptions and counts are mostly correct, the tax and total amounts are incorrect, and the date format does not match the gold standard.\",\n  \"failure_reasons\": [\n    \"Incorrect tax amount extracted\",\n    \"Incorrect total amount extracted\",\n    \"Date format mismatch\",\n    \"Address contains a typo/discrepancy in the second line\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Extracted as 06/10/2018, whereas gold is 2018-10-06. Note: The receipt image actually shows 06/10/2018, suggesting the gold label might be using a different format or the receipt date is ambiguous (MM/DD vs DD/MM).\",\n    \"address\": \"The second line '1865 Parker RD' differs from the gold '1805 Parker RD'.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Incorrect. Predicted 4.36, Gold 2.21.\",\n    \"total\": \"Incorrect. Predicted 35.9, Gold 33.75.\",\n    \"line_items\": \"Descriptions are mostly accurate, though 'Margherita Calzone' missed the 'QQ.99' suffix from gold. The line total for the Calzone was correctly identified as 11.99 despite being null in the gold line item object (likely due to gold data incompleteness).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

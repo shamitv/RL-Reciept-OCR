@@ -1,0 +1,14 @@
+{
+  "key": "93f8990fa7af84063a624b30532bd4953eeb0092b20c08f868219dbecf9c3f8e",
+  "created_at": "2026-04-07T18:57:04.704583+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was largely successful, correctly identifying all line items and the core financial totals. However, there were inaccuracies in the header information, specifically the company name and address formatting.\",\n  \"failure_reasons\": [\n    \"Incomplete company name extraction\",\n    \"Address mismatch/formatting error\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted value 'MIGUELS MEXICAN' is missing the address component included in the gold label 'MIGUELS MIXICAN 3035 N. KENNEDY BLVD'. Note: Gold label has a typo 'MIXICAN' which the prediction corrected to 'MEXICAN'.\",\n    \"date\": \"Correctly extracted, though in a different format (7-5-17 vs 2017-07-05).\",\n    \"address\": \"The predicted address includes the street number but differs in direction ('W.' vs 'N.') and formatting compared to the gold label.\",\n    \"subtotal\": \"Correctly extracted (25.3 vs 25.30).\",\n    \"tax\": \"Correctly extracted.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"All three line items were correctly identified with matching descriptions and totals.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

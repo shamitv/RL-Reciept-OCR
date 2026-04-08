@@ -1,0 +1,14 @@
+{
+  "key": "686fc8417e84d624534818f03b8616d950d4c90043a1a26b00a282ef50011d04",
+  "created_at": "2026-04-07T17:52:16.511305+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While most header fields were mostly correct, the total amount was captured from the wrong line, the company name was incomplete, and the line item extraction was flawed, missing one item and incorrectly assigning a text description as a price for another.\",\n  \"failure_reasons\": [\n    \"incorrect_total\",\n    \"incomplete_company_name\",\n    \"missing_line_item\",\n    \"incorrect_line_item_value\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The extraction missed the suffix 'ka Makana Ali'i'.\",\n    \"total\": \"The model extracted the 'Total' value ($77.49) instead of the 'Receipt Total' ($38.75) specified in the gold label.\",\n    \"line_items\": \"The model failed to extract the 'Mild' item as a separate line item. Instead, it merged it with 'Kickin Sauce' and incorrectly assigned the string 'Mild' to the line_total field.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

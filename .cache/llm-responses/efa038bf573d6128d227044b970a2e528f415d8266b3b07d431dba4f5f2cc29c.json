@@ -1,0 +1,14 @@
+{
+  "key": "efa038bf573d6128d227044b970a2e528f415d8266b3b07d431dba4f5f2cc29c",
+  "created_at": "2026-04-07T18:31:54.361621+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"E. BALDI\",\n  \"date\": \"TUE JANUARY 30,2018\",\n  \"address\": \"375 North Canon Drive Beverly Hills, CA 90210\",\n  \"subtotal\": \"$134.00\",\n  \"tax\": \"$12.73\",\n  \"total\": \"$146.73\",\n  \"line_items\": [\n    {\n      \"description\": \"1 ICED TEA\",\n      \"line_total\": \"$4.50\"\n    },\n    {\n      \"description\": \"1 ROMBO CARCIOFI FUNGH\",\n      \"line_total\": \"$48.00\"\n    },\n    {\n      \"description\": \"1 SPARKLING WATER LARG\",\n      \"line_total\": \"$8.50\"\n    },\n    {\n      \"description\": \"1 BRANZINO GRIGLIATO\",\n      \"line_total\": \"$40.00\"\n    },\n    {\n      \"description\": \"1 CARPACCIO RED SNAPPE\",\n      \"line_total\": \"$33.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "46d77ff963cec627992645b5e39405b0fd5dff7b87a7b862f5a539449b32eb9e",
+  "created_at": "2026-04-07T18:54:32.045760+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed due to significant errors in tax calculation and line item segmentation. While header fields like company, date, address, subtotal, and total were mostly correct, the tax amount was incorrect, and the line items were merged into a single incorrect entry.\",\n  \"failure_reasons\": [\n    \"Incorrect tax extraction (predicted 2.8 vs gold 0.80)\",\n    \"Line item merging (two distinct items merged into one)\",\n    \"OCR error in line item description ('SDBE' instead of 'SOBE')\",\n    \"Missing line item (BACARDI LIGHT was not captured as a separate item)\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Partially extracted; missed the check number suffix.\",\n    \"date\": \"Correctly extracted and formatted.\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Correctly extracted.\",\n    \"tax\": \"Incorrect; predicted 2.8 (likely the sales tax) instead of the total tax of 0.80 (resort tax) or the sum of both as per gold label.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"Failed to separate the two items; merged '4 SOBE MOJITO'S' and 'BACARDI LIGHT' into one description with an OCR error.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

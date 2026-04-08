@@ -1,0 +1,14 @@
+{
+  "key": "7ef93d0d2210e344a927cb72b4f1e20eb732507134d42bfdab8f6935c8cbb05f",
+  "created_at": "2026-04-07T18:00:00.732392+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed due to significant errors in the line items section. While the header information (company, date, address, subtotal, tax, and total) was extracted correctly, the model missed one line item ('PESCADO') and incorrectly merged descriptions for another, resulting in a reconciliation failure where the sum of line items does not match the subtotal.\",\n  \"failure_reasons\": [\n    \"missing_line_item\",\n    \"incorrect_description\",\n    \"reconciliation_failure\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct\",\n    \"date\": \"Correct\",\n    \"address\": \"Correct\",\n    \"subtotal\": \"Correct\",\n    \"tax\": \"Correct\",\n    \"total\": \"Correct\",\n    \"line_items\": \"Missed the 'PESCADO' item ($18.00) and incorrectly combined 'Chicken' and 'Pescado' into a single description ('Chicken Pescado') for the first item.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

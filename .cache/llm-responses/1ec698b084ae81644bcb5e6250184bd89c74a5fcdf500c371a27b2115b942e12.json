@@ -1,0 +1,14 @@
+{
+  "key": "1ec698b084ae81644bcb5e6250184bd89c74a5fcdf500c371a27b2115b942e12",
+  "created_at": "2026-04-07T18:50:42.737989+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. Most header fields were correctly identified, although the date format does not match the gold standard. In the line items, there is a typo in 'DIET COKE' (extracted as 'DIE COKE'), and the model extracted an additional item ('LUNCH FAJITAS') that is visible on the receipt but missing from the gold labels. Additionally, the 'raw_text' field for all line items is null.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"line_item_typo\",\n    \"extra_line_item_not_in_gold\",\n    \"missing_raw_text\"\n  ],\n  \"field_notes\": {\n    \"date\": \"Predicted '12/2/2017' does not match gold '2017-02-12'.\",\n    \"line_items\": \"Item '1 DIE COKE' contains a typo; '1 LUNCH FAJITAS' is an extra item not present in gold labels; 'raw_text' is missing for all items.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

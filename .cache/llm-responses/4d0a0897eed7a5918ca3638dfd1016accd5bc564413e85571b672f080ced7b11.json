@@ -1,0 +1,14 @@
+{
+  "key": "4d0a0897eed7a5918ca3638dfd1016accd5bc564413e85571b672f080ced7b11",
+  "created_at": "2026-04-07T17:58:02.554568+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to line item segmentation errors. The model merged the descriptions of two separate items into a single line item and left the second item with a null description. Additionally, there were minor inaccuracies in the company name and the address (store number).\",\n  \"failure_reasons\": [\n    \"line_item_segmentation_error\",\n    \"description_merging\",\n    \"address_discrepancy\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Minor spelling and symbol discrepancy ('Chilli's' vs 'Chili's' and '&' vs '$').\",\n    \"address\": \"Incorrect store number extracted (#25 instead of #26).\",\n    \"line_items\": \"The model failed to separate the items, merging 'TRIPLE DIPPER' and 'CHICKEN WAFFLES4' into one description for the first item, resulting in a null description for the second item.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "c6916dd47e083229dc52cd2b45945e72ccf37112b4cef8e4a7a84dbcc18cd028",
+  "created_at": "2026-04-07T18:45:12.609398+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Juniper & Ivy\",\n  \"date\": \"Oct06'16\",\n  \"address\": \"2228 Kettner Blvd San Diego, CA 92101\",\n  \"subtotal\": 309.00,\n  \"tax\": 24.72,\n  \"total\": 333.72,\n  \"line_items\": [\n    {\n      \"description\": \"BUCATINI\",\n      \"line_total\": 17.00\n    },\n    {\n      \"description\": \"RAVIOLO\",\n      \"line_total\": 18.00\n    },\n    {\n      \"description\": \"BT TURNBULL NAPA\",\n      \"line_total\": 90.00\n    },\n    {\n      \"description\": \"HALIBUT\",\n      \"line_total\": 38.00\n    },\n    {\n      \"description\": \"YODEL\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"MILK & HONEY\",\n      \"line_total\": 10.00\n    },\n    {\n      \"description\": \"COFFEE SM\",\n      \"line_total\": 6.00\n    },\n    {\n      \"description\": \"GL ROUND POND SB\",\n      \"line_total\": 13.00\n    },\n    {\n      \"description\": \"OCTOPUS\",\n      \"line_total\": 16.00\n    },\n    {\n      \"description\": \"BEEF TARTARE\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"FINLANDIA (WELL) $MARTINI\",\n      \"line_total\": 11.00\n    },\n    {\n      \"description\": \"HALIBUT\",\n      \"line_total\": 38.00\n    },\n    {\n      \"description\": \"SNAPPER\",\n      \"line_total\": 28.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

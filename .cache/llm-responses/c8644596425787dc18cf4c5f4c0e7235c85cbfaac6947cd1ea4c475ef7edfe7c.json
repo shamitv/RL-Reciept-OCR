@@ -1,0 +1,14 @@
+{
+  "key": "c8644596425787dc18cf4c5f4c0e7235c85cbfaac6947cd1ea4c475ef7edfe7c",
+  "created_at": "2026-04-07T18:52:58.648353+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. While all header fields (company, date, address, subtotal, tax, total) were correctly identified, the line item extraction failed significantly due to grouping multiple distinct items and modifiers into single entries, resulting in a much lower count of line items than the gold standard.\",\n  \"failure_reasons\": [\n    \"line_item_grouping\",\n    \"low_line_item_recall\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (format differs slightly but value is accurate).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Correctly extracted.\",\n    \"tax\": \"Correctly extracted.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"The model attempted to group modifiers (e.g., '- NO Goat Cheese', '- NO Bread') into the main item description rather than treating them as separate line items as per the gold labels. This led to a reduction in the total number of line items from 16 to 7.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

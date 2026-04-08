@@ -1,0 +1,14 @@
+{
+  "key": "273170b468c8ba9eb3a6e7e3b739e0a5983caf855e796899ebd8437a72a653a2",
+  "created_at": "2026-04-07T18:26:08.076645+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed to match the gold labels. While the header information (company, date, address) was extracted correctly, the tax field incorrectly captured the tip amount, and the total amount contains a decimal mismatch relative to the gold label (though the prediction is correct according to the image).\",\n  \"failure_reasons\": [\n    \"semantic_error_tax_vs_tip\",\n    \"decimal_mismatch\"\n  ],\n  \"field_notes\": {\n    \"tax\": \"The value '15.0' was extracted from the 'Tip' field instead of a tax field.\",\n    \"total\": \"The predicted total '173.07' matches the visual evidence in the image, but fails against the gold label '17307.00' which appears to have a decimal placement error.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

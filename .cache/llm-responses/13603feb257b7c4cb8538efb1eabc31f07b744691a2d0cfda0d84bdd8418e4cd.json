@@ -1,0 +1,14 @@
+{
+  "key": "13603feb257b7c4cb8538efb1eabc31f07b744691a2d0cfda0d84bdd8418e4cd",
+  "created_at": "2026-04-07T18:56:10.784948+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While the header fields (company, date, subtotal, tax, and total) are largely correct, the line item extraction is highly inaccurate. The model merged multiple items into single entries, misaligned prices with their corresponding descriptions, and failed to capture all line items.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"price_misalignment\",\n    \"missing_line_items\",\n    \"address_typo\"\n  ],\n  \"field_notes\": {\n    \"address\": \"The street number was incorrectly extracted as '608' instead of '600'.\",\n    \"line_items\": \"Severe errors in line item extraction: items are merged (e.g., 'Real Smooth Short Stack'), prices are misaligned (e.g., 'Coffee' is assigned the price of 'Short Stack'), and several items are missing or incorrectly combined.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

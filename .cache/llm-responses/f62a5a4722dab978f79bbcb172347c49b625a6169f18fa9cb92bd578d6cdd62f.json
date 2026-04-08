@@ -1,0 +1,14 @@
+{
+  "key": "f62a5a4722dab978f79bbcb172347c49b625a6169f18fa9cb92bd578d6cdd62f",
+  "created_at": "2026-04-07T17:41:28.785894+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed significantly on line item accuracy and completeness. While header fields like address, tax, and total were correctly identified, the model hallucinated descriptions by merging multiple line items into single entries and missed two distinct line items.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"missing_line_items\",\n    \"description_hallucination\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The company name 'Thai GUSTO' is a slight variation of the gold 'Thai Gusto Restaurant', but acceptable.\",\n    \"date\": \"Extracted full timestamp; gold only requested date, but content is correct.\",\n    \"subtotal\": \"Extracted with '$' symbol, whereas gold is null (though the value $27.48 is correct).\",\n    \"tax\": \"Extracted with '$' symbol, whereas gold is '2.67'.\",\n    \"total\": \"Extracted with '$' symbol, whereas gold is '30.15'.\",\n    \"line_items\": \"Major failure. The model merged the 'Chicken [5*****] [Small Brown Rice]' items into the descriptions of 'Garlic Delight' and 'Red Curry', resulting in only 3 items instead of the 5 gold items. It also failed to provide 'raw_text' for any items.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

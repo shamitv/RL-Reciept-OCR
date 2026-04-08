@@ -1,0 +1,14 @@
+{
+  "key": "42e09a6f1fb443f95217ace75d4d8ccd856417064d6dd9ddcd6a8d6170382fe7",
+  "created_at": "2026-04-07T18:18:24.606892+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded but failed on key financial fields and formatting. While the company, date, address, and line items were correctly identified, the subtotal was missed entirely, and the tax field contained the subtotal value instead of the tax value. Additionally, currency symbols were included in the predicted values, which deviates from the gold standard format.\",\n  \"failure_reasons\": [\n    \"field_misalignment\",\n    \"missing_field\",\n    \"formatting_error\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct (format differs but value is accurate).\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Failed; value is null.\",\n    \"tax\": \"Failed; predicted '$21.50' which is the subtotal, not the tax ($1.37).\",\n    \"total\": \"Correct (though includes '$' symbol).\",\n    \"line_items\": \"Descriptions are correct, but 'raw_text' is missing and currency symbols were included in 'line_total'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "b56c66b4dc92d6661fd8a5ea7d5bef0519765b6f2d9210970654e2d1d965c878",
+  "created_at": "2026-04-07T18:52:12.694883+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful. All key header fields (company, address, subtotal, tax, total) and all line items were correctly identified and match the gold labels. Minor differences in date formatting and decimal precision do not affect the accuracy of the extraction.\",\n  \"failure_reasons\": [],\n  \"field_notes\": {\n    \"date\": \"The extracted date uses MM/DD/YYYY format instead of YYYY-MM-DD, but the value is correct.\",\n    \"total\": \"The extracted total '47.9' is numerically equivalent to the gold '47.90'.\",\n    \"line_items\": \"All four line items were correctly extracted with matching descriptions and totals.\",\n    \"line_item_totals\": \"The Coors Light total '5.0' is numerically equivalent to the gold '5.00'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

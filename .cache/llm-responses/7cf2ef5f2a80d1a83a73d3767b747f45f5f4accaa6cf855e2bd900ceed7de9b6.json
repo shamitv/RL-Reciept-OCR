@@ -1,0 +1,14 @@
+{
+  "key": "7cf2ef5f2a80d1a83a73d3767b747f45f5f4accaa6cf855e2bd900ceed7de9b6",
+  "created_at": "2026-04-07T18:21:04.024283+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. While all header fields (company, date, address, subtotal, tax, total) were correctly identified, the line item extraction failed to capture the full description and raw text, and the reconciliation failed because the line item totals do not sum to the subtotal.\",\n  \"failure_reasons\": [\n    \"Incomplete line item descriptions (missing price and quantity info)\",\n    \"Missing raw_text for line items\",\n    \"Reconciliation failure: line item totals (47.15 + 4.91 = 52.06) sum to the total, not the subtotal (48.54)\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (includes timestamp).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Correctly extracted.\",\n    \"tax\": \"Correctly extracted.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"Descriptions are truncated (e.g., 'BBQ Dinner' instead of 'BBQ DINNER $10.99 X4'). Raw text is missing. Note: The receipt itself appears to have a mathematical error where the sum of line items equals the total rather than the subtotal, which caused the reconciliation failure.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

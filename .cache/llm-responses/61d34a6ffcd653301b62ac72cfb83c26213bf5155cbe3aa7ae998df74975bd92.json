@@ -1,0 +1,14 @@
+{
+  "key": "61d34a6ffcd653301b62ac72cfb83c26213bf5155cbe3aa7ae998df74975bd92",
+  "created_at": "2026-04-07T17:59:18.016464+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful in capturing all line items and the financial summary (subtotal, tax, total). However, it failed to match the gold labels for the company name and the date.\",\n  \"failure_reasons\": [\n    \"date_mismatch\",\n    \"company_spelling_error\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company name 'Mariannacci's Restaurant' has an extra 'n' compared to the gold label 'MARIANACCI'S RESTAURANT'.\",\n    \"date\": \"The predicted date 'FEB 18/17' does not match the gold label '2018-02-04'.\",\n    \"line_items\": \"All 11 line items were correctly extracted with matching descriptions and line totals.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "52dc490cd4b4d860d274f8b3b5348125b1071df83a05eac38580422ce1d43c89",
+  "created_at": "2026-04-07T18:35:55.787935+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed on line item accuracy. While header fields (company, date, address, subtotal, tax, total) were extracted correctly, several line items contained errors in the line total values.\",\n  \"failure_reasons\": [\n    \"line_item_value_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted 'SHAKE SHACK'.\",\n    \"date\": \"Correctly extracted '03/03/2015'.\",\n    \"address\": \"Correctly extracted '1450 S. Dixie Highway'.\",\n    \"subtotal\": \"Correctly extracted '23.58'.\",\n    \"tax\": \"Correctly extracted '1.89'.\",\n    \"total\": \"Correctly extracted '25.47'.\",\n    \"line_items\": {\n      \"item_1\": \"Correctly extracted 'ShackBurger' with total '5.19'.\",\n      \"item_2\": \"Incorrect total: predicted '6.59' instead of gold '6.69'.\",\n      \"item_3\": \"Correctly extracted 'cheese fries' with total '3.95'.\",\n      \"item_4\": \"Correctly extracted 'REG Soda (2 @2.75)' with total '5.50'.\",\n      \"item_5\": \"Missing total: predicted null instead of gold '2.00'.\",\n      \"item_6\": \"Correctly extracted 'REG Iced Tea' with total '2.25'.\"\n    }\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

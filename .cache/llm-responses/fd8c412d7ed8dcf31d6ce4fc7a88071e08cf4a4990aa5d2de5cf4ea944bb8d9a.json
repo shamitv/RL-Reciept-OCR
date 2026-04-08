@@ -1,0 +1,14 @@
+{
+  "key": "fd8c412d7ed8dcf31d6ce4fc7a88071e08cf4a4990aa5d2de5cf4ea944bb8d9a",
+  "created_at": "2026-04-07T18:12:55.144559+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was successful for all header fields, but failed to correctly segment the line items. Two separate items ('Sushi Dinner' and 'w.Miso Soup') were merged into a single entry, resulting in a lower line item count than the gold standard.\",\n  \"failure_reasons\": [\n    \"line_item_segmentation_error\"\n  ],\n  \"field_notes\": \"Header fields (company, date, address, subtotal, tax, total) are accurate. The line item 'Sushi Dinner w.Miso Soup' incorrectly combines two distinct items from the receipt.\"\n}\n"
+        }
+      }
+    ]
+  }
+}

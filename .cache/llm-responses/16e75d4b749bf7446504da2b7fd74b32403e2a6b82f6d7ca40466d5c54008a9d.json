@@ -1,0 +1,14 @@
+{
+  "key": "16e75d4b749bf7446504da2b7fd74b32403e2a6b82f6d7ca40466d5c54008a9d",
+  "created_at": "2026-04-07T18:37:27.418567+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"MIGUELS MEXICAN\",\n  \"date\": \"Dec26'12\",\n  \"address\": \"3035 W. KENNEDY BLVD TAMPA, FL.\",\n  \"subtotal\": 60.87,\n  \"tax\": 4.27,\n  \"total\": 65.14,\n  \"line_items\": [\n    {\n      \"description\": \"3 WATER\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"1 CRAB SUIZA\",\n      \"line_total\": 13.25\n    },\n    {\n      \"description\": \"1 SHRIMP VERACRUZ\",\n      \"line_total\": 14.95\n    },\n    {\n      \"description\": \"1 ENCHILADA\",\n      \"line_total\": 4.95\n    },\n    {\n      \"description\": \"1 FAJITA BF\",\n      \"line_total\": 13.95\n    },\n    {\n      \"description\": \"1 **TAKE OUT**\",\n      \"line_total\": 0.25\n    },\n    {\n      \"description\": \"4 HH MIGUELS MARGARIT @ 3.38\",\n      \"line_total\": 13.52\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

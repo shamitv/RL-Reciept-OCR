@@ -1,0 +1,14 @@
+{
+  "key": "5be08c163a8ab87f5fbc73ca8b39b2f4c76fa7cf2d3c7e4846842018603cf697",
+  "created_at": "2026-04-07T18:50:54.092707+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to incorrect mathematical reconciliation of the subtotal and tax fields, despite correctly identifying all line items and the total amount.\",\n  \"failure_reasons\": [\n    \"Incorrect subtotal extraction\",\n    \"Incorrect tax extraction\",\n    \"Mathematical reconciliation failure\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (includes time, but matches gold date).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Incorrect. Predicted 12.40, Gold 14.85. The predicted value seems to be only the food subtotal, ignoring the beverage.\",\n    \"tax\": \"Incorrect. Predicted 1.85, Gold 0.15. The predicted value is significantly higher than the actual tax on the receipt.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"All 5 line items were correctly identified with correct descriptions and prices, though raw_text and evidence_ids were missing.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

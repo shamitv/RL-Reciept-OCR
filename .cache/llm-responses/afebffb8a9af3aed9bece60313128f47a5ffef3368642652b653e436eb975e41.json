@@ -1,0 +1,14 @@
+{
+  "key": "afebffb8a9af3aed9bece60313128f47a5ffef3368642652b653e436eb975e41",
+  "created_at": "2026-04-07T18:49:55.098325+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to a significant error in the subtotal field, where the amount of the first line item was extracted instead of the actual subtotal. Additionally, there were several OCR-related typos in the company name, address (including the zip code), and one of the line item descriptions.\",\n  \"failure_reasons\": [\n    \"incorrect_subtotal\",\n    \"ocr_typo\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Extracted 'HALL' instead of 'MALL'.\",\n    \"date\": \"Format mismatch (DD/MM/YYYY vs YYYY-MM-DD), though the date value is correct.\",\n    \"address\": \"Extracted 'HALL' instead of 'MALL' and incorrectly identified the zip code as '400066' instead of '400606'.\",\n    \"subtotal\": \"Incorrectly extracted the first line item amount (190.00) instead of the total subtotal (498.00).\",\n    \"line_items\": \"Typo in the fourth item description: 'PAWEER' instead of 'PANEER'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

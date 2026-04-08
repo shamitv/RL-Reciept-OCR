@@ -1,0 +1,14 @@
+{
+  "key": "5e98c41e1a4f23134d3fb040a8ba9dbcc4b4979934d3bb9e4a1ac2e957e3838e",
+  "created_at": "2026-04-07T18:27:00.403635+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly, primarily due to incorrect subtotal calculation and poor line item segmentation. While header information like company, date, and tax were mostly correct, the model failed to capture the subtotal and merged multiple distinct line items into single entries.\",\n  \"failure_reasons\": [\n    \"Incorrect subtotal extraction (predicted 0.00 instead of 21.55)\",\n    \"Line item merging (multiple items combined into single descriptions)\",\n    \"Missing line items (only 3 predicted vs 7 gold)\",\n    \"Address formatting mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct (format differs but value is accurate).\",\n    \"address\": \"Minor discrepancies in punctuation and spelling compared to gold.\",\n    \"subtotal\": \"Failed; extracted 0.00 instead of 21.55.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"Poor performance; the model grouped several items together (e.g., 'Vegetable Roll Egg Roll' and 'L35.Sesame chicken 1 W/R 1 F/R') instead of treating them as individual entries, leading to a loss of granularity and incorrect item counts.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "f8b6ffc010092185f81372d96cfe0b854a490fd20f962cd978c29c5484054b26",
+  "created_at": "2026-04-07T18:38:32.340820+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"NEW DELHI INDIAN RESTAURANT\",\n  \"date\": \"24-Nov-16\",\n  \"address\": \"#237E, Sisivath Quay, Phnom Penh, Cambodia\",\n  \"subtotal\": \"7.50\",\n  \"tax\": \"0.00\",\n  \"total\": \"13.00\",\n  \"line_items\": [\n    {\n      \"description\": \"House Wine White Glass\",\n      \"line_total\": \"3.00\"\n    },\n    {\n      \"description\": \"VEGETABLE SHORBA\",\n      \"line_total\": \"2.50\"\n    },\n    {\n      \"description\": \"GARLIC MAAN\",\n      \"line_total\": \"2.00\"\n    },\n    {\n      \"description\": \"KARI PAKORA\",\n      \"line_total\": \"4.50\"\n    },\n    {\n      \"description\": \"ANGKOR BEER WITH MEAL\",\n      \"line_total\": \"0.50\"\n    },\n    {\n      \"description\": \"ANGKOR BEER WITH MEAL\",\n      \"line_total\": \"0.50\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

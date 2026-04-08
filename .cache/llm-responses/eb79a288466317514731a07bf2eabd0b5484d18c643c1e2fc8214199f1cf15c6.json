@@ -1,0 +1,14 @@
+{
+  "key": "eb79a288466317514731a07bf2eabd0b5484d18c643c1e2fc8214199f1cf15c6",
+  "created_at": "2026-04-07T18:52:43.249630+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"FourthStreetMill\",\n  \"date\": \"Sep 29, 2018\",\n  \"address\": \"2124 BONITA AVENUE\\nLA VERNE, CA 91750\",\n  \"subtotal\": 49.50,\n  \"tax\": 4.70,\n  \"total\": 54.20,\n  \"line_items\": [\n    {\n      \"description\": \"Lamb Burger - NO Goat Cheese - NO Bread - Medium - Sauce On Side\",\n      \"line_total\": 13.00\n    },\n    {\n      \"description\": \"Kids Grilled Cheese\",\n      \"line_total\": 5.00\n    },\n    {\n      \"description\": \"Kids Fries\",\n      \"line_total\": 3.00\n    },\n    {\n      \"description\": \"Sweet Potato Fries\",\n      \"line_total\": 8.00\n    },\n    {\n      \"description\": \"Kids Cheeseburger - NO Ketchup - No bun - Sub sourdough\",\n      \"line_total\": 7.00\n    },\n    {\n      \"description\": \"Beef Burger - Medium Rare\",\n      \"line_total\": 10.00\n    },\n    {\n      \"description\": \"Sides - Bacon (2) Slices\",\n      \"line_total\": 3.50\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

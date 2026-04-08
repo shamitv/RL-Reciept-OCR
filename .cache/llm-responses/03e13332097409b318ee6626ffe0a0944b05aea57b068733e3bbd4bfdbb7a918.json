@@ -1,0 +1,14 @@
+{
+  "key": "03e13332097409b318ee6626ffe0a0944b05aea57b068733e3bbd4bfdbb7a918",
+  "created_at": "2026-04-07T18:00:46.678239+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly, primarily due to severe errors in line item parsing. While header fields like company and address are correct, the line items suffer from description merging and price misalignment. Additionally, the date was not normalized to the expected YYYY-MM-DD format.\",\n  \"failure_reasons\": [\n    \"line_item_misalignment\",\n    \"description_merging\",\n    \"date_not_normalized\",\n    \"missing_line_items\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '4/10/16, 9:08 AM' was not normalized to the gold format '2016-10-04'.\",\n    \"subtotal\": \"The predicted subtotal includes a currency symbol ('$39.00'), whereas the gold label is null.\",\n    \"line_items\": \"Major errors detected: 'Pork' and 'Pancakes' were merged into a single description ('Pork Pancakes'), and the subsequent prices are misaligned with their respective descriptions (e.g., 'Side Bacon' is assigned the price of 'Pancakes'). The item '$3.00 each' was omitted entirely.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

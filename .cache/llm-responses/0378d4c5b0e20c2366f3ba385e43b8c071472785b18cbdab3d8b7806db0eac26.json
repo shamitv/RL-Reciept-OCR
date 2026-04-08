@@ -1,0 +1,14 @@
+{
+  "key": "0378d4c5b0e20c2366f3ba385e43b8c071472785b18cbdab3d8b7806db0eac26",
+  "created_at": "2026-04-07T18:06:55.305407+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While the predicted total (9.97) is mathematically correct based on the receipt image, it mismatches the gold label (97.00), which appears to contain a typo. Additionally, one line item ('MD') was missed, the date format is inconsistent with the gold standard, and the predicted line items do not sum to the predicted subtotal.\",\n  \"failure_reasons\": [\n    \"total_mismatch\",\n    \"missing_line_item\",\n    \"date_format_mismatch\",\n    \"line_item_sum_mismatch\"\n  ],\n  \"field_notes\": {\n    \"total\": \"Predicted 9.97 vs Gold 97.00. The gold label is likely incorrect as 9.00 + 0.97 = 9.97.\",\n    \"line_items\": \"The item 'MD' ($2.00) was not extracted. The sum of predicted line items (7.0) does not equal the predicted subtotal (9.0).\",\n    \"date\": \"The predicted date '02-Mar-2019' does not match the gold format '2019-03-02'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

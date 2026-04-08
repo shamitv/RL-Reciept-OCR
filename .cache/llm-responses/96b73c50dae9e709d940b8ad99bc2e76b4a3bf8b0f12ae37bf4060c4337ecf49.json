@@ -1,0 +1,14 @@
+{
+  "key": "96b73c50dae9e709d940b8ad99bc2e76b4a3bf8b0f12ae37bf4060c4337ecf49",
+  "created_at": "2026-04-07T17:41:42.694809+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to a date mismatch and significant errors in line item parsing. While header fields like company, subtotal, tax, and total were mostly correct, the date was incorrectly parsed, and the line items were merged and misidentified.\",\n  \"failure_reasons\": [\n    \"Incorrect date extraction (predicted 2013 instead of 2019)\",\n    \"Line item merging (multiple items combined into one description)\",\n    \"Missing line item (Special Request was not captured as a separate entity)\",\n    \"Spelling errors in line item descriptions (e.g., 'Lettuc' instead of 'Lettuce')\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Incorrect. Predicted '02/7/2013' but gold is '2019-02-27'.\",\n    \"address\": \"Mostly correct, though the zip code format differs slightly from gold.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"Failed. The model merged '1 Dbl Qtr Cheese', 'Special Request', 'ADD Leaf Lettuce', and 'ADD Mac Sauce' into a single item description. It also missed the 'Special Request' item as a distinct entry and failed to capture raw text.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

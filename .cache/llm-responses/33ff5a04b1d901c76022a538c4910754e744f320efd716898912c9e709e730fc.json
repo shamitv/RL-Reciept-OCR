@@ -1,0 +1,14 @@
+{
+  "key": "33ff5a04b1d901c76022a538c4910754e744f320efd716898912c9e709e730fc",
+  "created_at": "2026-04-07T17:48:50.227877+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful for header fields but failed significantly on line items. While the company, subtotal, tax, and total were correctly identified, the line item extraction was highly inaccurate due to splitting item modifiers into separate line items and failing to capture the 'VOID' entry.\",\n  \"failure_reasons\": [\n    \"line_item_splitting\",\n    \"missing_item\",\n    \"over_extraction\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The date format differs from the gold label (MM/DD/YY vs YYYY-MM-DD).\",\n    \"line_items\": \"The model incorrectly extracted item modifiers (e.g., 'Ensalada', 'No Cebolla', 'Aguacate') as individual line items instead of grouping them with the parent item. Additionally, it missed the 'VOID' line item, which is critical for the mathematical reconciliation of the total.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "c1083ed2603217633fcba7e0f64d3c5d86a32a02cf8e3ac18148c96042f47ba1",
+  "created_at": "2026-04-07T17:47:13.881560+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly. While the company and date were correctly identified, the financial totals (subtotal, tax, total) are incorrect, and the line item extraction is highly inaccurate, misattributing total amounts to individual items and failing to correctly parse the line item values.\",\n  \"failure_reasons\": [\n    \"Incorrect financial field extraction (subtotal, tax, and total are wrong)\",\n    \"Line item value misattribution (line totals are being populated with the receipt total or incorrect values)\",\n    \"Failure to correctly parse line item descriptions and prices\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (though includes time).\",\n    \"address\": \"Partially correct; includes city and state not present in gold.\",\n    \"subtotal\": \"Incorrect. Predicted '$11.38' instead of '0.08'.\",\n    \"tax\": \"Incorrect. Predicted '$0.70' instead of '0.37'.\",\n    \"total\": \"Incorrect. Predicted '$12.08' instead of '13.05'.\",\n    \"line_items\": \"Major failure. The model assigned the receipt total ($12.08 or $13.05) to various line items instead of their actual individual prices. It also failed to capture the correct descriptions and quantities.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

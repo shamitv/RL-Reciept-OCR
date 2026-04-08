@@ -1,0 +1,14 @@
+{
+  "key": "22986e58755a9a3bd1e5463f15e1c92ad2082474f50742c5e0b4df6d56fdbbe8",
+  "created_at": "2026-04-07T18:49:10.647817+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing header information but failed significantly on line items. While the company, date, address, and totals were correctly identified, the line item extraction suffered from incorrect price mapping, missing items, and incorrect descriptions.\",\n  \"failure_reasons\": [\n    \"line_item_price_mismatch\",\n    \"line_item_missing\",\n    \"line_item_description_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (format differs from gold but value is identical).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Correctly extracted.\",\n    \"tax\": \"Correctly extracted.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"Multiple errors: 1) 'Sm Garlic Bread' was assigned the tax amount (9.02) instead of its actual price (9.99). 2) 'Sm Chop Antipasto Salad' was assigned the price of 'Gl Buca Chianti' (10.00) instead of its actual price (18.99). 3) 'Lg Supremo Pizza' was assigned the price of 'Sm Chop Antipasto Salad' (18.99) instead of its actual price (29.99). 4) One item ('Gl Buca Chianti') was missing entirely. 5) The line item total reconciliation failed due to these misalignments.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

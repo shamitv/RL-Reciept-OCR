@@ -1,0 +1,14 @@
+{
+  "key": "ca18ddcce82a9f968859c543952e87cd0b3e5c04b16c23275f69cca390a65553",
+  "created_at": "2026-04-07T17:42:38.679897+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing header information but failed significantly on line items and tax accuracy.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"missing_line_items\",\n    \"incorrect_tax_value\",\n    \"date_format_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted value includes extra text 'CARU, HAWAII' which is not in the gold label.\",\n    \"date\": \"The predicted date format '01/11/2019' does not match the gold ISO format '2019-11-01'.\",\n    \"address\": \"Minor spelling difference ('Waipae' vs 'Waipahe').\",\n    \"tax\": \"The predicted tax '4.0' is incorrect; the gold label expects null, and the receipt shows a discount/tax calculation that doesn't match the prediction.\",\n    \"line_items\": \"The model merged multiple distinct line items into single entries (e.g., 'Wagyu Cheeseburger Medium Well', 'Garlic Fries ADD RAW ONIONS& BACON PLZ', 'Drink of the Day Tea'). It also missed several items entirely (Ranch, Add Raw Onions & Bacon, etc.), resulting in a low line item count and poor granularity.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "7ecadd020b0a0942696b778a71d6bed7a425f58dea54565146804581918a9d4e",
+  "created_at": "2026-04-07T18:54:19.350481+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is largely successful and highly accurate relative to the image. However, it fails validation against the gold labels due to an incorrect date format and a mismatch in the line item total for the 'Ribeye Bone In'. Interestingly, the prediction for the Ribeye total (69.5) matches the visual evidence in the image, whereas the gold label (1.00) appears to be incorrect.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"line_item_total_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date 'Apr07.16 07:53PM' includes time and a different format than the gold '2016-04-07'.\",\n    \"line_items[1].line_total\": \"The predicted total '69.5' for '1 Ribeye Bone In' does not match the gold label '1.00', although the prediction is more consistent with the receipt image.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

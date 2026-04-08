@@ -1,0 +1,14 @@
+{
+  "key": "3a6660f17caa25610ccbf18f4f55d396bd79e23142932e9a040f828fccdef6b6",
+  "created_at": "2026-04-07T17:35:24.914657+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Quick 73 Smoke City Market\",\n  \"date\": \"Jun 26, 15 04:55 PM\",\n  \"address\": \"5242 Van Nuys BLVD Sherman Oaks, CA 91401\",\n  \"subtotal\": \"$59.11\",\n  \"tax\": \"$5.32\",\n  \"total\": \"$64.43\",\n  \"line_items\": [\n    {\n      \"description\": \"Beef Ribs\",\n      \"line_total\": \"$36.86\"\n    },\n    {\n      \"description\": \"Weight: 1.89 lbs @ $19.50/lbs\",\n      \"line_total\": \"$8.50\"\n    },\n    {\n      \"description\": \"Pulled Pork Sand\",\n      \"line_total\": \"$0.00\"\n    },\n    {\n      \"description\": \"*Reg\",\n      \"line_total\": \"$3.35\"\n    },\n    {\n      \"description\": \"Creamed Corn[Small]\",\n      \"line_total\": \"$4.20\"\n    },\n    {\n      \"description\": \"Longhorn Mac & Cheese[sm]\",\n      \"line_total\": \"$3.95\"\n    },\n    {\n      \"description\": \"Chocolate Cake[Slice]\",\n      \"line_total\": \"$2.25\"\n    },\n    {\n      \"description\": \"Fountain Soda\",\n      \"line_total\": null\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

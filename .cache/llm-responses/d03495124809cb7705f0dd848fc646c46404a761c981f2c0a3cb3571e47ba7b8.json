@@ -1,0 +1,14 @@
+{
+  "key": "d03495124809cb7705f0dd848fc646c46404a761c981f2c0a3cb3571e47ba7b8",
+  "created_at": "2026-04-07T18:12:08.468381+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed to meet the required accuracy. While the company and address were correctly identified, the date format was incorrect, and both the subtotal and total were mathematically wrong. Furthermore, the line item extraction was incomplete, missing three items and incorrectly merging description fragments (like '[Roll]' and 'Spicy') into the preceding line items.\",\n  \"failure_reasons\": [\n    \"incorrect_date_format\",\n    \"incorrect_subtotal\",\n    \"incorrect_total\",\n    \"incomplete_line_items\",\n    \"incorrect_line_item_description_merging\"\n  ],\n  \"field_notes\": {\n    \"date\": \"Format mismatch: predicted '05-11-2018' instead of '2018-11-05'.\",\n    \"subtotal\": \"Predicted '18.95' is incorrect; the receipt shows an amount of '27.15'.\",\n    \"total\": \"Predicted '20.58' is incorrect; the receipt shows a total of '28.78'.\",\n    \"line_items\": \"The model missed 3 line items and incorrectly concatenated description fragments from separate lines into the descriptions of other items (e.g., '1 13. Shrimp Tempura Roll [Roll]').\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

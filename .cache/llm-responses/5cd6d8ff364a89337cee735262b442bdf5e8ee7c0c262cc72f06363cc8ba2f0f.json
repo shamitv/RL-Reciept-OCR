@@ -1,0 +1,14 @@
+{
+  "key": "5cd6d8ff364a89337cee735262b442bdf5e8ee7c0c262cc72f06363cc8ba2f0f",
+  "created_at": "2026-04-07T18:55:33.072710+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing the header and summary fields but failed significantly on line item accuracy and date formatting. While the subtotal, tax, and total were correct, the line item totals were incorrectly extracted as unit prices rather than line totals, leading to a reconciliation failure.\",\n  \"failure_reasons\": [\n    \"Incorrect line item total extraction (extracted unit price instead of line total)\",\n    \"Date format mismatch (predicted '5/3/19' instead of '2019-03-05')\",\n    \"Incomplete company name extraction (included 'Primo' which was not in gold, though present in image)\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Predicted 'Primo Family Restaurant'; gold is 'Family Restaurant'. The image shows 'Primo' in large text above 'Family Restaurant'.\",\n    \"date\": \"Format mismatch: '5/3/19' vs '2019-03-05'.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"Failed on line_total. For the first item, predicted '7.5' (unit price) instead of '22.50' (line total). For the second item, predicted '27.0' instead of '27.00' (though value is mathematically same, the first error causes reconciliation failure).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

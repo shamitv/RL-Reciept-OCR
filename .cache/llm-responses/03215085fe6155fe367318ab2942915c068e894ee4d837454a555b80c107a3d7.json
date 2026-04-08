@@ -1,0 +1,14 @@
+{
+  "key": "03215085fe6155fe367318ab2942915c068e894ee4d837454a555b80c107a3d7",
+  "created_at": "2026-04-07T18:05:53.056706+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"BRASAS RESTAURANT\",\n  \"date\": \"02-Mar-2019\",\n  \"address\": \"6011 W ROOSEVELT RD CICERO, IL 60804\",\n  \"subtotal\": 9.00,\n  \"tax\": 0.97,\n  \"total\": 9.97,\n  \"line_items\": [\n    {\n      \"description\": \"Chicken Torta\",\n      \"line_total\": 6.50\n    },\n    {\n      \"description\": \"Horchata\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"Custom Item\",\n      \"line_total\": 0.50\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

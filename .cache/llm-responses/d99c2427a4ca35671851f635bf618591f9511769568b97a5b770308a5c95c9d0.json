@@ -1,0 +1,14 @@
+{
+  "key": "d99c2427a4ca35671851f635bf618591f9511769568b97a5b770308a5c95c9d0",
+  "created_at": "2026-04-07T18:05:43.583335+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was mostly successful, correctly identifying all header fields and the majority of line items. However, there is a discrepancy in the line item descriptions and one hallucinated item.\",\n  \"failure_reasons\": [\n    \"hallucination\",\n    \"description_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (format differs from gold but value is identical).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Correctly extracted.\",\n    \"tax\": \"Correctly extracted.\",\n    \"total\": \"Correctly extracted.\",\n    \"line_items\": \"The model extracted 5 items. One item ('WEEKEND DINNER BUFFET' at 39.98) is not present in the gold line items list, although it appears to be a valid extraction from the receipt text. The description for 'SODA DRINK' is missing the quantity/unit price info present in gold, and 'WEEKEND DINNER KIDS (6-10y)' has a line total of 10.00 which matches the gold value but the gold description was null.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "0f45cfa43b8ca70bd385e8b7d449e79da71a69562fb32661f5442c8effc8b8f0",
+  "created_at": "2026-04-07T18:40:17.544054+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"HMS Host\",\n  \"date\": \"APR 04 16 6:09PM\",\n  \"address\": \"Sacramento Intl Airport\",\n  \"subtotal\": 74.49,\n  \"tax\": 5.96,\n  \"total\": 80.45,\n  \"line_items\": [\n    {\n      \"description\": \"1 DB WOODFRD RES 2 NEAT\",\n      \"line_total\": 17.99\n    },\n    {\n      \"description\": \"1 CAB PEJU SAUV S Peju Cabernet Sauvignon\",\n      \"line_total\": 11.00\n    },\n    {\n      \"description\": \"1 SAND GRLD CHIX SD CHDP SLD W/ DRS BLUE CHS DRESS ON SIDE\",\n      \"line_total\": 14.50\n    },\n    {\n      \"description\": \"1 SLD SHRIMP LOUIE W/ DRESS ON SIDE 1 SD BRUSSEL SPRTS\",\n      \"line_total\": 24.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

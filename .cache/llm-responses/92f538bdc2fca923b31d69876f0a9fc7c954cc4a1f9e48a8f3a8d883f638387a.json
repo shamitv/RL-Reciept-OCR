@@ -1,0 +1,14 @@
+{
+  "key": "92f538bdc2fca923b31d69876f0a9fc7c954cc4a1f9e48a8f3a8d883f638387a",
+  "created_at": "2026-04-07T18:32:42.600582+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is highly accurate and actually corrects several errors present in the gold labels. It correctly identifies the date as 2018 (the gold label's 2026 is likely a typo) and correctly spells 'CARPACCIO' as seen in the image (the gold label 'CALPACCIO' is a typo). The only significant failure is the omission of the summary line item 'FOOD'.\",\n  \"failure_reasons\": [\n    \"missing_line_item\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '2018' matches the image, while the gold label '2026' is incorrect.\",\n    \"address\": \"The predicted address is more complete than the gold label.\",\n    \"line_items\": \"The model missed the summary line item 'FOOD : $134.00'.\",\n    \"carpaccio\": \"The prediction 'CARPACCIO' is more accurate to the visual evidence than the gold label 'CALPACCIO'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

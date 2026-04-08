@@ -1,0 +1,14 @@
+{
+  "key": "449ae22728daba7786f88a887e31700594449309bfca46a20975fcd53323e5ae",
+  "created_at": "2026-04-07T17:41:15.105441+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed completely. All key fields (company, date, address, subtotal, tax, total) and line items are null or empty.\",\n  \"failure_reasons\": [\n    \"all_fields_null\",\n    \"no_line_items_extracted\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Predicted as null, expected 'Moonstar Restaurant'\",\n    \"date\": \"Predicted as null, expected '2018-10-29'\",\n    \"address\": \"Predicted as null, expected '383 Gellert Blvd., Daly City, CA 94015'\",\n    \"subtotal\": \"Predicted as null, expected '29.88'\",\n    \"tax\": \"Predicted as null, expected '3.01'\",\n    \"total\": \"Predicted as null, expected '37.37'\",\n    \"line_items\": \"Predicted as empty, expected 1 item\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

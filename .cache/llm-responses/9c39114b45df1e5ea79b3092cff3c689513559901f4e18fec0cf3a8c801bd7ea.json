@@ -1,0 +1,14 @@
+{
+  "key": "9c39114b45df1e5ea79b3092cff3c689513559901f4e18fec0cf3a8c801bd7ea",
+  "created_at": "2026-04-07T18:39:18.324062+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was largely successful, correctly identifying the company, date, total, and all line items. However, it failed to match the gold labels for subtotal and tax (which were null) by providing calculated/assumed values. Additionally, there was a minor transcription error in one line item description.\",\n  \"failure_reasons\": [\n    \"hallucination_of_missing_fields\",\n    \"transcription_error\"\n  ],\n  \"field_notes\": {\n    \"address\": \"The model corrected the spelling of 'Cambodia' and 'Sisivath' from the typos present in the gold label.\",\n    \"subtotal\": \"The model predicted a subtotal of 7.50, whereas the gold label is null.\",\n    \"tax\": \"The model predicted a tax of 0.00, whereas the gold label is null.\",\n    \"line_items\": \"The description 'GARLIC MAAN' contains a typo; it should be 'GARLIC NAAN'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

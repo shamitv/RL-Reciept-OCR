@@ -1,0 +1,14 @@
+{
+  "key": "6e4c69ded5eddf94479b5da80de965bdbcd467cf60093dbcb2f13996f817a66e",
+  "created_at": "2026-04-07T17:56:38.483568+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is highly successful. All primary header fields (company, date, address, subtotal, tax, and total) were correctly identified. The line items were also accurately captured with matching descriptions and totals, although they lack the raw text and evidence IDs present in the gold labels.\",\n  \"failure_reasons\": [],\n  \"field_notes\": {\n    \"date\": \"The predicted date format (Jan 24, 2019) differs from the gold format (2019-01-24) but is semantically identical.\",\n    \"address\": \"The predicted address includes the state abbreviation 'CA', which was not in the gold label but is contextually accurate.\",\n    \"line_items\": \"The predicted line items are missing 'raw_text' and 'evidence_ids' compared to the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

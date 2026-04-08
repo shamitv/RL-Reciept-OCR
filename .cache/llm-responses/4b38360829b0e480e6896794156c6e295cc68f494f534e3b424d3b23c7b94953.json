@@ -1,0 +1,14 @@
+{
+  "key": "4b38360829b0e480e6896794156c6e295cc68f494f534e3b424d3b23c7b94953",
+  "created_at": "2026-04-07T18:07:48.764150+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed primarily due to poor line item parsing. While the header fields (date, subtotal, tax, total) were extracted accurately, the line items were incorrectly merged. The model attempted to combine modifiers (e.g., 'CON TODO', 'COPA S.ROJA') into the main item descriptions and erroneously merged two distinct items ('1 QUESADILLA ASADA' and '1 ORDEN CHIPS') into a single line item. This resulted in a significant mismatch in both the number of items and the mathematical reconciliation of the subtotal.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"item_grouping_error\",\n    \"count_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Partial extraction; missed the descriptive suffix.\",\n    \"date\": \"Correct date, though format differs from gold.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"Failed to treat modifiers as separate line items as per gold labels. Merged '1 QUESADILLA ASADA' and '1 ORDEN CHIPS' into one item, and the sum of predicted line items (12.76) does not match the subtotal (12.67).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

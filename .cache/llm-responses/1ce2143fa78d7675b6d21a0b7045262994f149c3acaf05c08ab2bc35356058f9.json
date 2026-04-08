@@ -1,0 +1,14 @@
+{
+  "key": "1ce2143fa78d7675b6d21a0b7045262994f149c3acaf05c08ab2bc35356058f9",
+  "created_at": "2026-04-07T18:41:03.979679+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Collector's Choice Restaurant\",\n  \"date\": \"April 10, 2019\",\n  \"address\": \"215 Cypress Ave Snohomish WA 98290\",\n  \"subtotal\": 11.69,\n  \"tax\": 1.14,\n  \"total\": 13.53,\n  \"line_items\": [\n    {\n      \"description\": \"1 Twisted Rueben\",\n      \"line_total\": 11.69\n    },\n    {\n      \"description\": \"1 Service Fee (-6%)\",\n      \"line_total\": -1.14\n    },\n    {\n      \"description\": \"Sales Tax (9.2%)\",\n      \"line_total\": null\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

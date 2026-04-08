@@ -1,0 +1,14 @@
+{
+  "key": "95eed368631c65f9a6f4d5269631a9f9284b012af08b927816473b3553577fe7",
+  "created_at": "2026-04-07T18:40:55.311488+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While the financial totals (subtotal, tax, total) and date are correct, the company name is incorrect, and the line item extraction is highly inaccurate. The model merged multiple distinct line items into single entries, resulting in a significant loss of detail and an incorrect item count.\",\n  \"failure_reasons\": [\n    \"incorrect_company_name\",\n    \"merged_line_items\",\n    \"missing_line_items\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Extracted the parent company 'HMS Host' instead of the specific restaurant 'ESQUIRE GRILLE'.\",\n    \"address\": \"Extracted part of the company name as the address field.\",\n    \"line_items\": \"The model failed to separate individual items and their associated descriptions/notes, instead concatenating them into four large blocks. This caused a mismatch in both the number of items and the individual item descriptions.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

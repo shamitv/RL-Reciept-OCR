@@ -1,0 +1,14 @@
+{
+  "key": "edaa1b5af7b70db67336fc186adec321b5e58dadc7d1320c0c582939e7e5c917",
+  "created_at": "2026-04-07T18:37:49.033336+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Rihanna's Caribbean Restaurant\",\n  \"date\": \"12-Aug-2018 3:01:40P\",\n  \"address\": \"12709 BEECHNUT ST STE100 HOUSTON, TX 77072\",\n  \"subtotal\": 12.25,\n  \"tax\": 1.01,\n  \"total\": 13.26,\n  \"line_items\": [\n    {\n      \"description\": \"Curry Chicken\",\n      \"line_total\": 10.00\n    },\n    {\n      \"description\": \"Beef Pattie\",\n      \"line_total\": 2.25\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

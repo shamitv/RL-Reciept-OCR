@@ -1,0 +1,14 @@
+{
+  "key": "c198f2120c8a158c34de2c723ebf715fd0f3f53194a0d26974231a0e9a4c0a09",
+  "created_at": "2026-04-07T18:28:41.858873+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CHATPATA RESTAURANT INC\",\n  \"date\": \"19-Mar-2019\",\n  \"address\": \"1683 ROUTE 9 CLIFTON PARK, NY 12065\",\n  \"subtotal\": 17.85,\n  \"tax\": 1.25,\n  \"total\": 19.10,\n  \"line_items\": [\n    {\n      \"description\": \"6.5 Chicken Korma\",\n      \"line_total\": 11.95\n    },\n    {\n      \"description\": \"10.1 Naan (Plain Naan\",\n      \"line_total\": 1.95\n    },\n    {\n      \"description\": \"13.1 Kheer\",\n      \"line_total\": 3.95\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

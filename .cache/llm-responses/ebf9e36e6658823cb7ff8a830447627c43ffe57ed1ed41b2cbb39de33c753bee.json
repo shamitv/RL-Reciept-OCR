@@ -1,0 +1,14 @@
+{
+  "key": "ebf9e36e6658823cb7ff8a830447627c43ffe57ed1ed41b2cbb39de33c753bee",
+  "created_at": "2026-04-07T18:58:47.229347+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed the overall validation due to a reconciliation error in the line items. While header fields (company, date, address, subtotal, tax, total) were extracted with high accuracy, the line items failed to reconcile with the subtotal.\",\n  \"failure_reasons\": [\n    \"line_item_reconciliation_fail\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company name 'Marie Callender's Restaurant' is slightly truncated compared to the gold label 'Marie Callender's Restaurant Store N0134'.\",\n    \"date\": \"The date format 'Nov30'14' differs from the gold '2014-11-30' but represents the same value.\",\n    \"address\": \"The address is accurate, though punctuation differs slightly from the gold label.\",\n    \"line_items\": \"The line items were correctly identified in count and description, but the sum of the predicted line totals (0.0 + 19.98 + 0.0 + 0.0 + 2.79 + 5.0 = 27.77) does not match the subtotal (17.77). Specifically, the 'BDAY CLUB $5' item is a discount (indicated by '-' in raw text) but was treated as a positive addition, causing the reconciliation failure.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

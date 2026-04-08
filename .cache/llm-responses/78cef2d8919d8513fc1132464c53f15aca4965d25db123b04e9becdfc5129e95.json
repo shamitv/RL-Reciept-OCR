@@ -1,0 +1,14 @@
+{
+  "key": "78cef2d8919d8513fc1132464c53f15aca4965d25db123b04e9becdfc5129e95",
+  "created_at": "2026-04-07T18:41:19.549107+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing header information but failed significantly on line items and date formatting. While the company, address, subtotal, tax, and total were mostly correct, the model hallucinated extra line items (Service Fee and Sales Tax) that were not in the gold standard, and it failed to match the date format.\",\n  \"failure_reasons\": [\n    \"Incorrect date format (extracted 'April 10, 2019' instead of '2019-04-10')\",\n    \"Hallucinated line items (Service Fee and Sales Tax) not present in gold line items\",\n    \"Minor typo in company name (Collector's Choice vs Collector' s Choise)\",\n    \"Missing raw_text for line items\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Minor discrepancy in spelling/spacing ('Collector's Choice' vs 'Collector' s Choise').\",\n    \"date\": \"Format mismatch; predicted 'April 10, 2019' while gold expects '2019-04-10'.\",\n    \"address\": \"Perfect match.\",\n    \"subtotal\": \"Perfect match.\",\n    \"tax\": \"Perfect match.\",\n    \"total\": \"Perfect match.\",\n    \"line_items\": \"The model extracted the main item correctly but added two additional line items (Service Fee and Sales Tax) which are considered noise/hallucinations relative to the gold standard provided.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

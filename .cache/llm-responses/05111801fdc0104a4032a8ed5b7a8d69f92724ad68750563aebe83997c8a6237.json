@@ -1,0 +1,14 @@
+{
+  "key": "05111801fdc0104a4032a8ed5b7a8d69f92724ad68750563aebe83997c8a6237",
+  "created_at": "2026-04-07T18:34:38.799800+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed to meet the required accuracy. While the company, date, address, and total were correctly identified, the subtotal was missed, the tax field was populated with the subtotal value, and the line items were significantly under-counted due to merging multiple distinct items into single entries.\",\n  \"failure_reasons\": [\n    \"missing_subtotal\",\n    \"incorrect_tax_value\",\n    \"merged_line_items\",\n    \"missing_line_items\"\n  ],\n  \"field_notes\": {\n    \"subtotal\": \"The predicted subtotal is null.\",\n    \"tax\": \"The predicted tax value ($24.24) is actually the subtotal.\",\n    \"line_items\": \"The model merged several line items into single descriptions (e.g., combining 'Wonton or Egg Drop' with 'Mixed Dinner'). It also missed the 'Wonton Soup' item and had a slight discrepancy in the line total for the 'Juice Chinese Chop' item ($8.95 vs $8.99).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

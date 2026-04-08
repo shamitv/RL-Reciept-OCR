@@ -1,0 +1,14 @@
+{
+  "key": "b0fbc1cc70272a7bfedb4fc2425894ccefa7064b842e64cbfcc2f5ec8986185a",
+  "created_at": "2026-04-07T17:46:12.993257+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is highly accurate. The subtotal mismatch is due to an error in the gold label, which incorrectly uses the total amount (52.76) as the subtotal. The predicted subtotal (48.85) is correct based on the receipt image.\",\n  \"failure_reasons\": [\n    \"gold_label_error\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company name is a subset of the gold label.\",\n    \"subtotal\": \"The predicted subtotal (48.85) is correct per the image, while the gold label (52.76) is incorrect.\",\n    \"date\": \"The date format differs from the gold label (MM/DD/YY vs YYYY-MM-DD) but the value is correct.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

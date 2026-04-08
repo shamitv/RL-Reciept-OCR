@@ -1,0 +1,14 @@
+{
+  "key": "44acf465e9ec2e457db753c78b26871ba1f14a8b23d296833fc2750d2595279e",
+  "created_at": "2026-04-07T18:18:01.142913+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing the header information but failed significantly on the line items and summary fields. While the company, address, and total were correct, the date format was inconsistent, the subtotal was incorrect, and the line items were heavily consolidated/merged, missing several distinct entries.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"missing_line_items\",\n    \"incorrect_subtotal\",\n    \"date_format_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Extracted as 11/6/2013 instead of 2013-06-11.\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Incorrect. Extracted 14.0 (likely the first line item) instead of 4.48.\",\n    \"tax\": \"Extracted 37.9, whereas gold label is null (though 37.90 is visible on receipt as Food Subtotal).\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"Failed to capture all 8 line items. Several items (Flour Tortilla, Chicken, Shrimp, Steak) were merged into the description of the Fajitas item, and 'w/ Beef' was merged into the Burrito item.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

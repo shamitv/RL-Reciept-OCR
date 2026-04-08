@@ -1,0 +1,14 @@
+{
+  "key": "6ac562ff2e35f0dd5d9cff6e26f5b6d9039cb6b32b67cff451ad7eae12bd60ba",
+  "created_at": "2026-04-07T18:46:44.879313+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. Header fields like company, address, subtotal, tax, and total were extracted correctly, though the date format differs from the gold standard. The line item extraction suffered from a misalignment where the total for the second item was incorrectly attributed to the first item, causing a cascade error in the totals for the first two items.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"line_item_total_misalignment\"\n  ],\n  \"field_notes\": {\n    \"date\": \"The predicted date '03/05/17' uses a different format than the gold '2017-05-03'.\",\n    \"line_items\": \"The line item totals are misaligned for the first two entries. The gold label indicates the first item has no total (null) and the second item has a total of 27.98, but the prediction assigned 27.98 to the first item and 0.0 to the second.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

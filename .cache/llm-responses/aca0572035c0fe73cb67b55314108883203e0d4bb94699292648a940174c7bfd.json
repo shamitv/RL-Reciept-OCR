@@ -1,0 +1,14 @@
+{
+  "key": "aca0572035c0fe73cb67b55314108883203e0d4bb94699292648a940174c7bfd",
+  "created_at": "2026-04-07T17:49:50.250354+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed due to significant errors in the line items section. While the header information (company, date, address, subtotal, tax, and total) was extracted accurately, the line items suffered from misalignment of totals and a mismatch in item count compared to the gold labels.\",\n  \"failure_reasons\": [\n    \"Line item misalignment: The line total '12.0' was incorrectly assigned to 'YAMS' instead of 'SIDE (SM) x3'.\",\n    \"Item count mismatch: The model extracted 7 line items, whereas the gold labels only contained 4 (the gold labels appear to be an incomplete subset of the receipt).\",\n    \"Description mismatch: The model extracted 'WINGS (5)' while the gold label expected 'MINGS (5)', although 'WINGS' is the correct text visible in the image.\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct (includes timestamp).\",\n    \"address\": \"Correct (more complete than gold).\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Correct.\",\n    \"line_items\": \"The model correctly identified all 7 lines of text for items, but failed to correctly associate the line total '12.00' with 'SIDE (SM) x3', instead assigning it to 'YAMS'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

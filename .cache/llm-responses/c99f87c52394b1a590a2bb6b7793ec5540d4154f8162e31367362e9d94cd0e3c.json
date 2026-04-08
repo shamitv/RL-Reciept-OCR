@@ -1,0 +1,14 @@
+{
+  "key": "c99f87c52394b1a590a2bb6b7793ec5540d4154f8162e31367362e9d94cd0e3c",
+  "created_at": "2026-04-07T18:40:07.031153+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction partially succeeded in capturing header information but failed to capture all line items and missed one specific item entirely. The reconciliation failed because the predicted line items do not match the gold set in count and content.\",\n  \"failure_reasons\": [\n    \"Missing line items: The model failed to extract one of the '1 NO BEVERAGE' items.\",\n    \"Incorrect line item total: The 'Shake Choc' item was assigned a line total of 0.0, whereas the gold label indicates it has no specified total (null).\",\n    \"Incomplete line item count: Predicted 3 items instead of the 4 gold items.\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Matches gold label (minor spacing difference in gold).\",\n    \"date\": \"Matches gold label (format difference is acceptable).\",\n    \"address\": \"Matches gold label (added a comma).\",\n    \"subtotal\": \"Matches gold label.\",\n    \"tax\": \"Matches gold label (format difference 0.3 vs 0.30).\",\n    \"total\": \"Matches gold label.\",\n    \"line_items\": \"Missed one '1 NO BEVERAGE' entry. The 'Shake Choc' entry has an incorrect line_total of 0.0 instead of null.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

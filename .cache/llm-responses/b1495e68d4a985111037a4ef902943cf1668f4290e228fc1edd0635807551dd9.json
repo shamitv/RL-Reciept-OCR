@@ -1,0 +1,14 @@
+{
+  "key": "b1495e68d4a985111037a4ef902943cf1668f4290e228fc1edd0635807551dd9",
+  "created_at": "2026-04-07T17:40:55.934980+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is largely successful, correctly identifying the company, address, and all monetary values. However, it failed to meet strict formatting requirements and completeness standards. Specifically, currency symbols were included in the subtotal, tax, and total fields, and the date format differs from the gold label. For line items, the descriptions omitted the leading quantity/index prefix found in the gold labels, and the 'raw_text' and 'evidence_ids' fields were not populated.\",\n  \"failure_reasons\": [\n    \"formatting_discrepancy\",\n    \"incomplete_extraction\",\n    \"description_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"Format mismatch: '13-Jul-2018' vs gold '2018-07-13'.\",\n    \"subtotal\": \"Includes currency symbol '$'.\",\n    \"tax\": \"Includes currency symbol '$'.\",\n    \"total\": \"Includes currency symbol '$'.\",\n    \"line_items\": \"Descriptions missed the leading '1 ' prefix; 'raw_text' and 'evidence_ids' are missing; spelling error in 'Dulet' vs 'DULLET'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

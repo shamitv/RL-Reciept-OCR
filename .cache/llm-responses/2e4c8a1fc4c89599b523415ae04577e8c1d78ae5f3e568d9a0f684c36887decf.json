@@ -1,0 +1,14 @@
+{
+  "key": "2e4c8a1fc4c89599b523415ae04577e8c1d78ae5f3e568d9a0f684c36887decf",
+  "created_at": "2026-04-07T18:30:57.864449+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is highly successful. All header fields (company, date, address, subtotal, tax, total) were correctly identified, with only minor formatting differences in the subtotal and date. Line items were correctly identified with accurate totals, although the 'raw_text' field was not populated.\",\n  \"failure_reasons\": [\n    \"missing_raw_text\"\n  ],\n  \"field_notes\": {\n    \"date\": \"Format differs slightly (M/D/YYYY vs YYYY-MM-DD) but represents the same value.\",\n    \"subtotal\": \"Trailing zero omitted (15.9 vs 15.90).\",\n    \"line_items\": \"The 'raw_text' field is null for both items. The predicted description 'Makimono' is more accurate to the image than the gold label 'MKIMONO'. There is a minor spacing discrepancy in the first item's description ('1 (L)Ton' vs '1 (L) TON').\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

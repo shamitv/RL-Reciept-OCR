@@ -1,0 +1,14 @@
+{
+  "key": "ddea01f5fca2183e8e813b86f0704852f6b05d778f141f2ff80c95998eed255f",
+  "created_at": "2026-04-07T18:44:37.097444+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. Most header fields (company, address, subtotal, tax, total) were extracted correctly, although the date format differs from the gold label. The line item extraction included all correct items but also included an extra item ('Soup of Day') that was not present in the gold labels, and the 'raw_text' field was not populated for any line items.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"extra_line_item\",\n    \"missing_raw_text\"\n  ],\n  \"field_notes\": {\n    \"date\": \"Predicted '7/10/2017' instead of the gold format '2017-10-07'.\",\n    \"line_items\": \"The model extracted 5 items instead of 4. 'Soup of Day' is an extra item. Additionally, 'raw_text' is null for all predicted line items.\",\n    \"address\": \"The address contains a newline character which differs from the gold single-line string, but the content is correct.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

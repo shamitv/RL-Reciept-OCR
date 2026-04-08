@@ -1,0 +1,14 @@
+{
+  "key": "7f2804bf7a084dfaed9f1caa883e1b28b3ed84f5d62d579440f8b1270de1ca12",
+  "created_at": "2026-04-07T17:43:22.231387+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, capturing all line items and most header fields correctly. The primary failure was the date format mismatch and a minor typo in the address.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"address_typo\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Perfect match.\",\n    \"date\": \"The predicted date '12/8/2017' uses MM/DD/YYYY format, whereas the gold label expects YYYY-MM-DD format '2017-08-12'. Note: The receipt text actually says 12/8/2017, so the gold label might be interpreting it as August 12th, while the prediction is December 8th, or vice versa. Regardless, the format differs.\",\n    \"address\": \"The prediction corrected 'florai' to 'floral', which is likely more accurate, but it deviates from the gold label.\",\n    \"subtotal\": \"Perfect match.\",\n    \"tax\": \"Perfect match.\",\n    \"total\": \"Perfect match.\",\n    \"line_items\": \"All 6 line items were correctly identified with accurate descriptions and totals. Minor spelling difference in 'Bourguignone' vs 'Bourguigonne'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

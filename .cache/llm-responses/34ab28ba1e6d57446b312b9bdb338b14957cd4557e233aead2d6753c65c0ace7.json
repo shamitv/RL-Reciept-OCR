@@ -1,0 +1,14 @@
+{
+  "key": "34ab28ba1e6d57446b312b9bdb338b14957cd4557e233aead2d6753c65c0ace7",
+  "created_at": "2026-04-07T17:58:18.260211+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Mariannacci's Restaurant\",\n  \"date\": \"FEB 18/17\",\n  \"address\": null,\n  \"subtotal\": 132.25,\n  \"tax\": 9.76,\n  \"total\": 142.01,\n  \"line_items\": [\n    {\n      \"description\": \"PREM WHITE\",\n      \"line_total\": 10.75\n    },\n    {\n      \"description\": \"PREM RED\",\n      \"line_total\": 10.75\n    },\n    {\n      \"description\": \"DIET SDA\",\n      \"line_total\": 3.75\n    },\n    {\n      \"description\": \"7 UP\",\n      \"line_total\": 3.25\n    },\n    {\n      \"description\": \"VONG RIPIENE\",\n      \"line_total\": 9.75\n    },\n    {\n      \"description\": \"Chicken Parm\",\n      \"line_total\": 21.75\n    },\n    {\n      \"description\": \"SCAMPI MILAN\",\n      \"line_total\": 25.75\n    },\n    {\n      \"description\": \"LING VONG\",\n      \"line_total\": 22.75\n    },\n    {\n      \"description\": \"1/2 PASTA SP\",\n      \"line_total\": 16.75\n    },\n    {\n      \"description\": \"DIET SDA\",\n      \"line_total\": 3.75\n    },\n    {\n      \"description\": \"7 UP\",\n      \"line_total\": 3.25\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

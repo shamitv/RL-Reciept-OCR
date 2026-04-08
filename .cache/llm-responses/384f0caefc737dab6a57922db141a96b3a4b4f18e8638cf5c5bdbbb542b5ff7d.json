@@ -1,0 +1,14 @@
+{
+  "key": "384f0caefc737dab6a57922db141a96b3a4b4f18e8638cf5c5bdbbb542b5ff7d",
+  "created_at": "2026-04-07T17:55:51.648554+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While most header fields (company, subtotal, tax, total) were correctly identified, the date year does not match the gold label, and the line item extraction is highly inaccurate. The model merged multiple lines\u2014specifically item descriptions and their associated unit price lines\u2014into single entries, resulting in a significantly lower item count than the gold standard.\",\n  \"failure_reasons\": [\n    \"date_mismatch\",\n    \"line_item_merging\",\n    \"line_item_count_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"Predicted 'Jan 25, 2018' but gold label requires '2026-01-25'.\",\n    \"address\": \"The model extracted an address, but the gold label expected null.\",\n    \"line_items\": \"The model merged description lines with unit price lines (e.g., 'French Fries x 2' and '($2.50 each)') into single items, reducing the total count from 13 to 8.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

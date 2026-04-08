@@ -1,0 +1,14 @@
+{
+  "key": "62874dcfce58b9f3e6b3f4dc11b03cfdec2fed2b8537ed61984c4ea596e1248d",
+  "created_at": "2026-04-07T18:02:03.753876+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, accurately capturing the company, date, subtotal, tax, total, and all line items. The only minor discrepancy is an incomplete address field.\",\n  \"failure_reasons\": [\n    \"address_incomplete\"\n  ],\n  \"field_notes\": {\n    \"address\": \"The predicted address omitted the telephone number present in the gold label.\",\n    \"line_items\": \"All line items were correctly extracted with accurate totals. The prediction corrected a likely typo in the gold label ('GUINES' to 'Guiness'). Note that 'raw_text' for line items was not provided in the prediction.\",\n    \"date\": \"The date format differs (MM/DD/YY vs YYYY-MM-DD) but represents the same value.\",\n    \"monetary_values\": \"Subtotal, tax, and total values are correct, though the prediction omitted trailing zeros.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

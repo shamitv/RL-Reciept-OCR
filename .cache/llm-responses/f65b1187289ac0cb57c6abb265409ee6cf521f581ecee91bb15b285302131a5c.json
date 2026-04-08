@@ -1,0 +1,14 @@
+{
+  "key": "f65b1187289ac0cb57c6abb265409ee6cf521f581ecee91bb15b285302131a5c",
+  "created_at": "2026-04-07T19:00:44.071997+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While the company, date, address, and subtotal were correctly identified, the tax and total amounts are incorrect. Additionally, the line item extraction suffered from merging adjacent lines (Avion Silver RX and Margarita RX) and missing the gratuity line item.\",\n  \"failure_reasons\": [\n    \"tax_mismatch\",\n    \"total_mismatch\",\n    \"line_item_merging\",\n    \"missing_line_item\"\n  ],\n  \"field_notes\": {\n    \"tax\": \"Predicted 10.24, but the gold label specifies 2.84 (Resort Tax).\",\n    \"total\": \"Predicted 154.24, but the gold label specifies 154.78.\",\n    \"line_items\": \"The model merged 'Avion Silver RX' and 'margarita rx' into single descriptions and failed to extract the '22% GRATUITY' line item.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

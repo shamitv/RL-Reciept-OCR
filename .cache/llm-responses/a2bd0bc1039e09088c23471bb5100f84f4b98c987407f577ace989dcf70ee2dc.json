@@ -1,0 +1,14 @@
+{
+  "key": "a2bd0bc1039e09088c23471bb5100f84f4b98c987407f577ace989dcf70ee2dc",
+  "created_at": "2026-04-07T18:02:36.284596+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful. All header fields, including company, date, address, subtotal, tax, and total, were correctly identified and match the gold labels (allowing for semantic equivalence in date and address formatting). The line items were also correctly identified with accurate totals, although the descriptions were slightly truncated by omitting the quantity prefix.\",\n  \"failure_reasons\": [],\n  \"field_notes\": {\n    \"date\": \"The predicted date format 'Feb 24, 2019' is semantically identical to the gold '2019-02-24'.\",\n    \"address\": \"The predicted address includes an extra comma compared to the gold label, but is accurate.\",\n    \"line_items\": \"The descriptions 'Weekend Buffet' and 'Drink' are slightly less complete than the gold '2 WEEKEND BUFFET' and '2 DRINK', but the line totals are perfectly accurate.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

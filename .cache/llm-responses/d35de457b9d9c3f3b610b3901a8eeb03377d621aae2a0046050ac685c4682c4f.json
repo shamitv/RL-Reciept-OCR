@@ -1,0 +1,14 @@
+{
+  "key": "d35de457b9d9c3f3b610b3901a8eeb03377d621aae2a0046050ac685c4682c4f",
+  "created_at": "2026-04-07T17:57:24.433504+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly. While the header information (date, address, subtotal) is largely accurate, the line item extraction is highly corrupted, featuring merged items, misaligned prices, misspellings, and missing entries. Consequently, the tax and total fields are incorrect as they appear to have been derived from misidentified line item values.\",\n  \"failure_reasons\": [\n    \"line_item_merging\",\n    \"line_item_price_misalignment\",\n    \"misspelling\",\n    \"missing_line_items\",\n    \"incorrect_tax\",\n    \"incorrect_total\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Good semantic match to the gold label.\",\n    \"date\": \"Correct.\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Incorrect; the model predicted 7.0, which corresponds to a line item price (Butter Noodles) rather than the actual tax of 1.10.\",\n    \"total\": \"Incorrect; the total is mathematically inconsistent with the gold label due to the tax error.\",\n    \"line_items\": \"Major failures: Item 0 merged 'Glass Imp Stout' and 'Ashland Amber'; Item 1 ('Butter Noodles') has the price of 'Ashland Amber'; Item 2 ('Daimal TACO') is misspelled and has the price of 'Butter Noodles'; Item 3 ('Mahi Mahi') has the price of 'Oatmeal Stout'; 'Oatmeal Stout' is missing entirely.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

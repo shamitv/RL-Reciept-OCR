@@ -1,0 +1,14 @@
+{
+  "key": "9eaff5e40336b34eca028bc821ebd2b8f0e7bcb317c0e9ec11c3674f8761ee34",
+  "created_at": "2026-04-07T18:09:39.019427+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was largely successful, correctly identifying the date, address, tax, and total. However, there were minor errors in the company name and a discrepancy in the line total for the 'Comp Item'.\",\n  \"failure_reasons\": [\n    \"company_name_mismatch\",\n    \"line_item_total_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted company name 'Calagero's' is a subset of the gold label 'Calagero's Calagero's'.\",\n    \"subtotal\": \"The prediction correctly identified the subtotal as '145.00' from the image, although the gold label is null.\",\n    \"line_items[8]\": \"The 'Comp Item' line total was extracted as '0.00', whereas the gold label identifies it as '12.00' (the value being comped).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "353fe442fd3249e1c77d96676595b5381d2f58a34bca689d1708bf5a37b3dcfd",
+  "created_at": "2026-04-07T18:37:14.660377+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed to capture all line items and misidentified a line item as the subtotal. There were also minor discrepancies in the company name and date format.\",\n  \"failure_reasons\": [\n    \"missing_line_items\",\n    \"incorrect_subtotal\",\n    \"date_format_mismatch\",\n    \"company_name_mismatch\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Predicted 'Arthur's' instead of 'Arthurs'.\",\n    \"date\": \"Predicted 'Oct01'17' instead of the ISO format '2017-10-01'.\",\n    \"subtotal\": \"The value '56.80' was extracted from the 'food' line item and placed in the subtotal field, whereas the gold label expects null.\",\n    \"line_items\": \"Failed to extract two line items: 'food' (56.80) and 'liquor' (24.00).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

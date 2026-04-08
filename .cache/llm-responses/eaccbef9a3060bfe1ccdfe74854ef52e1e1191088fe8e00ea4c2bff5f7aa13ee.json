@@ -1,0 +1,14 @@
+{
+  "key": "eaccbef9a3060bfe1ccdfe74854ef52e1e1191088fe8e00ea4c2bff5f7aa13ee",
+  "created_at": "2026-04-07T18:29:38.390693+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"KALAVERAS MEXICAN CUISINE & BAR\",\n  \"date\": \"30-Aug-2019 3:24:10P\",\n  \"address\": \"16530 BELLFLOWER BLVD BELLFLOWER, CA 90706\",\n  \"subtotal\": \"$63.00\",\n  \"tax\": \"$5.99\",\n  \"total\": \"$68.99\",\n  \"line_items\": [\n    {\n      \"description\": \"Classic Michelada\",\n      \"line_total\": \"$12.00\"\n    },\n    {\n      \"description\": \"Classic Michelada\",\n      \"line_total\": \"$12.00\"\n    },\n    {\n      \"description\": \"Don Julio Anejo\",\n      \"line_total\": \"$15.00\"\n    },\n    {\n      \"description\": \"Classic Michelada\",\n      \"line_total\": \"$12.00\"\n    },\n    {\n      \"description\": \"Balam Madurodo\",\n      \"line_total\": \"$12.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

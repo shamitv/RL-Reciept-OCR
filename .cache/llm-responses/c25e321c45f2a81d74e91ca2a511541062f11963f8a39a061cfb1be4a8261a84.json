@@ -1,0 +1,14 @@
+{
+  "key": "c25e321c45f2a81d74e91ca2a511541062f11963f8a39a061cfb1be4a8261a84",
+  "created_at": "2026-04-07T18:19:11.820275+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful. While the header fields (company, date, address, subtotal, tax, and total) were correctly identified, the line item extraction failed significantly. The model incorrectly merged some items and, more critically, misaligned the prices with their corresponding descriptions, causing a cascading error in the line item totals.\",\n  \"failure_reasons\": [\n    \"line_item_misalignment\",\n    \"line_item_merging\",\n    \"missing_line_items\"\n  ],\n  \"field_notes\": {\n    \"header\": \"The header fields are accurate. Note that the predicted subtotal, tax, and total include currency symbols ($) which were not in the gold labels, and the date format differs, but the semantic content is correct.\",\n    \"line_items\": \"There is a major misalignment between descriptions and prices. The model merged 'Spicy Chicken' with 'Soy V.' and then shifted the prices of the subsequent items, resulting in incorrect line totals for nearly every entry. For example, the price for the Duck ($18.95) was assigned to the Chicken/Soy item, and the price for the Beef ($15.95) was assigned to the Duck.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

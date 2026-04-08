@@ -1,0 +1,14 @@
+{
+  "key": "f5b48152e19a7202951bfaaa277c913c48f0ec13f67d7e1544327d51f4568a1d",
+  "created_at": "2026-04-07T18:26:21.718735+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly. While header information (company, date, address) was correctly identified, the financial totals (subtotal, tax, total) are incorrect, and the line item extraction is both incomplete and contains incorrect pricing.\",\n  \"failure_reasons\": [\n    \"Incorrect financial values (subtotal, tax, total)\",\n    \"Missing line items (only 3 out of 6 gold items found)\",\n    \"Incorrect line item totals (Veggie Sandwich and Small Fries prices are wrong)\",\n    \"Missing raw text for line items\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correctly extracted.\",\n    \"date\": \"Correctly extracted (format differs from gold but value is accurate).\",\n    \"address\": \"Correctly extracted.\",\n    \"subtotal\": \"Incorrect. Predicted 4.97, gold is null (though total is 4.99).\",\n    \"tax\": \"Incorrect. Predicted 0.52, gold is 0.32.\",\n    \"total\": \"Incorrect. Predicted 5.49, gold is 4.99.\",\n    \"line_items\": \"Failed. Missing 3 items (No American Cheese, No Mayo, Add Chives). The prices for 'Veggie Sandwich' and 'Small Fries' are hallucinated/incorrect (1.89 vs 0.99 and 1.69 respectively).\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

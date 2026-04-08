@@ -1,0 +1,14 @@
+{
+  "key": "e52f5ee1bee9252356583c156e7c7e13084878fabb187e2fe109348882442a49",
+  "created_at": "2026-04-07T17:54:02.803058+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, capturing all major header fields and all line items correctly. Minor discrepancies exist in the address spelling and the formatting of the date and subtotal.\",\n  \"failure_reasons\": [\n    \"Minor typo in address (Turnpike vs Tumpike in gold)\",\n    \"Date format mismatch (MM/DD/YYYY vs YYYY-MM-DD)\",\n    \"Subtotal trailing zero omission (86.5 vs 86.50)\",\n    \"Line item description truncation/normalization (Hanger Sizzle vs Hanger Sizzl le)\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Perfect match.\",\n    \"date\": \"Format differs from gold (MM/DD/YYYY vs YYYY-MM-DD), but value is correct.\",\n    \"address\": \"The predicted 'Turnpike' is actually more correct than the gold 'Tumpike', though they differ.\",\n    \"subtotal\": \"Value is correct, but lost the trailing zero.\",\n    \"tax\": \"Perfect match.\",\n    \"total\": \"Perfect match.\",\n    \"line_items\": \"All 7 items were identified. Descriptions were slightly cleaned/normalized (e.g., 'Hanger Sizzle' instead of 'Hanger Sizzl le'), and 'raw_text' was missing, but the core data is accurate.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

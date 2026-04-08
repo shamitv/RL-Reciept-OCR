@@ -1,0 +1,14 @@
+{
+  "key": "c9d6653edf7d1fcef08f97de42920b5d371d9aa9c4fb076f9ab90d2adfa1b606",
+  "created_at": "2026-04-07T18:08:02.335360+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed on the date format and missed one line item. The subtotal, tax, and total values included currency symbols which were not present in the gold labels, though the numerical values are correct.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\",\n    \"missing_line_item\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Incorrect format. Predicted '7/1/2018' instead of '2018-01-07'. Note: The receipt image actually shows 7/1/2018, suggesting the gold label might be incorrect or refers to a different date, but based on strict validation against gold, it is a failure.\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Correct numerical value, but includes '$' symbol.\",\n    \"tax\": \"Correct numerical value, but includes '$' symbol.\",\n    \"total\": \"Correct numerical value, but includes '$' symbol.\",\n    \"line_items\": \"Missed one line item ('CCC222'). All other items were extracted with correct descriptions and totals, though line_total includes '$' symbol and raw_text is missing.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

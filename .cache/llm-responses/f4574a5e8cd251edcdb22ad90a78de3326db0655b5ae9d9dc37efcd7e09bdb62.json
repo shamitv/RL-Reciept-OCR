@@ -1,0 +1,14 @@
+{
+  "key": "f4574a5e8cd251edcdb22ad90a78de3326db0655b5ae9d9dc37efcd7e09bdb62",
+  "created_at": "2026-04-07T18:55:20.114005+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was highly successful, capturing all header fields and all line items with high accuracy. The only notable discrepancy is the date format, which follows a DD/MM/YYYY pattern instead of the ISO YYYY-MM-DD format used in the gold label. Minor differences in numeric precision (missing trailing zeros) were also observed.\",\n  \"failure_reasons\": [\n    \"date_format_mismatch\"\n  ],\n  \"field_notes\": {\n    \"date\": \"Predicted '02/12/2016' instead of gold '2016-12-02'.\",\n    \"subtotal\": \"Value '26.3' is numerically equivalent to '26.30'.\",\n    \"tax\": \"Value '2.1' is numerically equivalent to '2.10'.\",\n    \"total\": \"Value '28.4' is numerically equivalent to '28.40'.\",\n    \"line_items\": \"All four line items were correctly identified with accurate totals, despite minor variations in description casing and symbols.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

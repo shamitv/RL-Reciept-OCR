@@ -1,0 +1,14 @@
+{
+  "key": "5216ae2a8766030d0c1040094fe914e00be30ba01ffca752d8c4d3cee48f5a5b",
+  "created_at": "2026-04-07T18:59:43.583474+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"STK Miami Beach\",\n  \"date\": \"25AUG'17\",\n  \"address\": \"Collins Ave\\nMiami, FL 33140\",\n  \"subtotal\": 142.00,\n  \"tax\": 10.24,\n  \"total\": 154.24,\n  \"line_items\": [\n    {\n      \"description\": \"1 Avion Silver RX margarita rx\",\n      \"line_total\": 16.00\n    },\n    {\n      \"description\": \"1 Staub\",\n      \"line_total\": 0.00\n    },\n    {\n      \"description\": \"1 Avion Silver RX margarita rx\",\n      \"line_total\": 16.00\n    },\n    {\n      \"description\": \"1 DA Delmonico 14\",\n      \"line_total\": 62.00\n    },\n    {\n      \"description\": \"1 Truffle Fries\",\n      \"line_total\": 13.00\n    },\n    {\n      \"description\": \"1 Mac/Cheese\",\n      \"line_total\": 12.00\n    },\n    {\n      \"description\": \"1 Asparagus\",\n      \"line_total\": 13.00\n    },\n    {\n      \"description\": \"1 BAKED COOKIE\",\n      \"line_total\": 10.00\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

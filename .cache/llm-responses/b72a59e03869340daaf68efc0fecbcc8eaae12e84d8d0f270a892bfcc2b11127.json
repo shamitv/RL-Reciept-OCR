@@ -1,0 +1,14 @@
+{
+  "key": "b72a59e03869340daaf68efc0fecbcc8eaae12e84d8d0f270a892bfcc2b11127",
+  "created_at": "2026-04-07T18:02:10.754037+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"Lin Buffet\",\n  \"date\": \"Feb 24, 2019\",\n  \"address\": \"2988 N. Expressway, Brownsville, TX\",\n  \"subtotal\": \"31.16\",\n  \"tax\": \"2.57\",\n  \"total\": \"33.73\",\n  \"line_items\": [\n    {\n      \"description\": \"Weekend Buffet\",\n      \"line_total\": \"27.18\"\n    },\n    {\n      \"description\": \"Drink\",\n      \"line_total\": \"3.98\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

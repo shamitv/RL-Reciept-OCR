@@ -1,0 +1,14 @@
+{
+  "key": "31e4d37e83c7d038fc0fe541c0d649a818616bef22e91c145e3e3402d995cba4",
+  "created_at": "2026-04-07T18:15:11.950628+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed significantly. While the address and some line items were correctly identified, the total and tax fields are incorrect, and many line items are missing their prices or have incorrect descriptions.\",\n  \"failure_reasons\": [\n    \"Incorrect total calculation (the model summed the subtotal and the total)\",\n    \"Misidentified the total as the tax amount\",\n    \"Incomplete line item extraction (many line totals are null)\",\n    \"Incorrect company name extraction\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Predicted 'McDonald's' instead of 'Stony'.\",\n    \"date\": \"The date value is correct, but the format differs from the gold label (MM/DD/YYYY vs YYYY-MM-DD).\",\n    \"tax\": \"The predicted tax (26.15) is actually the total amount; the GST is 1.11.\",\n    \"total\": \"The predicted total (51.19) is incorrect; it appears to be the sum of the subtotal (25.04) and the total (26.15).\",\n    \"line_items\": \"Several line items have null 'line_total' values, and some descriptions or amounts are mismatched compared to the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

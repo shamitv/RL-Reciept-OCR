@@ -1,0 +1,14 @@
+{
+  "key": "1d63999823c7c98b1c3c40126d21dd9dff2067782a1c1250afc59cc7e03b0381",
+  "created_at": "2026-04-07T18:13:51.778988+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction failed. While header fields (company, date, address, subtotal, tax) were mostly correct, the total amount was incorrect, and the line item extraction was incomplete and inaccurate.\",\n  \"failure_reasons\": [\n    \"Incorrect total calculation\",\n    \"Missing line items\",\n    \"Hallucinated/merged line item descriptions\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Correct.\",\n    \"date\": \"Correct (format differs from gold but value is identical).\",\n    \"address\": \"Correct.\",\n    \"subtotal\": \"Correct.\",\n    \"tax\": \"Correct.\",\n    \"total\": \"Incorrect. Predicted 55.51, gold is 64.52. The prediction seems to have missed the gratuity.\",\n    \"line_items\": \"Failed. Only 4 items were extracted instead of 6. Additionally, descriptions were merged incorrectly (e.g., 'Enmoladas with Meat pollo' and 'Flautas Chicken Coloradito'), and the 'POLLO' item was not treated as a separate entity.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

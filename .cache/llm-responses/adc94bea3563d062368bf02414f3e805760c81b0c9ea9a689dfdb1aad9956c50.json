@@ -1,0 +1,14 @@
+{
+  "key": "adc94bea3563d062368bf02414f3e805760c81b0c9ea9a689dfdb1aad9956c50",
+  "created_at": "2026-04-07T18:28:19.877544+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was largely successful, capturing the main header information and most line items. However, it failed to extract one line item ('FOOD') and had a minor discrepancy in the company name.\",\n  \"failure_reasons\": [\n    \"missing_line_item\"\n  ],\n  \"field_notes\": {\n    \"company\": \"Minor OCR discrepancy: 'E1 Gato Negro' (gold) vs 'El Gato Negro' (predicted).\",\n    \"date\": \"The date format differs from the gold standard ('Aug23'19' vs '2019-08-23') but is semantically correct.\",\n    \"subtotal\": \"The model extracted '19.75' as the subtotal, which corresponds to the 'FOOD' line item, whereas the gold label marked this as null.\",\n    \"line_items\": \"The model missed the 'FOOD' line item (19.75) present in the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

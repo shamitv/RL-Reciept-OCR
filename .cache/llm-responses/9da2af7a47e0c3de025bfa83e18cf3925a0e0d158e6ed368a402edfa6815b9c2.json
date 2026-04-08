@@ -1,0 +1,14 @@
+{
+  "key": "9da2af7a47e0c3de025bfa83e18cf3925a0e0d158e6ed368a402edfa6815b9c2",
+  "created_at": "2026-04-07T17:44:44.637571+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction is partially successful. While the company, date, address, and total were correctly identified, the model failed in the summary and line item sections. Specifically, it incorrectly included the tax as a line item and provided a mathematically incorrect subtotal.\",\n  \"failure_reasons\": [\n    \"tax_as_line_item\",\n    \"incorrect_subtotal\",\n    \"extra_fields_extracted\"\n  ],\n  \"field_notes\": {\n    \"subtotal\": \"The predicted subtotal (6.47) is incorrect; the sum of the extracted line items is 8.75.\",\n    \"tax\": \"The tax was extracted as a field (0.75) but was also incorrectly included as a line item ('TXTL').\",\n    \"line_items\": \"The line item list contains an extra entry for the tax ('TXTL'), and there are minor transcription differences in descriptions (e.g., '15 WINGS' vs '1 5 WINGS').\",\n    \"date\": \"The date format 'MAR.19'17' is a valid representation of the gold '2017-03-19'.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

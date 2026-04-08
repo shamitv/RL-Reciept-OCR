@@ -1,0 +1,14 @@
+{
+  "key": "6c694496c55d74d5422b1ab996311fd81778158d5032a5c3457ae210fb733fa7",
+  "created_at": "2026-04-07T17:51:36.070463+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was partially successful but failed the validation against the gold labels. While the financial totals and line item descriptions/prices are accurate, the company name is incomplete, the date format/value does not match the gold standard, and the address differs due to a typo in the gold label. Additionally, the 'raw_text' field for line items was not extracted.\",\n  \"failure_reasons\": [\n    \"company_incomplete\",\n    \"date_mismatch\",\n    \"address_mismatch_due_to_gold_typo\",\n    \"line_item_missing_raw_text\"\n  ],\n  \"field_notes\": {\n    \"company\": \"The predicted value 'DAILY GRILL' is a subset of the gold value.\",\n    \"date\": \"Predicted '11/01/2018' does not match the gold '2018-01-11'.\",\n    \"address\": \"The prediction 'Santa Monica' is correct according to the image, but fails against the gold label which contains a typo ('Santa Manica').\",\n    \"line_items\": \"All items were correctly identified by description and total, but the 'raw_text' field is null in the prediction.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

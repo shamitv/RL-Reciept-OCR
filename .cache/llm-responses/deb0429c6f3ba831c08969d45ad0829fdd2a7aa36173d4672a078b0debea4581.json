@@ -1,0 +1,14 @@
+{
+  "key": "deb0429c6f3ba831c08969d45ad0829fdd2a7aa36173d4672a078b0debea4581",
+  "created_at": "2026-04-07T18:11:25.992952+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"summary\": \"The extraction was successful for most header fields (company, date, subtotal, tax, total), though the address was partially incomplete. The line item extraction failed significantly, missing 5 items, miscalculating totals for several items, and hallucinating a 'Cheese' item.\",\n  \"failure_reasons\": [\n    \"line_item_count_mismatch\",\n    \"line_item_value_error\",\n    \"missing_line_items\",\n    \"hallucinated_line_items\",\n    \"partial_address\"\n  ],\n  \"field_notes\": {\n    \"address\": \"Missing the 'STORE # CA-1661' prefix.\",\n    \"line_items\": \"Missing 5 items (Grilled Mushrooms, 1 Large Soda, 1 Cheeseburger, and one instance each of Lettuce and Pickles). Misaligned totals for Jalapeno Peppers ($11.56 vs $0.00) and 2 Large Fry ($7.81 vs $11.58). Hallucinated a 'Cheese' item which is not in the gold labels.\"\n  }\n}\n"
+        }
+      }
+    ]
+  }
+}

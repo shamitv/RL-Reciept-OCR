@@ -1,0 +1,14 @@
+{
+  "key": "db3d53d16e87556be281cb70b8f9d85c835f8da04af5476d3ace77f0cb81616e",
+  "created_at": "2026-04-07T18:27:43.743612+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"El Gato Negro\",\n  \"date\": \"Aug23'19\",\n  \"address\": \"300 Harrison Ave, New Orleans, LA 70124\",\n  \"subtotal\": \"19.75\",\n  \"tax\": \"2.01\",\n  \"total\": \"21.76\",\n  \"line_items\": [\n    {\n      \"description\": \"1 Fajita Vegetable\",\n      \"line_total\": \"7.75\"\n    },\n    {\n      \"description\": \"1 Taco Shrimp Fresh Catch 3\",\n      \"line_total\": \"12.00\"\n    },\n    {\n      \"description\": \"1 Water\",\n      \"line_total\": \"0.00\"\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}

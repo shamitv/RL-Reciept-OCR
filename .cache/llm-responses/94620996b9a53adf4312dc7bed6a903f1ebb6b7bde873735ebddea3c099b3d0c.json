@@ -1,0 +1,14 @@
+{
+  "key": "94620996b9a53adf4312dc7bed6a903f1ebb6b7bde873735ebddea3c099b3d0c",
+  "created_at": "2026-04-07T17:56:01.288830+00:00",
+  "ttl_days": 450.0,
+  "payload": {
+    "choices": [
+      {
+        "message": {
+          "content": "{\n  \"company\": \"CAFE PARISIEN LARCHMONT LLC\",\n  \"date\": \"Jan 24, 2019\",\n  \"address\": \"242 N LARCHMONT BLVD LOS ANGELES, CA 90004\",\n  \"subtotal\": 8.75,\n  \"tax\": 0.83,\n  \"total\": 9.58,\n  \"line_items\": [\n    {\n      \"description\": \"CROISSANT AUX RAISINS\",\n      \"line_total\": 4.00\n    },\n    {\n      \"description\": \"Cappucino\",\n      \"line_total\": 4.75\n    }\n  ]\n}"
+        }
+      }
+    ]
+  }
+}
